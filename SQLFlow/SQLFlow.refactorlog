@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="49239c3a-0661-4dff-9288-e7a42b701bc2" ChangeDateTime="08/17/2018 12:38:05">
+    <Property Name="ElementName" Value="[flow].[AddFlowItem]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AddItem" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2903fb3d-ce57-40a0-ad22-2039d076d790" ChangeDateTime="08/18/2018 06:47:56">
+    <Property Name="ElementName" Value="[internals].[ParameterDefaultValue]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Parameter" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b3066143-2822-4999-aac5-486f81438a74" ChangeDateTime="08/18/2018 06:48:08">
+    <Property Name="ElementName" Value="[internals].[Parameter].[ParameterDefaultValue]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[Parameter]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ParameterValue" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5b55992d-2576-4770-a750-5ee5ccd6b073" ChangeDateTime="08/18/2018 20:23:29">
+    <Property Name="ElementName" Value="[internals].[AddParameterDefault]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AddParameter" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d9397f9f-a45d-4003-8c3b-57442d5d6b77" ChangeDateTime="08/22/2018 08:48:32">
+    <Property Name="ElementName" Value="[internals].[ChangeStatus]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Do" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="25ca1704-03a1-4da1-82d4-fa41c4981f5a" ChangeDateTime="09/18/2018 12:08:52">
+    <Property Name="ElementName" Value="[flow].[FlowItemQueue]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="QueuedFlowItem" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9d4f1c1d-22b9-4f49-81bc-571c09157086" ChangeDateTime="09/18/2018 12:11:45">
+    <Property Name="ElementName" Value="[flow].[QueuedFlowItem]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="FlowItem" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6abaffab-4cce-4e03-aa9a-a1c25696c5dd" ChangeDateTime="09/18/2018 12:15:51">
+    <Property Name="ElementName" Value="[internals].[FlowInstance]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Flow" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e1a701fc-279b-4496-91c2-98c854dceb24" ChangeDateTime="09/20/2018 10:36:18">
+    <Property Name="ElementName" Value="[flow].[Do]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="ExecuteAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3f0c1ab9-789a-48e3-a01b-b338d3da9e93" ChangeDateTime="11/14/2018 11:48:22">
+    <Property Name="ElementName" Value="[internals].[Flow].[CurrentFlowItemID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[Flow]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CurrentFlowItemNumber" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0f6a8507-4b82-4a04-8599-db555f2a0ec2" ChangeDateTime="11/30/2018 07:51:32">
+    <Property Name="ElementName" Value="[internals].[FlowStatusType]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="StatusType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f846b71e-16cc-4d0d-943a-6d1bd24f55f0" ChangeDateTime="11/30/2018 07:51:39">
+    <Property Name="ElementName" Value="[internals].[StatusType].[FlowStatusTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[StatusType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusTypeID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fc80b48d-aab8-40db-a5a2-0c0a77d99500" ChangeDateTime="11/30/2018 07:52:20">
+    <Property Name="ElementName" Value="[internals].[FlowStatus].[FlowTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TypeID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8fbb6d86-a43e-4b50-a609-ceb679a710a0" ChangeDateTime="11/30/2018 07:55:39">
+    <Property Name="ElementName" Value="[internals].[StatusType]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="FlowStatusType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fa4ee5be-6dd7-40dc-99e3-316906d56893" ChangeDateTime="11/30/2018 07:55:56">
+    <Property Name="ElementName" Value="[internals].[FlowStatusType].[StatusTypeCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatusType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowStatusTypeCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d7d01ba8-3956-4e4d-b307-d2ae7d985dce" ChangeDateTime="11/30/2018 07:56:21">
+    <Property Name="ElementName" Value="[internals].[FlowStatus].[StatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4d9ab371-f64b-4808-9d63-cb6baca26975" ChangeDateTime="11/30/2018 07:56:26">
+    <Property Name="ElementName" Value="[internals].[FlowStatus].[StatusTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowStatusTypeID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="384df153-6093-4ac5-8410-25d1783cc0ad" ChangeDateTime="11/30/2018 07:56:44">
+    <Property Name="ElementName" Value="[internals].[FlowStatus].[TypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowTypeID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5adeea6b-7a3f-408b-a399-413b0e08fccf" ChangeDateTime="11/30/2018 07:57:32">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[StatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0ada0d08-c01a-4935-bedb-d522b7656c37" ChangeDateTime="11/30/2018 07:57:40">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[ActionCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowActionCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="09ecc9f6-cb15-47af-87fc-bc8daa476c23" ChangeDateTime="11/30/2018 07:57:49">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[ResultingStatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ResultingFlowStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce36949b-d277-4d3f-88b3-12400cd4b733" ChangeDateTime="11/30/2018 07:58:06">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[ActionProcedure]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ActionProcedureName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c8e34d7c-56c5-4383-a68a-10d3720be4c9" ChangeDateTime="11/30/2018 09:33:31">
+    <Property Name="ElementName" Value="[internals].[Flow].[StatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[Flow]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FlowStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8569acb3-ee43-4b75-8b90-0f1df910ba3e" ChangeDateTime="12/10/2018 20:50:31">
+    <Property Name="ElementName" Value="[internals].[Flow].[FlowStatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[Flow]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e59a0ed6-8eab-44dc-b822-11c100b8429c" ChangeDateTime="12/10/2018 20:50:53">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[FlowActionCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ActionCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e6c897b3-fdce-48a2-8308-e472ee29d4b7" ChangeDateTime="12/10/2018 20:50:58">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[FlowStatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="391a5d40-dbc0-48e9-a4b0-22f1fbbac6c6" ChangeDateTime="12/10/2018 20:51:04">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[ResultingFlowStatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ResultingStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7ba81313-e599-4c8b-967f-9d3d0fe24c64" ChangeDateTime="12/10/2018 22:00:01">
+    <Property Name="ElementName" Value="[flow].[AddParameter]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="SetParameter" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dd17c2f8-a338-4356-a1c5-f434843d07c7" ChangeDateTime="12/10/2018 22:07:45">
+    <Property Name="ElementName" Value="[internals].[FlowAction].[ActionProcedureName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowAction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PostActionProcedureName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="46d11eb6-63c6-4c56-a577-3d0d16f657b0" ChangeDateTime="12/10/2018 22:57:50">
+    <Property Name="ElementName" Value="[internals].[FlowStatus].[FlowStatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="aa405322-ebe9-4462-8010-9cf701dc18df" ChangeDateTime="12/11/2018 08:02:30">
+    <Property Name="ElementName" Value="[internals].[LogEntry].[ItemNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[LogEntry]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExecutionItemID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bd069037-efe2-4a70-8af7-1c724374332d" ChangeDateTime="12/13/2018 21:25:15">
+    <Property Name="ElementName" Value="[internals].[GetLocks]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetLockTree" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce8d2a20-0aaa-4d2b-9e13-43d610527755" ChangeDateTime="12/17/2018 09:25:47">
+    <Property Name="ElementName" Value="[flow].[ExecuteAction]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Do" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f6013414-51ff-443d-83f1-f810ff380f4a" ChangeDateTime="12/17/2018 09:51:54">
+    <Property Name="ElementName" Value="[flow].[AddAction]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="SetAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9c9cbac9-1837-4085-bd79-18e7644539e4" ChangeDateTime="12/17/2018 09:53:10">
+    <Property Name="ElementName" Value="[flow].[SetAction]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AddAction" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5b80444a-7ee3-4077-bd98-e2b12b3f3e95" ChangeDateTime="12/17/2018 11:56:03">
+    <Property Name="ElementName" Value="[internals].[Flow].[CreatedAtTimestamp]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[Flow]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatedAt" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c7a9a021-ac42-4532-a943-6198d8d72734" ChangeDateTime="12/19/2018 13:16:11">
+    <Property Name="ElementName" Value="[flow].[NewType]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AddFlowType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c06ef112-fa8e-4e99-a783-1128eaeb6ecb" ChangeDateTime="12/19/2018 13:16:29">
+    <Property Name="ElementName" Value="[flow].[DropType]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="DropFlowType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ed49c48d-409b-4106-bc30-bf27e27a867c" ChangeDateTime="12/19/2018 13:18:03">
+    <Property Name="ElementName" Value="[flow].[New]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="NewFlow" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8410a2a2-8932-4925-a3bb-f017881a9c1e" ChangeDateTime="12/19/2018 14:45:25">
+    <Property Name="ElementName" Value="[internals].[FlowType].[FlowTypeCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TypeCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ead86545-aab4-4435-b3d1-59f73867840c" ChangeDateTime="12/19/2018 15:12:28">
+    <Property Name="ElementName" Value="[flow].[AddFlowType]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AddType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="89d0b11b-ba65-4f3c-9281-937b0ced6680" ChangeDateTime="12/19/2018 20:57:30">
+    <Property Name="ElementName" Value="[flow].[Bye]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Touch" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf45eb3f-f9ed-4cfa-ae3b-8c4b98b55cb9" ChangeDateTime="12/19/2018 21:44:22">
+    <Property Name="ElementName" Value="[flow].[SetStatusFailureStatus]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="SetFailureStatus" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8feb7a6b-87c8-4b73-9ba2-bd80fbf908d8" ChangeDateTime="12/21/2018 13:32:32">
+    <Property Name="ElementName" Value="[internals].[FlowType].[InitialStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internals].[FlowType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InitialStatusCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5468851d-2148-46d0-b483-e8d2ff6289e2" ChangeDateTime="01/12/2019 14:52:28">
+    <Property Name="ElementName" Value="[flow].[SetParameter]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="SetParameterValue" />
+  </Operation>
+</Operations>

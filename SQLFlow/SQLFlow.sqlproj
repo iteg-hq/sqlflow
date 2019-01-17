@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQLFlow</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{2bbf7710-7196-4e6b-ac04-d8c45a26adb0}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQLFlow</RootNamespace>
+    <AssemblyName>SQLFlow</AssemblyName>
+    <ModelCollation>1030,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>flow</DefaultSchema>
+    <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
+    <Recovery>SIMPLE</Recovery>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>SQLFlowDevelopment.snk</AssemblyOriginatorKeyFile>
+    <PermissionSet>EXTERNAL_ACCESS</PermissionSet>
+    <Trustworthy>False</Trustworthy>
+    <IsEncryptionOn>True</IsEncryptionOn>
+    <GenerateCreateScript>True</GenerateCreateScript>
+    <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    <DefaultCollation>Danish_Norwegian_CI_AS</DefaultCollation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Security" />
+    <Folder Include="Tables" />
+    <Folder Include="Views" />
+    <Folder Include="Stored Procedures" />
+    <Folder Include="Functions" />
+    <Folder Include="Stored Procedures\Flow Type Setup" />
+    <Folder Include="Stored Procedures\Flow Setup" />
+    <Folder Include="Stored Procedures\Operations" />
+    <Folder Include="Stored Procedures\Runtime" />
+    <Folder Include="Flows" />
+    <Folder Include="Flows\Housekeeping" />
+    <Folder Include="CLR" />
+    <Folder Include="Stored Procedures\Internal" />
+    <Folder Include="Stored Procedures\Flow Type Setup\Type" />
+    <Folder Include="Stored Procedures\Flow Type Setup\Action" />
+    <Folder Include="Stored Procedures\Flow Type Setup\Lock" />
+    <Folder Include="Stored Procedures\Flow Type Setup\Status" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dev.publish.xml" />
+    <None Include="SQLFlowDevelopment.snk">
+      <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
+    </None>
+    <None Include="SQLFlowDevelopment.pub">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\internals.sql" />
+    <Build Include="Security\LogViewer.sql" />
+    <PostDeploy Include="PostDeployment.sql" />
+    <Build Include="Tables\FlowRelationship.sql" />
+    <Build Include="Tables\Flow.sql" />
+    <Build Include="Tables\FlowParameter.sql" />
+    <Build Include="Tables\FlowAction.sql" />
+    <Build Include="Tables\FlowStatus.sql" />
+    <Build Include="Tables\FlowType.sql" />
+    <Build Include="Tables\LogEntry.sql" />
+    <Build Include="Tables\LogLevel.sql" />
+    <Build Include="Tables\Lock.sql" />
+    <Build Include="Views\LogEntry.sql" />
+    <Build Include="Views\FlowAction.sql" />
+    <Build Include="Views\Flow.sql" />
+    <Build Include="Views\FlowLock.sql" />
+    <Build Include="Stored Procedures\Flow Setup\NewFlow.sql" />
+    <Build Include="Stored Procedures\Flow Setup\SetName.sql" />
+    <Build Include="Stored Procedures\Flow Setup\SetParameterValue.sql" />
+    <Build Include="Stored Procedures\Operations\Do.sql">
+      <SuppressTSqlWarnings>
+      </SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Stored Procedures\Operations\Main.sql">
+      <SuppressTSqlWarnings>
+      </SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Stored Procedures\Runtime\ExecuteSSISPackage.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Stored Procedures\Runtime\ExecuteStoredProcedure.sql" />
+    <Build Include="Stored Procedures\Runtime\Log.sql" />
+    <Build Include="Stored Procedures\Runtime\Notify.sql" />
+    <Build Include="Stored Procedures\Runtime\PostToWebhook.sql" />
+    <Build Include="Flows\Housekeeping\DeleteOldLogEntries.sql" />
+    <Build Include="Flows\Housekeeping\Housekeeping.sql" />
+    <Build Include="Stored Procedures\Operations\Touch.sql" />
+    <Build Include="Stored Procedures\Internal\SetStatus.sql" />
+    <Build Include="Functions\GetParent.sql" />
+    <Build Include="Functions\GetChild.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Type\ResetFlowType.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Type\AddType.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Action\DropAction.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Action\AddAction.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Lock\AddLock.sql" />
+    <Build Include="Functions\GetLockTree.sql" />
+    <Build Include="Functions\GetParameterValue.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Status\AddStatus.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Status\DropStatus.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Status\SetStatusLock.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Status\SetStatusProcedure.sql" />
+    <Build Include="Stored Procedures\Internal\AcquireLock.sql" />
+    <Build Include="Stored Procedures\Internal\ReleaseLock.sql" />
+    <Build Include="Security\SQLFlowUser.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Type\SetExecutionGroup.sql" />
+    <Build Include="Views\Lock.sql" />
+    <Build Include="Stored Procedures\Internal\GrabFlow.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Stored Procedures\Internal\ReleaseFlow.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SQLFlow.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CLR\PostToWebhook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\flow.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+  </ItemGroup>
+</Project>
