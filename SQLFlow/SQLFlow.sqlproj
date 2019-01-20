@@ -87,7 +87,7 @@
     <Folder Include="Stored Procedures\Flow Type Setup\Status" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dev.publish.xml" />
+    <None Include="Local.publish.xml" />
     <None Include="SQLFlowDevelopment.snk">
       <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
     </None>
