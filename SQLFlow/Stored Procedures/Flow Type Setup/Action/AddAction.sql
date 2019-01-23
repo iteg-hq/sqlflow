@@ -27,7 +27,8 @@ IF EXISTS (
 BEGIN
   UPDATE internals.FlowAction
   SET ResultingStatusCode = @FullResultingStatusCode
-  WHERE ActionCode = @ActionName
+  WHERE StatusCode = @StatusCode
+    AND ActionCode = @ActionName
   ;
 
   EXEC flow.Log 'INFO', 'Updated resulting status on :1: (:2:)', @ActionCode, @ResultingStatusCode;
