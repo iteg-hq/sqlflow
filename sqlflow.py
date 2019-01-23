@@ -12,7 +12,7 @@ loglevels = {
     "ERROR": 50,
 }
 
-log_template = "[{servername}][{timestamp}][{level}] {message}"
+log_template = "[{servername}][{timestamp}][{flow_id}][{level}] {message}"
 
 rv_query = "SELECT MIN(rv) FROM ( SELECT TOP {initial_tail} rv FROM flow.LogEntry ORDER BY rv DESC ) AS t"
 
@@ -22,9 +22,11 @@ rv_query = "SELECT MIN(rv) FROM ( SELECT TOP {initial_tail} rv FROM flow.LogEntr
 @click.option("-d", "--database", default="SQLFlow")
 @click.option("-U", "--username", default="")
 @click.option("-P", "--password", default="")
+@click.option("-v", "--verbose", is_flag=True)
 @click.pass_context
-def sqlflow(ctx, server, database, username, password):
-    click.echo("Connecting...")
+def sqlflow(ctx, server, database, username, password, verbose):
+    if verbose:
+        click.echo("Connecting...")
 
     connection_info = dict()
     connection_info["Driver"] = "{SQL Server}"
@@ -36,12 +38,15 @@ def sqlflow(ctx, server, database, username, password):
     else:
         connection_info["Trusted_Connection"] = "True"
     connection_string = ";".join("=".join(item) for item in connection_info.items())
-    click.echo(connection_string)
-    ctx.obj = dict()
+    if verbose:
+        click.echo('Connection string = "{0}"'.format(connection_string))
+    ctx.ensure_object(dict)
     ctx.obj["server"] = server
     ctx.obj["database"] = database
     ctx.obj["connection"] = pyodbc.connect(connection_string, autocommit=True)
-    click.echo("Connected")
+    ctx.obj["verbose"] = verbose
+    if verbose:
+        click.echo("Connected")
 
 
 @sqlflow.command()
@@ -52,9 +57,11 @@ def sqlflow(ctx, server, database, username, password):
 def tail(ctx, loglevel, polling_interval, initial_tail):
     cursor = ctx.obj["connection"].cursor()
     cursor.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
+    verbose = ctx.obj["verbose"]
     dbts = None
     if initial_tail:
-        click.echo("(Showing last {initial_tail} log messages)".format(initial_tail=initial_tail))
+        if verbose:
+            click.echo("(Showing last {initial_tail} log messages)".format(initial_tail=initial_tail))
         dbts = cursor.execute(rv_query.format(initial_tail=int(initial_tail))).fetchval()
     if not dbts:
         dbts = cursor.execute("SELECT @@DBTS").fetchval()
@@ -68,7 +75,7 @@ def tail(ctx, loglevel, polling_interval, initial_tail):
         for dbts, level, level_number, timestamp, message, spid, flow_id, status_code, username, servername in cursor:
             if level_number < limit:
                 continue
-            click.echo(log_template.format(servername=servername, timestamp=timestamp, level=level, message=message))
+            click.echo(log_template.format(servername=servername, timestamp=timestamp, level=level, message=message, flow_id=str(flow_id) or "-"))
         time.sleep(polling_interval)
 
 
