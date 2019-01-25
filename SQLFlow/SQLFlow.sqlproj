@@ -23,7 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>flow</DefaultSchema>
+    <DefaultSchema>utility</DefaultSchema>
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
     <Recovery>SIMPLE</Recovery>
     <SignAssembly>True</SignAssembly>
@@ -129,7 +129,6 @@
     <Build Include="Stored Procedures\Runtime\ExecuteStoredProcedure.sql" />
     <Build Include="Stored Procedures\Runtime\Log.sql" />
     <Build Include="Stored Procedures\Runtime\Notify.sql" />
-    <Build Include="Stored Procedures\Runtime\PostToWebhook.sql" />
     <Build Include="Flows\Housekeeping\DeleteOldLogEntries.sql" />
     <Build Include="Flows\Housekeeping\Housekeeping.sql" />
     <Build Include="Stored Procedures\Operations\Touch.sql" />
@@ -158,6 +157,7 @@
     <Build Include="Stored Procedures\Internal\ReleaseFlow.sql">
       <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </Build>
+    <Build Include="Security\utility.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SQLFlow.refactorlog" />
@@ -170,6 +170,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CLR\PostToWebhook.cs" />
+    <Compile Include="CLR\ReadFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\flow.sql" />
