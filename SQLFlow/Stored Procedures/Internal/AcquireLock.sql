@@ -34,7 +34,7 @@ BEGIN TRANSACTION
   IF @UnavailableLockCode != ''
   BEGIN
     ROLLBACK TRANSACTION
-    EXEC flow.Log 'ERROR', 'Could not acquire lock :1:, :2: is already held', @RootLockCode, @UnavailableLockCode;
+    EXEC flow.Log 'ERROR', 'Could not acquire lock [:1:], :2: is already held', @RootLockCode, @UnavailableLockCode;
     THROW 51000, 'Could not acquire lock', 1;
   END
 
@@ -44,6 +44,6 @@ BEGIN TRANSACTION
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 
-  EXEC flow.Log 'DEBUG', 'Acquired lock :1: (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
+  EXEC flow.Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
 
 COMMIT TRANSACTION

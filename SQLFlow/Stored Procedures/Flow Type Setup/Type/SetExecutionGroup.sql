@@ -9,7 +9,7 @@ IF NOT EXISTS (
     FROM internals.FlowType
     WHERE TypeCode = @TypeCode
   )
-  THROW 51000, 'Flow does not exist', 1;
+  THROW 51000, 'Flow type does not exist', 1;
 
 UPDATE internals.FlowType
 SET ExecutionGroupCode = @ExecutionGroupCode

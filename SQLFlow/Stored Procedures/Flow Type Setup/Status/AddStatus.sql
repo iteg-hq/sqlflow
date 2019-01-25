@@ -14,7 +14,7 @@ IF NOT EXISTS (
   WHERE TypeCode = @TypeCode
   )
 BEGIN
-  EXEC flow.Log 'ERROR', 'Flow type :1: does not exist', @TypeCode;
+  EXEC flow.Log 'ERROR', 'Flow type [:1:] does not exist', @TypeCode;
   THROW 51000, 'Flow type does not exist', 1;
 END
 -- Update the code of the required lock

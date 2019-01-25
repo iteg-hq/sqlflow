@@ -4,7 +4,7 @@ CREATE PROCEDURE internals.SetStatus
 AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC flow.Log 'TRACE', 'Entering flow.SetStatus'
-EXEC flow.Log 'DEBUG', 'Entering status :1:', @StatusCode;
+EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
   * Set the status of a Flow, acquiring any locks and executing 
   * any stored procedures associated with the flow.
@@ -25,7 +25,7 @@ IF EXISTS (
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC flow.Log 'INFO', 'Already in status :1:', @StatusCode;
+  EXEC flow.Log 'INFO', 'Already in status [:1:]', @StatusCode;
   RETURN;
 END
 
@@ -35,7 +35,7 @@ IF @StatusCode NOT IN (
     FROM internals.FlowStatus AS s
   )
 BEGIN
-  EXEC flow.Log 'ERROR', 'Invalid status: :1:', @StatusCode;
+  EXEC flow.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
   THROW 51000, 'Invalid status', 1;
 END
 

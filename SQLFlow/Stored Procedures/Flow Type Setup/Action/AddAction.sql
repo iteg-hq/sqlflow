@@ -31,7 +31,7 @@ BEGIN
     AND ActionCode = @ActionName
   ;
 
-  EXEC flow.Log 'INFO', 'Updated resulting status on :1: (:2:)', @ActionCode, @ResultingStatusCode;
+  EXEC flow.Log 'INFO', 'Updated resulting status on [:1:] (:2:)', @ActionCode, @ResultingStatusCode;
   RETURN;
 END
 

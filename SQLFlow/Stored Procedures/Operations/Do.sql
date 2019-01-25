@@ -5,7 +5,7 @@ AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internals.GrabFlow @FlowID;
 EXEC flow.Log 'TRACE', 'Entering flow.Do;'
-EXEC flow.Log 'DEBUG', 'Performing action: :1:', @ActionCode;
+EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
 
 DECLARE @StatusCode NVARCHAR(200);
 DECLARE @FailureStatusCode NVARCHAR(200);
@@ -15,7 +15,7 @@ DECLARE @ResultingStatusCode NVARCHAR(200);
 IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @FlowID )
 BEGIN
   EXEC flow.Touch @FlowID;
-  EXEC flow.Log 'ERROR', 'Invalid action: :1:', @ActionCode;
+  EXEC flow.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
   EXEC internals.ReleaseFlow;
   THROW 51000, 'Invalid action', 1;
 END
