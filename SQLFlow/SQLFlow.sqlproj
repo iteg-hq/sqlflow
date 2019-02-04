@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{2bbf7710-7196-4e6b-ac04-d8c45a26adb0}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -17,7 +17,7 @@
     <ModelCollation>1030,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -34,11 +34,12 @@
     <GenerateCreateScript>True</GenerateCreateScript>
     <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
     <DefaultCollation>Danish_Norwegian_CI_AS</DefaultCollation>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineDebug>false</DefineDebug>
@@ -130,7 +131,7 @@
     <Build Include="Stored Procedures\Runtime\Log.sql" />
     <Build Include="Stored Procedures\Runtime\Notify.sql" />
     <Build Include="Flows\Housekeeping\DeleteOldLogEntries.sql" />
-    <Build Include="Flows\Housekeeping\Housekeeping.sql" />
+    <Build Include="Flows\Housekeeping\Setup.sql" />
     <Build Include="Stored Procedures\Operations\Touch.sql" />
     <Build Include="Stored Procedures\Internal\SetStatus.sql" />
     <Build Include="Functions\GetParent.sql" />
@@ -176,8 +177,8 @@
     <Build Include="Security\flow.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac</HintPath>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>

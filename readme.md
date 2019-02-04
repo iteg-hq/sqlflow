@@ -4,7 +4,7 @@ SQLFlow is a flow manager written in SQL.
 
   - **Error handling and logging**: All errors are caught and logged to a common log table.
   - **Flow configuration**: All parameters are kept in one place.
-  - **Automated rollbacks and reruns**: Code for rolling back and re-scheduling flows may be registered with SQLFlow, so SQLFlow can perform common application management tasks.
+  - **Automated ollbacks and reruns**: Code for rolling back and re-scheduling flows may be registered with SQLFlow, so SQLFlow can perform common application management tasks.
   - **Seamless integration of SSIS and stored procedures**: Build your flows from both types of components, or add new types.
   - **Dependency management**: SQLFlow will keep track of which previous flows to prevent them from being unintentionally rolled back.
   - **Separation of invocation and execution**: In SQLFlow, a user with limited privileges may start a flow that will then run with elevated privileges.
@@ -28,21 +28,25 @@ EXEC flow.AddAction 'LoadNumbers.Running.Complete', 'Completed';
 ~~~
 
 Actions are transitions between statuses, and the statuses are added by SQLFlow if
-they're not already defined - we could also have added them with `flow.AddStatu`. Our "LoadNumbers" flow type defines four statuses - we'll add more later:
+they're not already defined - we could also have added them with `flow.AddStatus`.
 
-  - `New`: The status that the flow will have when it is created. In this status, the flow can only be started.
+Our "LoadNumbers" flow type defines four statuses - we'll add more later:
+
+  - `New`: The status that the flow will have when it is created. . In this status, the flow can only be started.
   - `Running`: The status where the flow does its work. In this status, the flow can fail or succeed.
   - `Failed` and `Completed`: The statuses that the flow enters if the work fails or succeeds.
 
-First, we'll try running a flow manually:
+Next, we'll create an instance of the "LoadNumbers" flow type by calling `flow.New`:
 
 
 ~~~sql
-DECLARE @ID INT
-EXEC flow.New 'LoadNumbers', @ID OUTPUT
+DECLARE @FlowID INT
+EXEC flow.New 'LoadNumbers', @FlowID OUTPUT
 EXEC flow.Do @ID, 'Start';
 EXEC flow.Do @ID, 'Complete';
 ~~~
+
+`flow.New` creates a new instance
 
 Normally, a SQL Agent Job would invoke the 'Start' action to start queued flows one by one, and the procedure that does the work associated with the "Running" status would invoke the 'Complete' action to hand over control to the next part of the flow. Here, we're running both procedures explicitly.
 
@@ -85,17 +89,6 @@ CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\somewhere\that\
 CREATE LOGIN SQLFlowDevelopmentLogin FROM ASYMMETRIC KEY SQLFlowDevelopment;
 GRANT UNSAFE ASSEMBLY TO SQLFlowDevelopmentLogin;
 ~~~
-
-Databses > System Databases > master > Security > Asymmetric Keys
-
-
-
-
-database > Security > Logins (rightclick)
-
-Name = SQLFlowDev
-
-
 
 (Doing this requires administration privileges on the target machine)
 
