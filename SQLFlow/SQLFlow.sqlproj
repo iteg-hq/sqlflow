@@ -159,6 +159,8 @@
       <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </Build>
     <Build Include="Security\utility.sql" />
+    <Build Include="Views\FlowType.sql" />
+    <Build Include="Views\FlowStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SQLFlow.refactorlog" />
