@@ -11,6 +11,10 @@ SELECT
   , le.StatusCode
   , le.UserName
   , @@SERVERNAME AS ServerName
+  , '['+ @@SERVERNAME +']' +
+    '['+ CAST(EntryTimestamp AS NVARCHAR(26)) +']' +
+    '['+ COALESCE(StatusCode, 'no status') +']' +
+    ' '+ FormattedEntryText AS LogLine
 FROM internals.LogEntry AS le
 INNER JOIN internals.LogLevel AS ll
   ON ll.LogLevelID = le.LogLevelID
