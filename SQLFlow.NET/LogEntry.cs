@@ -27,10 +27,13 @@ namespace SQLFlow
 
         public string Format()
         {
-            if (Flow == null) {
-                return $"[{ServerName}][{Timestamp}][{LogLevel}][{Message}]";
-            } else{
-                return $"[{ServerName}][{Timestamp}][{Flow.FlowID}][{LogLevel}][{Message}]";
+            if (Flow == null)
+            {
+                return $"[{ServerName}][{Timestamp}][{LogLevel}] {Message}";
+            }
+            else
+            {
+                return $"[{ServerName}][{Timestamp}][{Flow.FlowID}][{LogLevel}] {Message}";
             }
         }
     }

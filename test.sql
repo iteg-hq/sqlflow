@@ -1,33 +1,15 @@
 USE SQLFlow;
 
-
-
-EXEC flow.AddType @TypeCode='CRM';
-EXEC flow.AddAction 'CRM.New.Start', 'Downloading';
-EXEC flow.AddAction 'CRM.Downloading.Fail', 'DownloadFailed';
-EXEC flow.AddAction 'CRM.Downloading.Complete', 'DownloadCompleted';
-
-
-
-select * from flow.Flow
-
-SELECT *
-FROM flow.LogEntry
-WHERE flowID = 5
-
-
-
-
-
 -- Set up a new flow
 EXEC flow.AddType @TypeCode='Test';
 
--- Add some status transitions (the statuses will be added as needed)
+-- Add some actions:
 EXEC flow.AddAction 'Test.New.Start', 'Running';
 EXEC flow.AddAction 'Test.Running.Fail', 'Failed';
 EXEC flow.AddAction 'Test.Running.Complete', 'Completed';
 
--- try it, manually
+
+-- try it
 DECLARE @FlowID INT
 EXEC flow.NewFlow 'Test', @FlowID OUTPUT
 EXEC flow.Do @FlowID, 'Start';
@@ -35,65 +17,59 @@ EXEC flow.Do @FlowID, 'Complete';
 
 GO
 
--- Create a table
-CREATE TABLE flow.Seq (
-    Number INT NOT NULL PRIMARY KEY
-  , FlowID INT NOT NULL
-  )
-
-GO
--- ...and a procedure to load the table
-CREATE PROCEDURE flow.LoadSeq @FlowID INT
+-- Do some stuff and complete when we're done running
+CREATE PROCEDURE flow.DoStuff @FlowID INT
 AS
-DECLARE @Number INT = flow.GetParameterValue(@FlowID, 'Number')
-EXEC flow.Log 'INFO', 'Inserting number :1:...', @Number;
-INSERT INTO flow.Seq (Number, FlowID) VALUES (@Number, @FlowID)
-EXEC flow.Log 'INFO', 'Done, completing';
-EXEC flow.Do @FlowID, 'Complete'; 
+EXEC flow.Log 'INFO', 'Doing stuff';
+EXEC flow.Do @FlowID, 'Complete';
 ;
 
 GO
 
 -- Register the procedure with Running state
-EXEC flow.SetStatusProcedure @StatusCode='Test.Running', @ProcedureName='flow.LoadSeq';
-
-GO
-
-
--- Load the value 1, manually
-DECLARE @FlowID INT
-EXEC flow.NewFlow 'Test', @FlowID OUTPUT
-EXEC flow.SetName @FlowID, 'Number = ', 1
-EXEC flow.SetParameter @FlowID, 'Number', 1
-EXEC flow.Do @FlowID, 'Start';
--- flow.LoadSeq Completes the flow when it's done.
-
-GO
-
--- Wrap flow initiation in a procedure
-CREATE PROCEDURE flow.Test @Number INT
-AS
-DECLARE @FlowID INT
-EXEC flow.NewFlow 'Test', @FlowID OUTPUT
-EXEC flow.SetName @FlowID, 'Number = ', @Number
-EXEC flow.SetParameter @FlowID, 'Number', @Number
-EXEC flow.Do @FlowID, 'Start';
+EXEC flow.SetStatusProcedure @StatusCode='Test.Running', @ProcedureName='flow.DoStuff';
 
 GO
 
 -- Try it out
-EXEC flow.Test 2
-EXEC flow.Test 2
-EXEC flow.Test 3
+DECLARE @FlowID INT
+EXEC flow.NewFlow 'Test', @FlowID OUTPUT
+EXEC flow.Do @FlowID, 'Start';
+GO
+
+-- Wrap flow initiation in a procedure
+CREATE PROCEDURE flow.Test
+AS
+DECLARE @FlowID INT
+EXEC flow.NewFlow 'Test', @FlowID OUTPUT
 
 GO
 
--- Something went wrong, we need to roll back.
--- Put the rollback in a procedure
+-- Try it out
+EXEC flow.Test
+EXEC flow.Test
+EXEC flow.Test
+
+GO
+
+-- Try using flow.Main to process the queue
+EXEC flow.Main 'Ungrouped';
+
+GO
+
+-- 
+ALTER OR CREATE PROCEDURE flow.Test @Number INT
+AS
+DECLARE @FlowID INT
+EXEC flow.NewFlow 'Test', @FlowID OUTPUT
+IF SQLFlow.flow.Ge
+
+
+
+-- Put the rollback in a procedure, completing when we're done
 CREATE PROCEDURE flow.RollbackTest @FlowID INT
 AS
-DELETE flow.Seq WHERE FlowID = @FlowID;  
-EXEC flow.Log 'INFO', 'Rolled back Seq';
+EXEC flow.Log 'INFO', 'Rolling back stuff';
 EXEC flow.Do @FlowID, 'Complete'
 
 GO
@@ -112,11 +88,6 @@ EXEC flow.SetStatusProcedure 'Test.RollbackRunning', 'flow.RollbackTest';
 
 GO
 
--- Now, we can roll back 5 and 4, cancel 4 and rerun 5
-EXEC flow.Do 5, 'ForceRollback' -- #3
-EXEC flow.Do 4, 'Rollback' -- #2, failed run
-EXEC flow.Do 4, 'Cancel'
-EXEC flow.Do 5, 'Restart'
 
 SELECT *
 FROM flow.Flow

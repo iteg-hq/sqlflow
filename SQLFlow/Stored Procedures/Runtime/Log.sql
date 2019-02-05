@@ -6,7 +6,6 @@ CREATE PROCEDURE flow.Log
   , @Value3 NVARCHAR(4000) = NULL
   , @Value4 NVARCHAR(4000) = NULL
   , @Value5 NVARCHAR(4000) = NULL
-  , @FlowID INT = NULL
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
@@ -36,7 +35,7 @@ BEGIN
   END
   
   IF @EchoToOutput = 1
-    PRINT '[' + @LogLevel + '] ' + @FormattedEntryText;
+    PRINT '[' + COALESCE(CAST(SESSION_CONTEXT(N'FlowID') AS NVARCHAR(10)), 'No FlowID') + '][' + @LogLevel + '] ' + @FormattedEntryText;
 
   INSERT INTO internals.LogEntry (
       LogLevelID

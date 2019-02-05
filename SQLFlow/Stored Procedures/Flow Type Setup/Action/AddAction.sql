@@ -8,6 +8,18 @@ DECLARE @StatusCode NVARCHAR(200) = internals.GetParent(@ActionCode);
 DECLARE @ActionName NVARCHAR(200) = internals.GetChild(@ActionCode)
 DECLARE @FullResultingStatusCode NVARCHAR(200) = internals.GetParent(@StatusCode) +'.'+ @ResultingStatusCode;
 
+IF EXISTS (
+    SELECT 1
+    FROM internals.FlowAction AS a
+    WHERE StatusCode = @StatusCode
+      AND ActionCode = @ActionName
+      AND ResultingStatusCode = @FullResultingStatusCode
+  )
+  BEGIN
+    EXEC flow.Log 'DEBUG', 'Action :1: exists and has resulting status :2:', @ActionCode, @FullResultingStatusCode;
+    RETURN
+  END
+
 -- Forward definition of resulting status
 IF @FullResultingStatusCode NOT IN (
     SELECT StatusCode 
