@@ -26,14 +26,10 @@ namespace SQLFlow
             FlowID = flowID;
             Parameters = new FlowParameters(flowDatabase, FlowID);
         }
-
+        
         public void Do(string actionCode)
         {
             FlowDatabase.Do(FlowID, actionCode);
         }
-
-
-
-
     }
 }

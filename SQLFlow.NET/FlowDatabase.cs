@@ -29,20 +29,26 @@ namespace SQLFlow
 
         // SQLFlow stuff
 
-        public Flow GetFlowByID(int FlowID)
+        public Flow GetFlowByID(int flowID)
         {
-            return null;
+            return new Flow(this, flowID);
         }
 
         public Flow NewFlow(string typeCode)
         {
+            FlowType flowType = GetFlowTypeByCode(typeCode);
+            return NewFlow(GetFlowTypeByCode(typeCode));
+        }
+
+        public Flow NewFlow(FlowType flowType)
+        {
             int flowID;
-            SqlConnection connection = GetConnection();
+            var connection = GetConnection();
             connection.Open();
             using (var command = new SqlCommand("flow.NewFlow", connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@TypeCode", typeCode);
+                command.Parameters.AddWithValue("@TypeCode", flowType.TypeCode);
                 var outParam = new SqlParameter("@FlowID", SqlDbType.Int)
                 {
                     Direction = ParameterDirection.Output
@@ -51,9 +57,17 @@ namespace SQLFlow
                 command.ExecuteNonQuery();
                 flowID = (int)outParam.Value;
             }
+
+            Flow flow = new Flow(this, flowID);
             connection.Close();
-            return new Flow(this, flowID);
+            return flow;
         }
+
+        public FlowType GetFlowTypeByCode(string typeCode)
+        {
+            return new FlowType(this, typeCode);
+        }
+
 
         public void AddLogEntry(LogLevel logLevel, string message, object Value1 = null, object Value2 = null)
         {
@@ -120,28 +134,6 @@ namespace SQLFlow
             return null;
         }
 
-        public Flow NewFlow(FlowType flowType)
-        {
-            int flowID;
-            var connection = GetConnection();
-            connection.Open();
-            using (var command = new SqlCommand("flow.NewFlow", connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@TypeCode", flowType.TypeCode);
-                var outParam = new SqlParameter("@FlowID", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(outParam);
-                command.ExecuteNonQuery();
-                flowID = (int)outParam.Value;
-            }
-
-            Flow flow = new Flow(this, flowID);
-            connection.Close();
-            return flow;
-        }
 
         public void SetParameterValue(int flowID, string parameterName, object parameterValue)
         {

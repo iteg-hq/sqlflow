@@ -11,12 +11,13 @@ namespace SQLFlow
         private readonly FlowDatabase FlowDatabase;
 
         public string TypeCode;
-        public string ExecutionGroupCode;
+        public string ExecutionGroupCode { get; }
         public Status InitialStatus { get; set; }
 
-        protected FlowType(FlowDatabase flowDatabase)
+        internal FlowType(FlowDatabase flowDatabase, string typeCode)
         {
             FlowDatabase = flowDatabase;
+            TypeCode = typeCode;
         }
 
     }
