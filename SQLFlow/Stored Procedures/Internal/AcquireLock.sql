@@ -1,11 +1,11 @@
-CREATE PROCEDURE internals.AcquireLock
+CREATE PROCEDURE flow_internals.AcquireLock
     @FlowID INT
   , @RootLockCode NVARCHAR(200)
 AS
 BEGIN TRANSACTION
   CREATE TABLE #tree (LockCode NVARCHAR(200) PRIMARY KEY, LockLevel INT NOT NULL);
 
-  EXEC internals.ReleaseLock @FlowID;
+  EXEC flow_internals.ReleaseLock @FlowID;
 
   ;WITH tree AS (
       SELECT LockCode, 0 AS LockLevel
@@ -40,7 +40,7 @@ BEGIN TRANSACTION
 
   UPDATE l
   SET HeldByFlowID = @FlowID
-  FROM internals.Lock AS l
+  FROM flow_internals.Lock AS l
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 

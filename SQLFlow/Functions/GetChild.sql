@@ -1,4 +1,4 @@
-CREATE FUNCTION internals.GetChild (@Name NVARCHAR(200))
+CREATE FUNCTION flow_internals.GetChild (@Name NVARCHAR(200))
 RETURNS NVARCHAR(200)
 AS
 BEGIN

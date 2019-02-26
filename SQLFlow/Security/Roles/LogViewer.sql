@@ -1,5 +1,8 @@
 CREATE ROLE LogViewer;
-
 GO
 
 GRANT CONNECT TO LogViewer;
+GO
+
+GRANT EXECUTE ON flow.Tail TO LogViewer;
+GO

@@ -2,46 +2,44 @@ CREATE PROCEDURE flow.NewFlow
     @TypeCode NVARCHAR(20)
   , @FlowID INT OUTPUT
 AS
+SET NOCOUNT, XACT_ABORT ON;
+
+EXEC flow.Log 'TRACE', 'NewFlow [:1:], [:2:]', @TypeCode, @FlowID;
+  
+DECLARE @InitialStatus NVARCHAR(200);
+
+SELECT @InitialStatus = InitialStatusCode 
+FROM flow_internals.FlowType
+WHERE TypeCode = @TypeCode
+;
+
+IF @TypeCode NOT IN ( SELECT TypeCode FROM flow_internals.FlowType )
 BEGIN
-  SET NOCOUNT, XACT_ABORT ON;
+  EXEC flow.Log 'ERROR', 'Unknown flow type: :1:', @TypeCode;
+  THROW 51000, 'Unknown flow type code', 1;
+END 
 
-  DECLARE @InitialStatus NVARCHAR(200);
+-- Create new instance
+INSERT INTO flow_internals.Flow (
+    ExecutionGroupCode
+  , TypeCode
+  )
+SELECT
+    ExecutionGroupCode
+  , @TypeCode
+FROM flow_internals.FlowType
+WHERE TypeCode = @TypeCode
+;
 
-  SELECT @InitialStatus = InitialStatusCode 
-  FROM internals.FlowType
-  WHERE TypeCode = @TypeCode
-  ;
+-- Store the ID in an output variable
+SET @FlowID = SCOPE_IDENTITY();
 
-  IF @TypeCode NOT IN ( SELECT TypeCode FROM internals.FlowType )
-  BEGIN
-    EXEC flow.Log 'ERROR', 'Unknown flow type: :1:', @TypeCode;
-    THROW 51000, 'Unknown flow type code', 1;
-  END 
+EXEC flow_internals.GrabFlow @FlowID;
 
-  -- Create new instance
-  INSERT INTO internals.Flow (
-      [Name]
-    , ExecutionGroupCode
-    , TypeCode
-    )
-  SELECT
-      @TypeCode
-    , ExecutionGroupCode
-    , @TypeCode
-  FROM internals.FlowType
-  WHERE TypeCode = @TypeCode
-  ;
+-- Log the ID, so that it shows up in the log even if you're not seeing the FlowID column
+EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
 
-  -- Store the ID in an output variable
-  SET @FlowID = SCOPE_IDENTITY();
+-- Change status to New
+EXEC flow_internals.SetStatus @FlowID, @InitialStatus;
 
-  EXEC internals.GrabFlow @FlowID;
-
-  -- Log the ID, so that it shows up in the log even if you're not seeing the FlowID column
-  EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
-
-  -- Change status to New
-  EXEC internals.SetStatus @FlowID, @InitialStatus;
-
-  EXEC internals.GrabFlow @FlowID;
-END
+EXEC flow_internals.GrabFlow @FlowID;

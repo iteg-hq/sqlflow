@@ -1,13 +1,13 @@
-CREATE PROCEDURE internals.SetStatus
+CREATE PROCEDURE flow_internals.SetStatus
     @FlowID INT
   , @StatusCode NVARCHAR(255)
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow.Log 'TRACE', 'Entering flow.SetStatus'
+EXEC flow.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
 EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
   * Set the status of a Flow, acquiring any locks and executing 
-  * any stored procedures associated with the flow.
+  * any stored procedures associated with the status.
   * 
   * Fails if:
   *   - The status doesn't exist
@@ -32,7 +32,7 @@ END
 -- If the status is invalid, return
 IF @StatusCode NOT IN (
     SELECT s.StatusCode
-    FROM internals.FlowStatus AS s
+    FROM flow_internals.FlowStatus AS s
   )
 BEGIN
   EXEC flow.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
@@ -41,7 +41,7 @@ END
 
 -- Find the required lock
 SELECT @RequiredLockCode = RequiredLockCode
-FROM internals.FlowStatus
+FROM flow_internals.FlowStatus
 WHERE StatusCode = @StatusCode
 ;
 
@@ -49,19 +49,19 @@ WHERE StatusCode = @StatusCode
 IF @RequiredLockCode != ''
 BEGIN
   EXEC flow.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
-  EXEC internals.AcquireLock @FlowID, @RequiredLockCode
+  EXEC flow_internals.AcquireLock @FlowID, @RequiredLockCode
   EXEC flow.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
 END
 ELSE
 BEGIN
   EXEC flow.Log 'DEBUG', 'No lock required';
-  EXEC internals.ReleaseLock @FlowID;
+  EXEC flow_internals.ReleaseLock @FlowID;
 END
 
 -- Put the status code in the session context
 EXEC sp_set_session_context N'StatusCode', @StatusCode;
 
-UPDATE internals.Flow
+UPDATE flow_internals.Flow
 SET StatusCode = @StatusCode
 WHERE FlowID = @FlowID
 ;

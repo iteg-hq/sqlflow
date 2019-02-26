@@ -3,9 +3,9 @@ AS
 SELECT DISTINCT
     f.FlowID
   , l.LockCode
-FROM internals.Flow AS f
-INNER JOIN internals.Lock AS l
+FROM flow_internals.Flow AS f
+INNER JOIN flow_internals.Lock AS l
   ON l.HeldByFlowID = f.FlowID
-INNER JOIN internals.FlowStatus AS s
+INNER JOIN flow_internals.FlowStatus AS s
   ON s.StatusCode = f.StatusCode
 ;

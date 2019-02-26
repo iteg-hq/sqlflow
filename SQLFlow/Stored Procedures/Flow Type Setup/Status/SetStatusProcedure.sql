@@ -4,13 +4,16 @@ CREATE PROCEDURE flow.SetStatusProcedure
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-DECLARE @Exists BIT = 0;
+EXEC flow.Log 'TRACE', 'SetStatusProcedure [:1:], [:2:]', @StatusCode, @ProcedureName;
+
+DECLARE @Exists 
+BIT = 0;
 DECLARE @CurrentProcedureName NVARCHAR(255)
 
 SELECT 
     @Exists = 1
   , @CurrentProcedureName = ProcedureName
-FROM internals.FlowStatus
+FROM flow_internals.FlowStatus
 WHERE StatusCode = @StatusCode
 
 -- Fail if the status does not exist
@@ -28,7 +31,7 @@ BEGIN
   THROW 51000, 'Invalid procedure', 1;
 END
 
-UPDATE internals.FlowStatus
+UPDATE flow_internals.FlowStatus
 SET ProcedureName = @ProcedureName
 WHERE StatusCode = @StatusCode
 ;

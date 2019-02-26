@@ -24,7 +24,7 @@ BEGIN
       @LogLevelID = LogLevelID 
     , @EchoToOutput = EchoToOutput
     , @Notify = Notify
-  FROM internals.LogLevel 
+  FROM flow_internals.LogLevel 
   WHERE LogLevelCode = @LogLevel;
 
   IF @LogLevelID IS NULL
@@ -37,7 +37,7 @@ BEGIN
   IF @EchoToOutput = 1
     PRINT '[' + COALESCE(CAST(SESSION_CONTEXT(N'FlowID') AS NVARCHAR(10)), 'No FlowID') + '][' + @LogLevel + '] ' + @FormattedEntryText;
 
-  INSERT INTO internals.LogEntry (
+  INSERT INTO flow_internals.LogEntry (
       LogLevelID
     , FormattedEntryText
     , RawEntryText
@@ -59,15 +59,4 @@ BEGIN
     )
   ;
 
-  /*
-  IF @Notify = 1
-  BEGIN
-    DECLARE @Message NVARCHAR(MAX);
-    IF '$(NotificationWebhookURL)' LIKE 'https://hooks.slack.com/%'
-    BEGIN
-      SET @Message = ( SELECT @FormattedEntryText AS 'text' FOR JSON PATH, WITHOUT_ARRAY_WRAPPER )
-    END
-    EXEC flow.PostToWebhook '$(NotificationWebhookURL)', @Message;
-  END
-  */
 END

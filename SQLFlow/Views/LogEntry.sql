@@ -8,19 +8,15 @@ SELECT
   , le.FormattedEntryText
   , le.ServerProcessID
   , le.FlowID
-  , le.StatusCode
+  , le.RecursionLevel
+  , COALESCE(le.StatusCode, '(no status)') AS StatusCode
   , le.UserName
   , @@SERVERNAME AS ServerName
   , '['+ @@SERVERNAME +']' +
     '['+ CAST(EntryTimestamp AS NVARCHAR(26)) +']' +
     '['+ COALESCE(StatusCode, 'no status') +']' +
     ' '+ FormattedEntryText AS LogLine
-FROM internals.LogEntry AS le
-INNER JOIN internals.LogLevel AS ll
+FROM flow_internals.LogEntry AS le
+INNER JOIN flow_internals.LogLevel AS ll
   ON ll.LogLevelID = le.LogLevelID
-;
-
-GO
-
-GRANT SELECT ON flow.LogEntry TO LogViewer
 ;

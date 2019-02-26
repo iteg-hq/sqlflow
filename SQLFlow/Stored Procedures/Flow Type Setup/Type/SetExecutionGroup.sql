@@ -4,14 +4,27 @@ CREATE PROCEDURE flow.SetExecutionGroup
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
+EXEC flow.Log 'TRACE', 'SetExecutionGroup [:1:], [:2:]', @TypeCode, @ExecutionGroupCode;
+
 IF NOT EXISTS (
-    SELECT TypeCode
-    FROM internals.FlowType
+    SELECT 1
+    FROM flow_internals.FlowType
     WHERE TypeCode = @TypeCode
   )
   THROW 51000, 'Flow type does not exist', 1;
+  
+-- If no changes are needed, return
+IF EXISTS (
+    SELECT 1
+    FROM flow_internals.FlowType
+    WHERE TypeCode = @TypeCode
+      AND ExecutionGroupCode = @ExecutionGroupCode    
+  )
+  RETURN
 
-UPDATE internals.FlowType
+UPDATE flow_internals.FlowType
 SET ExecutionGroupCode = @ExecutionGroupCode
 WHERE TypeCode = @TypeCode
 ;
+
+EXEC flow.Log 'INFO', 'Set Execution Group to [:2:] on flow type [:1:]', @TypeCode, @ExecutionGroupCode;

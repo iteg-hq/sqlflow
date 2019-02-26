@@ -8,13 +8,13 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{2bbf7710-7196-4e6b-ac04-d8c45a26adb0}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
     <RootNamespace>SQLFlow</RootNamespace>
     <AssemblyName>SQLFlow</AssemblyName>
-    <ModelCollation>1030,CI</ModelCollation>
+    <ModelCollation>1033,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -23,7 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>utility</DefaultSchema>
+    <DefaultSchema>flow_internals</DefaultSchema>
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
     <Recovery>SIMPLE</Recovery>
     <SignAssembly>True</SignAssembly>
@@ -31,9 +31,9 @@
     <PermissionSet>EXTERNAL_ACCESS</PermissionSet>
     <Trustworthy>False</Trustworthy>
     <IsEncryptionOn>True</IsEncryptionOn>
-    <GenerateCreateScript>True</GenerateCreateScript>
+    <GenerateCreateScript>False</GenerateCreateScript>
     <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
-    <DefaultCollation>Danish_Norwegian_CI_AS</DefaultCollation>
+    <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -46,6 +46,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatTSqlWarningsAsErrors>True</TreatTSqlWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -86,6 +87,8 @@
     <Folder Include="Stored Procedures\Flow Type Setup\Action" />
     <Folder Include="Stored Procedures\Flow Type Setup\Lock" />
     <Folder Include="Stored Procedures\Flow Type Setup\Status" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Security\Roles" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
@@ -97,10 +100,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Security\internals.sql" />
-    <Build Include="Security\LogViewer.sql" />
     <PostDeploy Include="PostDeployment.sql" />
-    <Build Include="Tables\FlowRelationship.sql" />
     <Build Include="Tables\Flow.sql" />
     <Build Include="Tables\FlowParameter.sql" />
     <Build Include="Tables\FlowAction.sql" />
@@ -114,7 +114,6 @@
     <Build Include="Views\Flow.sql" />
     <Build Include="Views\FlowLock.sql" />
     <Build Include="Stored Procedures\Flow Setup\NewFlow.sql" />
-    <Build Include="Stored Procedures\Flow Setup\SetName.sql" />
     <Build Include="Stored Procedures\Flow Setup\SetParameterValue.sql" />
     <Build Include="Stored Procedures\Operations\Do.sql">
       <SuppressTSqlWarnings>
@@ -129,14 +128,14 @@
     </Build>
     <Build Include="Stored Procedures\Runtime\ExecuteStoredProcedure.sql" />
     <Build Include="Stored Procedures\Runtime\Log.sql" />
-    <Build Include="Stored Procedures\Runtime\Notify.sql" />
     <Build Include="Flows\Housekeeping\DeleteOldLogEntries.sql" />
     <Build Include="Flows\Housekeeping\Setup.sql" />
     <Build Include="Stored Procedures\Operations\Touch.sql" />
-    <Build Include="Stored Procedures\Internal\SetStatus.sql" />
+    <Build Include="Stored Procedures\Internal\SetStatus.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Functions\GetParent.sql" />
     <Build Include="Functions\GetChild.sql" />
-    <Build Include="Stored Procedures\Flow Type Setup\Type\ResetFlowType.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Type\AddType.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Action\DropAction.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Action\AddAction.sql" />
@@ -149,7 +148,6 @@
     <Build Include="Stored Procedures\Flow Type Setup\Status\SetStatusProcedure.sql" />
     <Build Include="Stored Procedures\Internal\AcquireLock.sql" />
     <Build Include="Stored Procedures\Internal\ReleaseLock.sql" />
-    <Build Include="Security\SQLFlowUser.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Type\SetExecutionGroup.sql" />
     <Build Include="Views\Lock.sql" />
     <Build Include="Stored Procedures\Internal\GrabFlow.sql">
@@ -158,12 +156,18 @@
     <Build Include="Stored Procedures\Internal\ReleaseFlow.sql">
       <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </Build>
-    <Build Include="Security\utility.sql" />
     <Build Include="Views\FlowType.sql" />
     <Build Include="Views\FlowStatus.sql" />
     <Build Include="Stored Procedures\Operations\Help.sql" />
     <Build Include="Stored Procedures\Operations\Tail.sql" />
-    <Build Include="CLR\PostToSlack.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Type\SetInitialStatus.sql" />
+    <Build Include="Stored Procedures\Internal\ShowOrphans.sql" />
+    <Build Include="Stored Procedures\Flow Type Setup\Action\DropActions.sql" />
+    <Build Include="Version.sql" />
+    <Build Include="Security\Schemas\flow.sql" />
+    <Build Include="Security\Schemas\flow_internals.sql" />
+    <Build Include="Security\Roles\SQLFlowUser.sql" />
+    <Build Include="Security\Roles\LogViewer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SQLFlow.refactorlog" />
@@ -179,19 +183,10 @@
     <Compile Include="CLR\ReadFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Security\flow.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac</HintPath>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SqlCmdVariable Include="WebhookURL">
-      <DefaultValue>https://localhost/</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
-    </SqlCmdVariable>
   </ItemGroup>
 </Project>

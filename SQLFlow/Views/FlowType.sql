@@ -4,5 +4,5 @@ SELECT
     TypeCode
   , ExecutionGroupCode
   , InitialStatusCode
-FROM internals.FlowType
+FROM flow_internals.FlowType
 ;

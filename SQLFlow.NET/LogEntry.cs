@@ -21,19 +21,21 @@ namespace SQLFlow
         public string Message;
         public string ServerName;
         public string UserName;
+        public string Status;
         public DateTime Timestamp;
         public LogLevel LogLevel;
         public Flow Flow;
+        public int RecursionLevel;
 
         public string Format()
         {
             if (Flow == null)
             {
-                return $"[{ServerName}][{Timestamp}][{LogLevel}] {Message}";
+                return $"[{Timestamp}][{UserName}@{ServerName}][{RecursionLevel}][{Status}][{LogLevel}] {Message}";
             }
             else
             {
-                return $"[{ServerName}][{Timestamp}][{Flow.FlowID}][{LogLevel}] {Message}";
+                return $"[{Timestamp}][{UserName}@{ServerName}][{Flow.FlowID}][{RecursionLevel}][{Status}][{LogLevel}] {Message}";
             }
         }
     }

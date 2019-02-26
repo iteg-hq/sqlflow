@@ -118,9 +118,10 @@ namespace SQLFlow
                         Timestamp = reader.GetDateTime(3),
                         Message = reader.GetString(4),
                         Flow = reader.IsDBNull(6) ? null : new Flow(this, reader.GetInt32(6)),
-                        UserName = reader.GetString(8),
-                        ServerName = reader.GetString(9)
-                        // int spid = reader.GetInt32(5);
+                        RecursionLevel = reader.GetInt32(7),
+                        Status = reader.GetString(8),
+                        UserName = reader.GetString(9),
+                        ServerName = reader.GetString(10)
                     };
                 }
                 reader.Close();

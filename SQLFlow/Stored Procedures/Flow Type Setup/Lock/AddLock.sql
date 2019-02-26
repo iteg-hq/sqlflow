@@ -3,14 +3,16 @@ CREATE PROCEDURE flow.AddLock
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-IF @LockCode IN ( SELECT LockCode FROM internals.Lock ) RETURN;
+EXEC flow.Log 'TRACE', 'AddLock [:1:]', @LockCode;
 
-DECLARE @ParentLockCode NVARCHAR(200) = internals.GetParent(@LockCode);
+IF @LockCode IN ( SELECT LockCode FROM flow_internals.Lock ) RETURN;
+
+DECLARE @ParentLockCode NVARCHAR(200) = flow_internals.GetParent(@LockCode);
 
 IF @ParentLockCode IS NULL 
 BEGIN
   -- If the lock has no parent, insert it
-  INSERT INTO internals.Lock (
+  INSERT INTO flow_internals.Lock (
       LockCode
     , ParentLockCode 
     , LockDepth
@@ -28,7 +30,7 @@ BEGIN
     EXEC flow.AddLock @ParentLockCode;
 
   -- Finally, create the child lock.
-  INSERT INTO internals.Lock (
+  INSERT INTO flow_internals.Lock (
       LockCode
     , ParentLockCode 
     , LockDepth

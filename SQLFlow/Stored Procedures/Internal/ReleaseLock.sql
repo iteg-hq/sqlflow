@@ -1,7 +1,7 @@
-CREATE PROCEDURE internals.ReleaseLock
+CREATE PROCEDURE flow_internals.ReleaseLock
     @FlowID INT
 AS
-UPDATE internals.Lock
+UPDATE flow_internals.Lock
 SET HeldByFlowID = NULL
 WHERE HeldByFlowID = @FlowID
 ;

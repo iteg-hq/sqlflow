@@ -15,7 +15,6 @@ DECLARE @LogLine NVARCHAR(MAX);
 
 SELECT
     @Exists = 1
-  , @Name = COALESCE([Name], '(none)')
   , @ExecutionGroupCode = COALESCE(ExecutionGroupCode, '(none)')
   , @TypeCode = COALESCE(TypeCode, '(none)')
   , @StatusCode = COALESCE(StatusCode, '(none)')
@@ -29,8 +28,6 @@ BEGIN
   RETURN;
 END
 
-PRINT 'Name: ' + @Name;
-PRINT '';
 PRINT 'Type: ' + @TypeCode;
 PRINT '';
 PRINT 'Status: ' + @StatusCode;

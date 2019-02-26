@@ -10,224 +10,140 @@ SQLFlow is a flow manager written in SQL.
   - **Separation of invocation and execution**: In SQLFlow, a user with limited privileges may start a flow that will then run with elevated privileges.
   - **Notifications via webhook**: SQLFlow will post notifications to Slack if something goes wrong.
 
-## Overview
+
+
 
 
 ## Quickstart ##
 
-Start out be defining a new flow type, which specifies which statuses the flow can be in and which actions are allowed when the flow is in each status:
+This tutorial describes installing SQLFlow to a local instance of SQL Server, for development purposes. In a production environment, you'll want to pay more attention to security.
 
-~~~sql
-USE SQLFlow;
+### Installation ###
 
-EXEC flow.NewType @TypeCode='LoadNumbers';
+First, you'll need to install the public key used to sign the SQLCLR assembly deployed by SQLFlow. This cannot be done in Management Studio.
 
-EXEC flow.AddAction 'LoadNumbers.New.Start', 'Running';
-EXEC flow.AddAction 'LoadNumbers.Running.Fail', 'Failed';
-EXEC flow.AddAction 'LoadNumbers.Running.Complete', 'Completed';
-~~~
+- Grant the SQL Server service user (`NT Service\MSSQLSERVER`) read access to to the `SQLFlowDevelopment.pub` file.
 
-Actions are transitions between statuses, and the statuses are added by SQLFlow if
-they're not already defined - we could also have added them with `flow.AddStatus`.
+- In Management Studio, start a new query in `master` and import the public key by running:
 
-Our "LoadNumbers" flow type defines four statuses - we'll add more later:
+  ~~~mssql
+  CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\SQLFlowDevelopment.pub';
+  ~~~
 
-  - `New`: The status that the flow will have when it is created. . In this status, the flow can only be started.
-  - `Running`: The status where the flow does its work. In this status, the flow can fail or succeed.
-  - `Failed` and `Completed`: The statuses that the flow enters if the work fails or succeeds.
+- Create a new login for the key: "Security" > Right-click "Logins" and select "New Login..."
+- Provide a name for the login (e.g. `SQLFlowKey`).
+- Select "Mapped to assymmetric key", select "SQLFlowDevelopment"
+- Go to the "Securables" page, click "Search", select the server, click OK
+- Check "Grant" under "Unsafe Assembly".
 
-Next, we'll create an instance of the "LoadNumbers" flow type by calling `flow.New`:
+Next, install SQLFlow:
 
+- Right-click "Databases" and select "New Database..."
+- Name the new database `SQLFlow`.
+- Right-click the new database, select "Tasks" and "Upgrade Data-tier Application..."
 
-~~~sql
-DECLARE @FlowID INT
-EXEC flow.New 'LoadNumbers', @FlowID OUTPUT
-EXEC flow.Do @ID, 'Start';
-EXEC flow.Do @ID, 'Complete';
-~~~
+- Browse to `SQLFlow.dacpac`
+- (The wizard will note that it cannot detect drift, and will ask to run the PostDeployment script.)
 
-`flow.New` creates a new instance
+Finally, start the log viewer by doubleclicking `SQLFlowTail.exe`. (If you've installed SQLFlow non-locally or to a database,  other than `SQLFlow` you'll need to supply a connection string as a command line argument. For more information on the SQLFlowTail.exe, see [TODO].)
 
-Normally, a SQL Agent Job would invoke the 'Start' action to start queued flows one by one, and the procedure that does the work associated with the "Running" status would invoke the 'Complete' action to hand over control to the next part of the flow. Here, we're running both procedures explicitly.
+You should see a bunch of messages from the installation. Now, try connecting to the SQLFlow database and doing:
 
-Next, we'll add some actual work to be done by the flow.
+```mssql
+EXEC flow.Log 'INFO', 'Hello World!';
+```
 
+You should see your message in the log.
 
+### SQLFlow test project ###
 
-
-
-
-
-
+Install the SQLFlowTest dacpac the same way as above
 
 
 
+## Documentation ##
 
+### API Overview ###
 
-
-
-
-
-
-
-
-The quickest way to get started developing code against SQLFlow is by
-installing a pre-built version of the solution (a dacpac).
-
-To deploy that, you'll need to install the public key used to sign the C#
-assemblies included in the solution.
-
-Navigate to `<repo root>\SQLFlow`, then copy `SQLFlowDevelopment.pub` to a
-place where it is accessible to the SQL Server that you'll be deploying to.
-
-Log on to SQL Server, go to `master` and import the key:
-
-~~~sql
-USE master;
-
-CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\somewhere\that\SQL\Server\can\access\SQLFlowDevelopment.pub';
-CREATE LOGIN SQLFlowDevelopmentLogin FROM ASYMMETRIC KEY SQLFlowDevelopment;
-GRANT UNSAFE ASSEMBLY TO SQLFlowDevelopmentLogin;
-~~~
-
-(Doing this requires administration privileges on the target machine)
-
-Use cmd or Powershell to navigate to the folder where the dacpac is located, then do
-
-~~~
-SqlPackage.exe /a:Publish /tsn:localhost /tdn:SQLFlow /sf:SQLFlow.dacpac
-~~~
-
-to deploy it, modifying the parameters `tsn` (target server name) and `tdn`
-(target database name) as needed.
-
-Now start a new database project in Visual Studio, add a database reference to
-the SQLFlow dacpac and to `master`, and you're ready to go.
-
-
-
-## API ##
+- *Flow Type*
+  - `AddType` @TypeCode, [@ExecutionGroupCode], [@InitialStatusCode]
+  - `SetExecutionGroup` @TypeCode, [@ExecutionGroupCode]
+  - `SetInitialStatus` @TypeCode, [@InitialStatusCode]
+- *Status*
+  - `AddStatus` @StatusCode, [@RequiredLockCode], [@ProcedureName]
+  - `SetStatusLock` @StatusCode, @RequiredLockCode
+  - `SetStatusProcedure` @StatusCode, [@ProcedureName]
+- *Actions*
+  - `AddAction` @ActionCode, @ResultingStatusCode
+  - `DropAction` @ActionCode
+  - `DropActions` @TypeCode
+- *Locking*
+  - `AddLock` @LockCode
+- *Flow Instances*
+  - `NewFlow` @TypeCode, @FlowID (OUTPUT)
+  - `Do` @FlowID, @ActionCode
 
 ### Flow Type Setup ###
 
+All setup calls are idempotent, and can be called as part of a deployment.
+
 #### Flow Types ####
 
-A flow type contains at least one status that instances of the flow can be in (e.g. "New", "Running", "Completed", "Rolling back"). Flow types are required to define an initial status that new instances of the flow 
+A flow type contains at least one status that instances of the flow can be in
+(e.g. "New", "Running", "Completed", "Rolling back"). Flow types are required
+to define an initial status that new instances of the flow
 
-Flow types cannot be deleted, but you can assign the initial status to 
+**AddType @TypeCode, [@ExecutionGroupCode], [@InitialStatusCode]**: Adds a new flow type named @TypeCode. If @ExecutionGroupCode and @InitialStatusCode are provided, they will be passed to SetExecutionGroup and SetInitialStatus, respectively. If not, execution group will be left unchanged.
 
-- **AddType**: Add a new flow type.
+If the flow does not exists, and no @ExecutionGroupCode is provided, the flow will be added to the 'Ungrouped' execution group.
 
-  - **@TypeCode**: The code identifying the flow. If a flow with the specified flow code already exists, it will be modified.
-  - **@ExecutionGroupCode** (optional): The execution group that instances of this type will belong to (The default value is "Ungrouped")
-  - **@InitialStatusCode** (optional): The initial status of instances of the type. Defaults to '<@TypeCodeæ>.New'
+If the flow does not exists, and no @InitialStatusCode is provided, an initial status '<@TypeCode>.New' will be used. This status will be provided if it does not exist.
 
+**SetExecutionGroup @TypeCode, [@ExecutionGroupCode]**: Sets the execution group of a flow type. If @ExecutionGroupCode is blank or NULL, no changed are made. Execution groups are mandatory and cannot be dropped.
 
+**SetInitialStatus @TypeCode, [@InitialStatusCode]**: Sets the initial status of a flow type. If @InitialStatusCode is blank or NULL, the initial status '<@TypeCode>.New' will be used (and created, if necessary).
 
+#### Status
 
-- **SetExecutionGroup**: Sets the execution group of a flow type.
+At any point in time, a flow is in a specific status, e.g. new, running, running, failed, cancelled, completed etc.
 
-  - **@TypeCode**: The code identifying the flow, which must exist.
+**AddStatus @StatusCode, [@RequiredLockCode], [@ProcedureName]**: Add a new status to a flow type, optionally assigning a required lock and/or a procedure to be run when entering the status.
 
-  - **@ExecutionGroupCode**: The execution group that instances of this type will belong to.
+The status code must be prefixed with a valid flow type code. If @RequiredLockCode and/or @ProcedureName are provided, they are passed to SetStatusLock and SetStatusProcedure.
 
-      
+**SetStatusLock @StatusCode, @RequiredLockCode**: Specify a lock that is required to enter a status.
 
-- **ResetFlowType**: Remove all actions, locks and procedures associated with the flow type.
+**SetStatusProcedure @StatusCode, [@ProcedureName]**: Specify a procedure to perform when a status is entered.
 
+#### Actions
 
-- - **@TypeCode**: The code identifying the flow type to reset.
+**AddAction @ActionCode, @ResultingStatusCode**: Add a new action to a flow type. @ActionCode is of the form `Flow.Status.Action`
 
+**DropAction @ActionCode**: Remove an action from a flow type. @ActionCode is of the form `Flow.Status.Action.
+
+**DropActions @TypeCode** : Remove all actions from the flow type with code @TypeCode.
+
+### 
+
+### Flow Instances ###
+
+**NewFlow @TypeCode, @FlowID (OUTPUT)**: Create a new flow instance pf type @TypeCode. The flow ID is returned to the caller.
+
+**SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a flow.
+
+**[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a flow.
+
+#### 
 
 #### Locking ####
 
 Locks are attached to statuses to exclude other flows from entering statuses that require the same lock. Locks are hierarchically arranged, with dotted names denoting their place in the hierarchy: Holding lock `Parent` implies holding `Parent.Child`, and holding `Parent.Child` prevents anyone from acquiring `Parent`. Holding `Parent.Sibling` does not prevent anyone from holding `Parent.Child`.
 
-Locks can always be de-escalated: If you hold `Parent`, you can always acquire `Parent.Child`.
+Locks can always be de-escalated: If you hold `Parent`, you can always release it and acquire `Parent.Child`.
 
-- **AddLock**: Add a new lock.
+**AddLock @LockCode**: Add a new lock. If a lock with the code already exists, this does nothing. Any implied parent locks will be created.
 
-  - **@LockCode**: The code identifying the lock. If a lock with the code already exists, nothing will happen. If the implied parent lock does not exist, it will be created.
-
-
-
-#### Status ####
-
-At any point in time, a flow is in a specific status, e.g. new, running, running, failed, cancelled, completed etc.
-
-In SQLFlow, the status 
-
-To enter a status, a flow may need to acquire a lock (see above). If the lock cannot be acquired, flow execution will fail.
-
-A status may define an _action_, which is a stored procedure that must be called when a flow enters the status.
-
-In each status, a number of actions may be taken
-
-
-
-- **AddStatus**: Add a new status to a flow type.
-  - **@StatusCode**: The code identifying the status. If the status is already defined, the lock, procedure and "initiality" will be updated, if the corresponding parameters are set.
-  - **@RequiredLockCode** (optional): The lock required to enter the status.
-  - **@ProcedureName** (optional): The procedure to perform when the status is entered.
-  - **@IsInitial** (optional): Flag that indicates that the status is the initial status for the parent flow. The default value is 0 (for false).
-
-
-
-
-- **SetStatusLock**: Specify a lock that is required to enter a status.
-  - **@StatusCode**: The code identifying the status. The status must exist.
-  - **@RequiredLockCode**: The lock required to enter the status (may be NULL). If the lock does not exist, it will be created.
-
-
-
-- **SetStatusProcedure**: Specify a procedure to perform when a status is entered.
-  - **@StatusCode**: The code identifying the status. The status must exist.
-  - **@ProcedureName** (optional): The procedure to perform when the status is entered (may be NULL).
-
-
-
-- **DropStatus**: Removes a status from a flow type.
-
-  - **@TypeCode**: The code identifying the flow type.
-  - **@StatusCode**: The code identifying the status.
-
-
-
-- **AddAction**: Add a new action to a flow type.
-
-  - **@ActionCode**: The code identifying the action.
-  - **@ResultingStatusCode**: The status that results from performing the action.
-
-- **DropAction**: Remove an action from a flow type.
-
-  - **@TypeCode**: The code identifying the flow type.
-  - **@StatusCode**: The code identifying the status.
-  - **@ActionCode**: The code identifying the action to drop.
-
-- 
-
-
-
-### Flow Setup ###
-
-
-
-- **NewFlow**: Specify a procedure to perform when a status is entered.
-
-  - **@TypeCode**: The code identifying the flow type. The flow must exists.
-  - **@StatusCode**: The code identifying the status. The status must exist.
-
-
-
-
-
-
-
-
-
-
-
-
+### 
 
 
 ### Deploying to production ###

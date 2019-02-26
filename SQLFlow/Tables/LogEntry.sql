@@ -1,10 +1,11 @@
-CREATE TABLE internals.LogEntry (
+CREATE TABLE flow_internals.LogEntry (
     rv ROWVERSION
   , UserName NVARCHAR(256) NOT NULL CONSTRAINT DF_LogEntry_UserName DEFAULT(SUSER_NAME())
   , EntryTimestamp DATETIME2(7) NOT NULL CONSTRAINT DF_LogEntry_EntryTimestamp DEFAULT (SYSDATETIME())
   , ServerProcessID INT NOT NULL CONSTRAINT DF_LogEntry_ServerProcessID DEFAULT (@@SPID)
   , FlowID INT NULL DEFAULT (CAST(SESSION_CONTEXT(N'FlowID') AS INT))
   , StatusCode NVARCHAR(50) NULL DEFAULT (CAST(SESSION_CONTEXT(N'StatusCode') AS NVARCHAR(50)))
+  , RecursionLevel INT NOT NULL DEFAULT (COALESCE(CAST(SESSION_CONTEXT(N'RecursionLevel') AS INT), 0))
   , LogLevelID TINYINT NOT NULL
   , FormattedEntryText NVARCHAR(4000) NULL
   -- Entry components
@@ -15,7 +16,7 @@ CREATE TABLE internals.LogEntry (
   , Value4 NVARCHAR(4000) NULL
   , Value5 NVARCHAR(4000) NULL
   , CONSTRAINT PK_LogEntry PRIMARY KEY (rv)
-  , CONSTRAINT FK_LogEntry_LogLevel FOREIGN KEY (LogLevelID) REFERENCES internals.LogLevel (LogLevelID)
-  --, CONSTRAINT FK_LogEntry_Flow FOREIGN KEY (FlowID) REFERENCES internals.Flow (FlowID)
+  , CONSTRAINT FK_LogEntry_LogLevel FOREIGN KEY (LogLevelID) REFERENCES flow_internals.LogLevel (LogLevelID)
+  --, CONSTRAINT FK_LogEntry_Flow FOREIGN KEY (FlowID) REFERENCES flow_internals.Flow (FlowID)
   )
 

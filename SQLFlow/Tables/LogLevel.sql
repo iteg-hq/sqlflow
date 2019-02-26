@@ -1,4 +1,4 @@
-CREATE TABLE internals.LogLevel (
+CREATE TABLE flow_internals.LogLevel (
     LogLevelID TINYINT NOT NULL
   , LogLevelCode NVARCHAR(10) NOT NULL
   , EchoToOutput BIT NOT NULL
