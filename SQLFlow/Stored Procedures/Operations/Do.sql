@@ -13,7 +13,7 @@ EXEC flow.Log 'TRACE', 'Do [:1:], [:2:], [:3:]', @FlowID, @ActionCode, @Recursio
 
 DECLARE @StatusCode NVARCHAR(200);
 DECLARE @ResultingStatusCode NVARCHAR(200);
-DECLARE @AutoComplete BIT;
+DECLARE @Autocomplete BIT;
 DECLARE @NextRecursionLevel INT = @RecursionLevel+1;
 
 
@@ -28,10 +28,10 @@ BEGIN
   THROW 51000, 'Invalid action', 1;
 END
 
--- Get the resulting status and wether or not the new status has autocomplete set
+-- Get the resulting status and wether or not the new status has Autocomplete set
 SELECT
     @ResultingStatusCode = ResultingStatusCode
-  , @AutoComplete = AutoComplete
+  , @Autocomplete = Autoomplete
 FROM flow.FlowAction
 WHERE FlowID = @FlowID
   AND ActionCode = @ActionCode
@@ -51,7 +51,7 @@ END CATCH
 -- If the status has Autocomplete set, call Do recursively to perform the Complete action to
 -- progress to the next state.
 
-IF @AutoComplete = 1
+IF @Autocomplete = 1
   EXEC flow.Do @FlowID, 'Complete', @NextRecursionLevel;
 
 
