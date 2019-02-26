@@ -31,7 +31,7 @@ END
 -- Get the resulting status and wether or not the new status has Autocomplete set
 SELECT
     @ResultingStatusCode = ResultingStatusCode
-  , @Autocomplete = Autoomplete
+  , @Autocomplete = Autocomplete
 FROM flow.FlowAction
 WHERE FlowID = @FlowID
   AND ActionCode = @ActionCode
