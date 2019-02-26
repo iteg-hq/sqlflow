@@ -25,17 +25,16 @@ namespace SQLFlow
         public DateTime Timestamp;
         public LogLevel LogLevel;
         public Flow Flow;
-        public int RecursionLevel;
 
         public string Format()
         {
             if (Flow == null)
             {
-                return $"[{Timestamp}][{UserName}@{ServerName}][{RecursionLevel}][{Status}][{LogLevel}] {Message}";
+                return $"[{Timestamp}][{UserName}@{ServerName}][{Status}][{LogLevel}] {Message}";
             }
             else
             {
-                return $"[{Timestamp}][{UserName}@{ServerName}][{Flow.FlowID}][{RecursionLevel}][{Status}][{LogLevel}] {Message}";
+                return $"[{Timestamp}][{UserName}@{ServerName}][{Flow.FlowID}][{Status}][{LogLevel}] {Message}";
             }
         }
     }

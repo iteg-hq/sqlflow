@@ -7,6 +7,8 @@ SELECT
   , a.ActionCode
   , a.ResultingStatusCode
   , s2.RequiredLockCode
+  , s2.ProcedureName
+  , s2.Autocomplete
 FROM flow_internals.Flow AS f
 INNER JOIN flow_internals.FlowStatus AS s
   ON  s.StatusCode = f.StatusCode

@@ -1,20 +1,21 @@
 CREATE PROCEDURE flow.Do
     @FlowID INT
   , @ActionCode NVARCHAR(50)
+  , @RecursionLevel INT = 0
 AS
 SET NOCOUNT, XACT_ABORT ON;
+EXEC flow_internals.UpdateContext @FlowID;
 
-EXEC flow.Log 'TRACE', 'Do [:1:], [:2:]', @FlowID, @ActionCode;
+/*
+ * Performs an action
+ */
+EXEC flow.Log 'TRACE', 'Do [:1:], [:2:], [:3:]', @FlowID, @ActionCode, @RecursionLevel;
 
 DECLARE @StatusCode NVARCHAR(200);
-DECLARE @FailureStatusCode NVARCHAR(200);
 DECLARE @ResultingStatusCode NVARCHAR(200);
-DECLARE @RecursionLevel INT;
+DECLARE @AutoComplete BIT;
+DECLARE @NextRecursionLevel INT = @RecursionLevel+1;
 
-SET @RecursionLevel = COALESCE(CAST(SESSION_CONTEXT(N'RecursionLevel') AS INT), 0) + 1
-EXEC sp_set_session_context N'RecursionLevel', @RecursionLevel;
-
-EXEC flow_internals.GrabFlow @FlowID;
 
 EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
 
@@ -23,12 +24,14 @@ IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @F
 BEGIN
   EXEC flow.Touch @FlowID;
   EXEC flow.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
-  EXEC flow_internals.ReleaseFlow;
+  EXEC flow_internals.UpdateContext @FlowID=NULL;
   THROW 51000, 'Invalid action', 1;
 END
 
--- Get the resulting status
-SELECT @ResultingStatusCode = ResultingStatusCode
+-- Get the resulting status and wether or not the new status has autocomplete set
+SELECT
+    @ResultingStatusCode = ResultingStatusCode
+  , @AutoComplete = AutoComplete
 FROM flow.FlowAction
 WHERE FlowID = @FlowID
   AND ActionCode = @ActionCode
@@ -39,36 +42,19 @@ BEGIN TRY
   EXEC flow_internals.SetStatus @FlowID, @ResultingStatusCode;
 END TRY
 BEGIN CATCH
-  SELECT
-      @StatusCode = StatusCode
-    , @FailureStatusCode = FailureStatusCode
-  FROM flow.Flow
-  WHERE FlowID = @FlowID
-  ;
-
-  IF @FailureStatusCode IS NULL
-  BEGIN
-    EXEC flow.Log 'ERROR', 'Undefined failure status on status code [:1:]', @StatusCode;
-    THROW 51000, 'Invalid action', 1;
-  END
-
-  IF @FailureStatusCode = @StatusCode
-  BEGIN
-    EXEC flow.Log 'INFO', 'Already in failure status.', @StatusCode;
-    EXEC flow.Log 'TRACE', 'Leaving flow.Do;'
-    SET @RecursionLevel = COALESCE(CAST(SESSION_CONTEXT(N'RecursionLevel') AS INT), 0) - 1
-    EXEC sp_set_session_context N'RecursionLevel', @RecursionLevel;
-    RETURN;
-  END
-    
-  -- Exception handling
-  EXEC flow.Log 'ERROR', 'Entering failure status', @FailureStatusCode;
-  EXEC flow_internals.SetStatus @FlowID, @FailureStatusCode
-  -- No failure chaining: If entering the failure status throws an exception, that exception is unhandled
+  -- If anything goes wrong in the status transition, call Do recursively to perform the Fail action.
+  -- No failure chaining: If Failing throws an exception, that exception is unhandled
+  EXEC flow.Do @FlowID, 'Fail', @NextRecursionLevel;
+  RETURN;
 END CATCH
+
+-- If the status has Autocomplete set, call Do recursively to perform the Complete action to
+-- progress to the next state.
+
+IF @AutoComplete = 1
+  EXEC flow.Do @FlowID, 'Complete', @NextRecursionLevel;
+
 
 EXEC flow.Log 'TRACE', 'Leaving flow.Do;'
 EXEC flow.Touch @FlowID;
-SET @RecursionLevel = COALESCE(CAST(SESSION_CONTEXT(N'RecursionLevel') AS INT), 0) - 1
-EXEC sp_set_session_context N'RecursionLevel', @RecursionLevel;
 

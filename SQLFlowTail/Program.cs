@@ -15,7 +15,7 @@ namespace SQLFlow
             {
                 foreach (LogEntry logentry in db.GetTail())
                 {
-                    if (logentry.LogLevel >= LogLevel.INFO)
+                    if (logentry.LogLevel >= LogLevel.TRACE)
                     {
                         Console.WriteLine(logentry.Format());
                     }

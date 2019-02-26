@@ -1,29 +1,38 @@
 CREATE PROCEDURE flow.SetStatusProcedure
     @StatusCode NVARCHAR(50)
   , @ProcedureName NVARCHAR(255)
+  , @Autocomplete BIT = NULL
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC flow.Log 'TRACE', 'SetStatusProcedure [:1:], [:2:]', @StatusCode, @ProcedureName;
+EXEC flow.Log 'TRACE', 'SetStatusProcedure [:1:], [:2:], [:3:]', @StatusCode, @ProcedureName, @Autocomplete;
 
-DECLARE @Exists 
-BIT = 0;
-DECLARE @CurrentProcedureName NVARCHAR(255)
+-- If this status has a procedure and no value is supplied for Autocomplete, assume that we want to
+-- Autocomplete. You might want to turn off Autocomplete if the status SP manages the resulting 
+-- status transition itself, or simply if the SP is something final, like notifying an operator or
+-- reporting success.
+IF @ProcedureName <> '' AND @Autocomplete IS NULL
+  SET @Autocomplete = 1;
 
-SELECT 
-    @Exists = 1
-  , @CurrentProcedureName = ProcedureName
-FROM flow_internals.FlowStatus
-WHERE StatusCode = @StatusCode
-
--- Fail if the status does not exist
-IF @Exists = 0
+IF NOT EXISTS (
+  SELECT 1
+  FROM flow_internals.FlowStatus
+  WHERE StatusCode = @StatusCode
+)
 BEGIN
   EXEC flow.Log 'ERROR', 'Invalid status [:1:]', @StatusCode;
   THROW 51000, 'Invalid status', 1
 END
 
-IF @CurrentProcedureName = @ProcedureName RETURN;
+-- No change
+IF NOT EXISTS (
+    SELECT ProcedureName, Autocomplete
+    FROM flow_internals.FlowStatus
+    WHERE StatusCode = @StatusCode
+    EXCEPT
+    SELECT @ProcedureName, @Autocomplete
+  )
+  RETURN;
 
 IF 'EXECUTE' NOT IN ( SELECT permission_name FROM fn_my_permissions(@ProcedureName, 'OBJECT') )
 BEGIN
@@ -33,7 +42,8 @@ END
 
 UPDATE flow_internals.FlowStatus
 SET ProcedureName = @ProcedureName
+  , Autocomplete = @Autocomplete
 WHERE StatusCode = @StatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Using procedure [:1:] for status [:2:]', @ProcedureName, @StatusCode;
+EXEC flow.Log 'INFO', 'Using procedure [:1:], Autocomplete [:2:] for status [:3:]', @ProcedureName, @Autocomplete, @StatusCode;

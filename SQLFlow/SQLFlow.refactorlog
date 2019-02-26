@@ -315,4 +315,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="SetParameterValue" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="64c5abdf-73ef-4e67-bbfc-e8dcb8070633" ChangeDateTime="02/26/2019 12:53:17">
+    <Property Name="ElementName" Value="[flow_internals].[GrabFlow]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[flow_internals]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UpdateContext" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0cfbb8ec-a52b-4360-a9f2-c311ee5dcd21" ChangeDateTime="02/26/2019 13:11:45">
+    <Property Name="ElementName" Value="[flow_internals].[FlowStatus].[AutoComplete]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[flow_internals].[FlowStatus]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Autocomplete" />
+  </Operation>
 </Operations>

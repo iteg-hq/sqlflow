@@ -2,6 +2,10 @@ CREATE PROCEDURE flow_internals.AcquireLock
     @FlowID INT
   , @RootLockCode NVARCHAR(200)
 AS
+SET NOCOUNT, XACT_ABORT ON;
+EXEC flow_internals.UpdateContext @FlowID;
+EXEC flow.Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
+
 BEGIN TRANSACTION
   CREATE TABLE #tree (LockCode NVARCHAR(200) PRIMARY KEY, LockLevel INT NOT NULL);
 

@@ -150,10 +150,7 @@
     <Build Include="Stored Procedures\Internal\ReleaseLock.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Type\SetExecutionGroup.sql" />
     <Build Include="Views\Lock.sql" />
-    <Build Include="Stored Procedures\Internal\GrabFlow.sql">
-      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
-    </Build>
-    <Build Include="Stored Procedures\Internal\ReleaseFlow.sql">
+    <Build Include="Stored Procedures\Internal\UpdateContext.sql">
       <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </Build>
     <Build Include="Views\FlowType.sql" />

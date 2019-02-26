@@ -9,7 +9,7 @@ SET NOCOUNT, XACT_ABORT ON;
 DECLARE @FlowID INT;
 DECLARE @StatusCode NVARCHAR(50);
   
-EXEC flow_internals.ReleaseFlow;
+EXEC flow_internals.UpdateContext @FlowID=NULL;
   
 -- Get the next action to run for this Execution Group where all required locks are available.
 SELECT TOP 1 @FlowID = FlowID
@@ -32,7 +32,7 @@ ORDER BY a.FlowID * @SortOrder
 IF @FlowID IS NULL
   RETURN;
 
-EXEC flow_internals.GrabFlow @FlowID;
+EXEC flow_internals.UpdateContext @FlowID;
 
 EXEC flow.Do @FlowID, @ActionCode;
 
@@ -44,4 +44,4 @@ WHERE FlowID = @FlowID
 
 EXEC flow.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;
 
-EXEC flow_internals.ReleaseFlow;
+EXEC flow_internals.UpdateContext @FlowID=NULL;

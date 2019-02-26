@@ -3,6 +3,8 @@ CREATE PROCEDURE flow_internals.SetStatus
   , @StatusCode NVARCHAR(255)
 AS
 SET NOCOUNT, XACT_ABORT ON;
+EXEC flow_internals.UpdateContext @FlowID;
+
 EXEC flow.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
 EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
@@ -10,9 +12,9 @@ EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
   * any stored procedures associated with the status.
   * 
   * Fails if:
-  *   - The status doesn't exist
-  *   - A required lock cannot be acquired
-  *   - The status procedure fails
+  *   - The status doesn't exist.
+  *   - A required lock cannot be acquired.
+  *   - The status procedure fails.
   */
 DECLARE @RequiredLockCode NVARCHAR(50);
 DECLARE @ProcedureName NVARCHAR(500);
@@ -58,13 +60,13 @@ BEGIN
   EXEC flow_internals.ReleaseLock @FlowID;
 END
 
--- Put the status code in the session context
-EXEC sp_set_session_context N'StatusCode', @StatusCode;
-
 UPDATE flow_internals.Flow
 SET StatusCode = @StatusCode
 WHERE FlowID = @FlowID
 ;
+-- Put the status code in the session context
+EXEC sp_set_session_context N'StatusCode', @StatusCode;
+
 
 EXEC flow.Log 'INFO', 'Entered status [:1:]', @StatusCode;
 

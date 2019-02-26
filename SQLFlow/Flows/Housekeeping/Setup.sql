@@ -12,8 +12,8 @@ EXEC flow.AddAction 'SQLFlow:Housekeeping.New.Start', 'Running';
 EXEC flow.AddAction 'SQLFlow:Housekeeping.Running.Fail', 'Failed'
 EXEC flow.AddAction 'SQLFlow:Housekeeping.Running.Complete', 'Completed';
 
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Running', @ProcedureName='flow_internals.HousekeepingRunning'
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Failed',  @ProcedureName='flow_internals.HousekeepingFailed';
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Running', @ProcedureName='flow_internals.HousekeepingRunning';
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Failed',  @ProcedureName='flow_internals.HousekeepingFailed', @Autocomplete=0;
 
 GO
 
@@ -34,7 +34,6 @@ AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
   EXEC flow_internals.DeleteOldLogEntries @FlowID;
-  EXEC flow.Do @FlowID, 'Complete';
 END
 
 GO

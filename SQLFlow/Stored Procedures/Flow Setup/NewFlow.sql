@@ -3,6 +3,7 @@ CREATE PROCEDURE flow.NewFlow
   , @FlowID INT OUTPUT
 AS
 SET NOCOUNT, XACT_ABORT ON;
+EXEC flow_internals.UpdateContext @FlowID;
 
 EXEC flow.Log 'TRACE', 'NewFlow [:1:], [:2:]', @TypeCode, @FlowID;
   
@@ -31,10 +32,9 @@ FROM flow_internals.FlowType
 WHERE TypeCode = @TypeCode
 ;
 
--- Store the ID in an output variable
+-- Store the ID in an output variable and update the session context
 SET @FlowID = SCOPE_IDENTITY();
-
-EXEC flow_internals.GrabFlow @FlowID;
+EXEC flow_internals.UpdateContext @FlowID;
 
 -- Log the ID, so that it shows up in the log even if you're not seeing the FlowID column
 EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
@@ -42,4 +42,4 @@ EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
 -- Change status to New
 EXEC flow_internals.SetStatus @FlowID, @InitialStatus;
 
-EXEC flow_internals.GrabFlow @FlowID;
+

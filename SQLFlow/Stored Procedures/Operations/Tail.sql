@@ -12,7 +12,7 @@ FROM (
 WHERE n <= 101
 ;
 
-SELECT [rv], [LogLevelCode], [LogLevelID], [EntryTimestamp], [FormattedEntryText], [ServerProcessID], [FlowID], RecursionLevel, [StatusCode], [UserName], [ServerName]
+SELECT [rv], [LogLevelCode], [LogLevelID], [EntryTimestamp], [FormattedEntryText], [ServerProcessID], [FlowID], [StatusCode], [UserName], [ServerName]
 FROM flow.LogEntry
 WHERE rv > @rv
 ORDER BY rv;

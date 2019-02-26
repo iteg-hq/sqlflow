@@ -5,7 +5,6 @@ CREATE TABLE flow_internals.LogEntry (
   , ServerProcessID INT NOT NULL CONSTRAINT DF_LogEntry_ServerProcessID DEFAULT (@@SPID)
   , FlowID INT NULL DEFAULT (CAST(SESSION_CONTEXT(N'FlowID') AS INT))
   , StatusCode NVARCHAR(50) NULL DEFAULT (CAST(SESSION_CONTEXT(N'StatusCode') AS NVARCHAR(50)))
-  , RecursionLevel INT NOT NULL DEFAULT (COALESCE(CAST(SESSION_CONTEXT(N'RecursionLevel') AS INT), 0))
   , LogLevelID TINYINT NOT NULL
   , FormattedEntryText NVARCHAR(4000) NULL
   -- Entry components
