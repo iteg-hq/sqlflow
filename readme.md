@@ -46,7 +46,7 @@ In addition, SQLFlow provides a framework for storing parameter values needed by
 
 SQLFlow consists of the following components:
 
-- [SQLFlow](/SQLFLow/Documentation/readme.md): The flow manager itself, including a SQL interface.
+- [SQLFlow](/SQLFlow/Documentation/readme.md): The flow manager itself, including a SQL interface.
 - [SQLFlow.NET](/SQLFlow.NET/Documentation/readme.md): A .NET wrapper for the SQLFlow interface.
 - [SQLFlowTail](/SQLFlowTail/Documentation/readme.md): A command line application that displays log messages from SQLFlow
 - [SQLFlowTest](/SQLFlowTest/Documentation/readme.md): A sample database project using SQLFlow.
