@@ -68,7 +68,6 @@
     <PostDeploy Include="PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Stored Procedures\DoStuffAndComplete.sql" />
     <Build Include="Stored Procedures\RollStuffBack.sql" />
     <Build Include="Stored Procedures\DoStuffButFailSometimes.sql" />
     <Build Include="Security\flow_test.sql" />
@@ -76,6 +75,8 @@
     <Build Include="Flows\03 - Failure.sql" />
     <Build Include="Flows\01 - Simple.sql" />
     <Build Include="Flows\02 - Rollback.sql" />
+    <Build Include="Stored Procedures\FailOnce.sql" />
+    <Build Include="Flows\00 - Sample.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">

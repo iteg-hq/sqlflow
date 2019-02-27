@@ -89,6 +89,7 @@
     <Folder Include="Stored Procedures\Flow Type Setup\Status" />
     <Folder Include="Security\Schemas" />
     <Folder Include="Security\Roles" />
+    <Folder Include="Documentation" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
@@ -98,6 +99,7 @@
     <None Include="SQLFlowDevelopment.pub">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Documentation\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />

@@ -6,7 +6,7 @@ EXEC [$(SQLFlow)].flow.DropActions 'Test:Simple';
 
 EXEC [$(SQLFlow)].flow.AddAction 'Test:Simple.New.Start', 'Running';
 EXEC [$(SQLFlow)].flow.AddAction 'Test:Simple.Running.Complete', 'Complete';
-EXEC [$(SQLFlow)].flow.SetStatusProcedure 'Test:Simple.Running', '$(DatabaseName).flow_test.DoStuffAndComplete'
+EXEC [$(SQLFlow)].flow.SetStatusProcedure 'Test:Simple.Running', '$(DatabaseName).flow_test.DoStuff'
 
 GO
 

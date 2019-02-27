@@ -15,7 +15,7 @@ EXEC [$(SQLFlow)].flow.AddAction 'Test:Async.RollingBack.Complete', 'RollbackCom
 -- Restart
 EXEC [$(SQLFlow)].flow.AddAction 'Test:Async.RollbackCompleted.Restart', 'Running';
 
-EXEC [$(SQLFlow)].flow.SetStatusProcedure 'Test:Async.Running', '$(DatabaseName).flow_test.DoStuffAndComplete'
+EXEC [$(SQLFlow)].flow.SetStatusProcedure 'Test:Async.Running', '$(DatabaseName).flow_test.DoStuff'
 EXEC [$(SQLFlow)].flow.SetStatusProcedure 'Test:Async.RollingBack', '$(DatabaseName).flow_test.RollStuffBack'
 
 GO

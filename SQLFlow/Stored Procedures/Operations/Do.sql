@@ -54,7 +54,6 @@ END CATCH
 IF @Autocomplete = 1
   EXEC flow.Do @FlowID, 'Complete', @NextRecursionLevel;
 
-
-EXEC flow.Log 'TRACE', 'Leaving flow.Do;'
+EXEC flow.Log 'TRACE', 'Leaving flow.Do [:1:];', @RecursionLevel;
 EXEC flow.Touch @FlowID;
 
