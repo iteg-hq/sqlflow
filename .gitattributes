@@ -63,4 +63,4 @@
 #*.RTF   diff=astextplain
 
 *.sql   linguist-detectable=true linguist-language=sql
-*.md    diff=astextplain
+# *.md    diff=astextplain
