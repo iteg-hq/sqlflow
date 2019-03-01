@@ -42,4 +42,14 @@ EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
 -- Change status to New
 EXEC flow_internals.SetStatus @FlowID, @InitialStatus;
 
+DECLARE @Autocomplete BIT;
 
+SELECT @Autocomplete = Autocomplete
+FROM flow.FlowStatus
+WHERE StatusCode = @InitialStatus;
+;
+
+IF @Autocomplete = 1
+  EXEC flow.Do @FlowID, 'Complete';
+
+GO
