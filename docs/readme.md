@@ -71,6 +71,8 @@ This tutorial describes installing SQLFlow to a local instance of SQL Server, fo
 
 ### Installation ###
 
+First, fetch the ()[https://github.com/grit-solutions/sqlflow/releases/latest]
+
 First, you'll need to install the public key used to sign the SQLCLR assembly deployed by SQLFlow. This cannot be done in Management Studio.
 
 - Grant the SQL Server service user (`NT Service\MSSQLSERVER`) read access to to the `SQLFlowDevelopment.pub` file.
@@ -78,7 +80,7 @@ First, you'll need to install the public key used to sign the SQLCLR assembly de
 - In Management Studio, start a new query in `master` and import the public key by running:
 
   ~~~mssql
-  CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\SQLFlowDevelopment.pub';
+  CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\SQLFlowDevelopment.dll';
   ~~~
 
 - Create a new login for the key: "Security" > Right-click "Logins" and select "New Login..."
@@ -92,19 +94,18 @@ Next, install SQLFlow:
 - Right-click "Databases" and select "New Database..."
 - Name the new database `SQLFlow`.
 - Right-click the new database, select "Tasks" and "Upgrade Data-tier Application..."
-
 - Browse to `SQLFlow.dacpac`
-- (The wizard will note that it cannot detect drift, and will ask to run the PostDeployment script.)
+- (The wizard will warn that it cannot detect drift, and will ask to run the PostDeployment script.)
 
 Finally, start the log viewer by doubleclicking `SQLFlowTail.exe`. (If you've installed SQLFlow non-locally or to a database,  other than `SQLFlow` you'll need to supply a connection string as a command line argument. For more information on the SQLFlowTail.exe, see [TODO].)
 
-You should see a bunch of messages from the installation. Now, try connecting to the SQLFlow database and doing:
+You should see some messages from the installation. Now, try connecting to the SQLFlow database and doing:
 
 ```mssql
 EXEC flow.Log 'INFO', 'Hello World!';
 ```
 
-You should see your message in the log.
+This message should appear in the log.
 
 ## API ##
 
@@ -173,8 +174,6 @@ The status code must be prefixed with a valid flow type code. If @RequiredLockCo
 **SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a flow.
 
 **[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a flow.
-
-#### 
 
 #### Locking ####
 
