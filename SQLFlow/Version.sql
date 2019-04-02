@@ -1,4 +1,4 @@
 EXEC sp_addextendedproperty
   @name='sqlflow_version',
-  @value ='0.9.0'
+  @value ='1.1.0'
 ;

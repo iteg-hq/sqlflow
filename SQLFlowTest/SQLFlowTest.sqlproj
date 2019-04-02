@@ -57,9 +57,9 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Flows" />
-    <Folder Include="Stored Procedures" />
+    <Folder Include="Test" />
     <Folder Include="Security" />
+    <Folder Include="Test\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
@@ -68,15 +68,15 @@
     <PostDeploy Include="PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Stored Procedures\RollStuffBack.sql" />
-    <Build Include="Stored Procedures\DoStuffButFailSometimes.sql" />
-    <Build Include="Security\flow_test.sql" />
-    <Build Include="Stored Procedures\DoStuff.sql" />
-    <Build Include="Flows\03 - Failure.sql" />
-    <Build Include="Flows\01 - Simple.sql" />
-    <Build Include="Flows\02 - Rollback.sql" />
-    <Build Include="Stored Procedures\FailOnce.sql" />
-    <Build Include="Flows\00 - Sample.sql" />
+    <Build Include="TEst\03 - Failure.sql" />
+    <Build Include="TEst\01 - Simple.sql" />
+    <Build Include="TEst\02 - Rollback.sql" />
+    <Build Include="TEst\00 - Sample.sql" />
+    <Build Include="Test\flow_test.sql" />
+    <Build Include="Test\Stored Procedures\DoStuff.sql" />
+    <Build Include="Test\Stored Procedures\DoStuffButFailSometimes.sql" />
+    <Build Include="Test\Stored Procedures\FailOnce.sql" />
+    <Build Include="Test\Stored Procedures\RollStuffBack.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">

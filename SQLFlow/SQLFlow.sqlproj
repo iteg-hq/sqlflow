@@ -32,7 +32,7 @@
     <Trustworthy>False</Trustworthy>
     <IsEncryptionOn>True</IsEncryptionOn>
     <GenerateCreateScript>False</GenerateCreateScript>
-    <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
     <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -89,6 +89,8 @@
     <Folder Include="Stored Procedures\Flow Type Setup\Status" />
     <Folder Include="Security\Schemas" />
     <Folder Include="Security\Roles" />
+    <Folder Include="Flows\Test" />
+    <Folder Include="Flows\Test\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
@@ -185,5 +187,16 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Flows\Test\Stored Procedures\DoStuff.sql" />
+    <Build Include="Flows\Test\Stored Procedures\DoStuffButFailSometimes.sql" />
+    <Build Include="Flows\Test\Stored Procedures\FailOnce.sql" />
+    <Build Include="Flows\Test\Stored Procedures\RollStuffBack.sql" />
+    <Build Include="Flows\Test\00 - Sample.sql" />
+    <Build Include="Flows\Test\01 - Simple.sql" />
+    <Build Include="Flows\Test\02 - Rollback.sql" />
+    <Build Include="Flows\Test\03 - Failure.sql" />
+    <Build Include="Flows\Test\flow_test.sql" />
   </ItemGroup>
 </Project>
