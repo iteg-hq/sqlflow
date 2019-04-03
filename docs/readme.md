@@ -4,17 +4,17 @@
 
 SQLFlow hosts your "business" code by letting you associate it with a flow *status*: The procedure that loads your data attached to the "Running" status, the one that notifies an operator to the "Failed" status, the one that rolls the load back to the "Rollback Running" status, and so on. When a new status is entered, the associated code is run.
 
-*Actions* define transitions between statuses and thus provide an abstract way of invoking your code: SQL Agent jobs can be set up to perform "Start" actions on any type of flow as they reach the head of the queue. Human operators can perform "Rollback" actions without having to know how the rollback works. SQLFlow itself can perform "Fail" actions to take appropriate action when something fails.
+*Actions* define transitions between statuses and thus provide an abstract way of invoking your code: SQL Agent jobs perform "Start" actions on any type of startable flow as they reach the head of the queue. Human operators perform "Rollback" actions without having to know how the rollback works. SQLFlow performs "Fail" actions to take appropriate action when something fails.
 
-In addition, SQLFlow provides a framework for storing parameter values needed by flows, a single procedure for logging and a simple locking system that lets flows block one another while running or until failed flows are handled.
+In addition, SQLFlow provides a framework for storing parameter values needed by flows, a single procedure for logging and a simple locking system that lets flows block one another while running or until a failed flow is handled.
 
 ## Features
 
+- **Error handling**: All errors are caught (and logged) and error handling code can be registered in SQLFlow.
+- **Automated rollbacks and reruns**: Code for application management tasks (like rolling back failed flows) can be registered with SQLFlow and performed automatically or by using a common interface.
 - **Logging**: SQLFlow provides a single SP for logging.
 - **Locking**: A simple locking mechanism lets you specify that only one flow can be running at a time, or that failed flows should block new flows from running.
-- **Error handling**: All errors are caught (and logged) and error handling code can be registered in SQLFlow and run automatically.
 - **Flow configuration in one place**: All configuration info and parameters are kept in one place.
-- **Automated rollbacks and reruns**: Code for application management tasks (like rolling back failed flows) can be registered with SQLFlow and performed automatically or by using a common interface.
 - **Separation of invocation and execution**: In SQLFlow, a user or application with limited privileges may start a flow that will then run with elevated privileges.
 - **Seamless integration of SSIS packages and stored procedures**: Flows from both types of components, or add new types.
 - **Notifications via webhook**: SQLFlow makes it easy to notify operators via webhooks.
@@ -27,7 +27,7 @@ In addition, SQLFlow provides a framework for storing parameter values needed by
 [29][INFO] Created new FlowID: 29
 [29][INFO] Entered status [Test:TestFlow.New]
 
-> EXEC SQLFlow.flow.Main 'System' -- Worker process picks up the flow from the queue
+> EXEC SQLFlow.flow.Main 'Test' -- Worker process picks up the flow from the queue
 
 [29][INFO] Entered status [Test:TestFlow.Running]
 [29][INFO] Doing stuff
@@ -57,30 +57,39 @@ Invalid action
 
 SQLFlow consists of the following components:
 
-- [SQLFlow](/SQLFlow/Documentation/readme.md): The flow manager itself, including a SQL interface.
-- [SQLFlow.NET](/SQLFlow.NET/Documentation/readme.md): A .NET wrapper for the SQLFlow interface.
-- [SQLFlowTail](/SQLFlowTail/Documentation/readme.md): A command line application that displays log messages from SQLFlow
-- [SQLFlowTest](/SQLFlowTest/Documentation/readme.md): A sample database project using SQLFlow.
+- [SQLFlow](#sqlflow): The flow manager itself, including a SQL interface.
+- SQLFlow.NET: A .NET wrapper for the SQLFlow interface.
+- SQLFlowTail: A command line application that displays log messages from SQLFlow
 
 
 # SQLFlow #
 
-## Quickstart ##
-
 This tutorial describes installing SQLFlow to a local instance of SQL Server, for development purposes. In a production environment, you'll want to pay more attention to security.
 
-### Installation ###
+## Installation
 
-First, fetch the ()[https://github.com/grit-solutions/sqlflow/releases/latest]
+### Download
 
-First, you'll need to install the public key used to sign the SQLCLR assembly deployed by SQLFlow. This cannot be done in Management Studio.
+First, download the following installation files from https://github.com/grit-solutions/sqlflow/releases/latest:
 
-- Grant the SQL Server service user (`NT Service\MSSQLSERVER`) read access to to the `SQLFlowDevelopment.pub` file.
+- SQLFlow.dacpac
+- master.dacpac
+- SQLFlow.dll
+
+Place the files in the same folder.
+
+### Install the encryption key
+
+SQLFlow includes a SQLCLR assembly (SQLFlow.dll) which is signed using a private key. 
+
+In order to install the assembly, you'll first need to install the public key on SQL Server and authorise the server to install the assembly. This requires a few steps:
+
+- Grant the SQL Server service user (`NT Service\MSSQLSERVER`) read access to to the `SQLFlowDevelopment.dll` file.
 
 - In Management Studio, start a new query in `master` and import the public key by running:
 
   ~~~mssql
-  CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM FILE = 'C:\path\to\SQLFlowDevelopment.dll';
+  CREATE ASYMMETRIC KEY SQLFlowDevelopment FROM EXECUTABLE FILE = 'C:\path\to\SQLFlowDevelopment.dll';
   ~~~
 
 - Create a new login for the key: "Security" > Right-click "Logins" and select "New Login..."
@@ -89,17 +98,26 @@ First, you'll need to install the public key used to sign the SQLCLR assembly de
 - Go to the "Securables" page, click "Search", select the server, click OK
 - Check "Grant" under "Unsafe Assembly".
 
-Next, install SQLFlow:
+*Note: Installing the public key from the assembly that you're about to deploy negates any security benefits from the assembly being signed. In a production environment, you may want to do something else.*
+
+### Install SQLFlow
+
+SQLFlow can be now be installed like this:
 
 - Right-click "Databases" and select "New Database..."
 - Name the new database `SQLFlow`.
 - Right-click the new database, select "Tasks" and "Upgrade Data-tier Application..."
-- Browse to `SQLFlow.dacpac`
-- (The wizard will warn that it cannot detect drift, and will ask to run the PostDeployment script.)
+- Browse to `SQLFlow.dacpac` and click "Open" and "Next"
 
-Finally, start the log viewer by doubleclicking `SQLFlowTail.exe`. (If you've installed SQLFlow non-locally or to a database,  other than `SQLFlow` you'll need to supply a connection string as a command line argument. For more information on the SQLFlowTail.exe, see [TODO].)
+The wizard will warn that it cannot detect drift, and will also ask to run the PostDeployment script.
 
-You should see some messages from the installation. Now, try connecting to the SQLFlow database and doing:
+*Note: You can automate installation and upgrades of SQLFlow using Microsofts [SqlPackage](https://docs.microsoft.com/en-us/sql/tools/sqlpackage) tool.*
+
+### Hello World!
+
+Fetch `SQLFlowTail.exe` from the release page. Starting it should show you a console window with some messages from the installation.
+
+Now, try connecting to the SQLFlow database in Management Studio and doing:
 
 ```mssql
 EXEC flow.Log 'INFO', 'Hello World!';
@@ -217,3 +235,4 @@ previous section.
 You should now be able to publish to you server directly from Visual Studio
 and to package dacpacs for deployment in production environments (where you
 will need, again, to install the public key)
+
