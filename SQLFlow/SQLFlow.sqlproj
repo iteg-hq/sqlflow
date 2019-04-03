@@ -97,9 +97,6 @@
     <None Include="SQLFlowDevelopment.snk">
       <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
     </None>
-    <None Include="SQLFlowDevelopment.pub">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />
