@@ -22,8 +22,6 @@ VALUES
 
 GO
 
-EXEC flow.AddType @TypeCode='System', @InitialStatusCode='System.Uncreatable';
-
 EXEC flow.HousekeepingSetup;
 
 /*

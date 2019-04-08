@@ -1,13 +1,12 @@
 CREATE PROCEDURE flow.AddStatus
-    @StatusCode NVARCHAR(200)
+    @TypeCode NVARCHAR(200)
+  , @StatusCode NVARCHAR(200)
   , @RequiredLockCode NVARCHAR(50) = NULL
   , @ProcedureName NVARCHAR(500) = NULL
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC flow.Log 'TRACE', 'AddStatus [:1:], [:2:], [:3:]', @StatusCode, @RequiredLockCode, @ProcedureName;
-
-DECLARE @TypeCode NVARCHAR(200) = flow_internals.GetParent(@StatusCode);
+EXEC flow.Log 'TRACE', 'AddStatus [:1:], [:2:], [:3:], [:4:]', @TypeCode, @StatusCode, @RequiredLockCode, @ProcedureName;
 
 IF NOT EXISTS (
   SELECT 1
@@ -19,11 +18,12 @@ BEGIN
   THROW 51000, 'Flow type does not exist', 1;
 END
 
--- Add the type, if needed
+-- Add the status, if needed
 IF NOT EXISTS (
   SELECT 1
   FROM flow_internals.FlowStatus AS s
-  WHERE StatusCode = @StatusCode
+  WHERE TypeCode = @TypeCode
+    AND StatusCode = @StatusCode
   )
 BEGIN
   INSERT INTO flow_internals.FlowStatus (

@@ -8,12 +8,12 @@ EXEC flow.AddType
 
 EXEC flow.DropActions 'SQLFlow:Housekeeping';
 
-EXEC flow.AddAction 'SQLFlow:Housekeeping.New.Start', 'Running';
-EXEC flow.AddAction 'SQLFlow:Housekeeping.Running.Fail', 'Failed'
-EXEC flow.AddAction 'SQLFlow:Housekeeping.Running.Complete', 'Completed';
+EXEC flow.AddAction 'SQLFlow:Housekeeping', 'New',     'Start',    'Running';
+EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Fail',     'Failed'
+EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Complete', 'Completed';
 
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Running', @ProcedureName='flow_internals.HousekeepingRunning';
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping.Failed',  @ProcedureName='flow_internals.HousekeepingFailed', @Autocomplete=0;
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Running', @ProcedureName='flow_internals.HousekeepingRunning';
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Failed',  @ProcedureName='flow_internals.HousekeepingFailed', @Autocomplete=0;
 
 GO
 

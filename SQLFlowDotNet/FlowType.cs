@@ -8,15 +8,15 @@ namespace SQLFlow
 {
     public class FlowType
     {
-        private readonly FlowDatabase FlowDatabase;
+        private readonly FlowDatabase db;
 
         public string TypeCode;
-        public string ExecutionGroupCode { get; }
-        public Status InitialStatus { get; set; }
+        public string ExecutionGroupCode { get => db.GetExecutionGroupByTypeCode(TypeCode); }
+        public Status InitialStatus { get => db.GetInitialStatusByTypeCode(TypeCode); }
 
         internal FlowType(FlowDatabase flowDatabase, string typeCode)
         {
-            FlowDatabase = flowDatabase;
+            db = flowDatabase;
             TypeCode = typeCode;
         }
 

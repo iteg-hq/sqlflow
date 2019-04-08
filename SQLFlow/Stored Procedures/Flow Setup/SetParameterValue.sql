@@ -5,7 +5,7 @@ CREATE PROCEDURE flow.SetParameterValue
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC flow.Log 'TRACE', 'SetParameterValue [:1:], [:2:]', @FlowID, @Name, @Value;
+EXEC flow.Log 'TRACE', 'SetParameterValue [:1:], [:2:], [:3:]', @FlowID, @Name, @Value;
   
 IF @FlowID NOT IN ( SELECT @FlowID FROM flow_internals.Flow )
 BEGIN

@@ -16,6 +16,8 @@ namespace SQLFlow
         private SqlBinary rv = null;
         public int Interval;
 
+        public FlowDatabase() : this("Server=localhost;Database=SQLFlow;Trusted_Connection=True;") { }
+
         public FlowDatabase(string connectionString)
         {
             this.ConnectionString = connectionString;
@@ -66,6 +68,26 @@ namespace SQLFlow
         public FlowType GetFlowTypeByCode(string typeCode)
         {
             return new FlowType(this, typeCode);
+        }
+
+        public Status GetStatusByCode(string typeCode, string statusCode)
+        {
+            return new Status(this, GetFlowTypeByCode(typeCode), statusCode);
+        }
+
+        public FlowType GetFlowTypeByFlowID(int flowID)
+        {
+            SqlConnection connection = GetConnection();
+            connection.Open();
+            string typeCode;
+            using (var command = new SqlCommand("SELECT TypeCode FROM flow.Flow WHERE FlowID = @FlowID", connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@FlowID", flowID);
+                typeCode = command.ExecuteScalar().ToString();
+            }
+            connection.Close();
+            return GetFlowTypeByCode(typeCode);
         }
 
 
@@ -129,9 +151,71 @@ namespace SQLFlow
             connection.Close();
         }
 
-        public Status GetStatusByFlowID(int FlowID)
+        public Status GetStatusByFlowID(int flowID)
         {
-            return null;
+            SqlConnection connection = GetConnection();
+            connection.Open();
+            string statusCode;
+            using (var command = new SqlCommand("SELECT StatusCode FROM flow_internals.Flow WHERE FlowID = @FlowID", connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@FlowID", flowID);
+                statusCode = command.ExecuteScalar().ToString();
+            }
+            connection.Close();
+            return GetStatusByCode(GetFlowTypeByFlowID(flowID).TypeCode, statusCode);
+        }
+
+        public Status GetInitialStatusByTypeCode(string typeCode)
+        {
+            SqlConnection connection = GetConnection();
+            connection.Open();
+            string statusCode;
+            using (var command = new SqlCommand("SELECT InitialStatusCode FROM flow_internals.FlowType WHERE TypeCode= @TypeCode", connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@TypeCode", typeCode);
+                statusCode = command.ExecuteScalar().ToString();
+            }
+            connection.Close();
+            return GetStatusByCode(typeCode, statusCode);
+        }
+
+        public string GetExecutionGroupByTypeCode(string typeCode)
+        {
+            SqlConnection connection = GetConnection();
+            connection.Open();
+            string executionGroup;
+            using (var command = new SqlCommand("SELECT ExecutionGroupCode FROM flow_internals.FlowType WHERE TypeCode= @TypeCode", connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@TypeCode", typeCode);
+                executionGroup = command.ExecuteScalar().ToString();
+            }
+            connection.Close();
+            return executionGroup;
+        }
+
+        public IDictionary<string, Status> GetActionsByStatus(string typeCode, string statusCode)
+        {
+            SqlConnection connection = GetConnection();
+            connection.Open();
+            var result = new Dictionary<string, Status>();
+            using (var command = new SqlCommand("SELECT ActionCode, ResultingStatusCode FROM flow_internals.FlowAction WHERE TypeCode = @TypeCode AND StatusCode = @StatusCode", connection))
+            {
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@TypeCode", typeCode);
+                command.Parameters.AddWithValue("@StatusCode", statusCode);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    string actionCode = reader.GetString(0);
+                    string resultingStatusCode = reader.GetString(1);
+                    result[actionCode] = GetStatusByCode(typeCode, resultingStatusCode);
+                }
+            }
+            connection.Close();
+            return result;
         }
 
 
@@ -152,25 +236,15 @@ namespace SQLFlow
 
         public string GetParameterValue(int flowID, string parameterName)
         {
-            string value = "";
             var connection = GetConnection();
             connection.Open();
+            string value = null;
             using (var command = new SqlCommand("SELECT flow.GetParameterValue(@FlowID, @Name)", connection))
             {
                 command.CommandType = CommandType.Text;
                 command.Parameters.AddWithValue("@FlowID", flowID);
                 command.Parameters.AddWithValue("@Name", parameterName);
-                var reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    value = reader.GetString(0);
-                }
-                else
-                {
-                    value = null;
-                }
-                reader.Close();
+                value = command.ExecuteScalar().ToString();
             }
             connection.Close();
             return value;

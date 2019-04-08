@@ -45,8 +45,9 @@ EXEC flow_internals.SetStatus @FlowID, @InitialStatus;
 DECLARE @Autocomplete BIT;
 
 SELECT @Autocomplete = Autocomplete
-FROM flow.FlowStatus
-WHERE StatusCode = @InitialStatus;
+FROM flow_internals.FlowStatus
+WHERE TypeCode = @TypeCode
+  AND StatusCode = @InitialStatus;
 ;
 
 IF @Autocomplete = 1

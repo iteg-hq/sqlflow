@@ -16,7 +16,7 @@ IF NOT EXISTS (
 
 -- Default value, if needed
 IF @InitialStatusCode IS NULL OR @InitialStatusCode = ''
-  SET @InitialStatusCode = @TypeCode + '.New';
+  SET @InitialStatusCode = 'New';
 
 -- If no changes are needed, return
 IF EXISTS (
@@ -28,7 +28,7 @@ IF EXISTS (
   RETURN
 
 -- Add the status (if it does not already exists)
-EXEC flow.AddStatus @InitialStatusCode;
+EXEC flow.AddStatus @TypeCode, @InitialStatusCode;
 
 -- Update
 UPDATE flow_internals.FlowType

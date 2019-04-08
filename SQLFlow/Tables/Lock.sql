@@ -1,6 +1,6 @@
 CREATE TABLE flow_internals.Lock (
-    LockCode NVARCHAR(200) NOT NULL
-  , ParentLockCode NVARCHAR(200) NULL
+    LockCode NVARCHAR(100) NOT NULL
+  , ParentLockCode NVARCHAR(100) NULL
   , HeldByFlowID INT NULL
   , LockDepth INT NOT NULL
   , CONSTRAINT PK_Lock PRIMARY KEY (LockCode)

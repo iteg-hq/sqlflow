@@ -52,7 +52,10 @@ END CATCH
 -- progress to the next state.
 
 IF @Autocomplete = 1
+BEGIN
+  EXEC flow.Log 'TRACE', 'Autocompleting';
   EXEC flow.Do @FlowID, 'Complete', @NextRecursionLevel;
+END
 
 EXEC flow.Log 'TRACE', 'Leaving flow.Do [:1:];', @RecursionLevel;
 EXEC flow.Touch @FlowID;

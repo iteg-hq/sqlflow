@@ -329,4 +329,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Autocomplete" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="75505232-f43c-4173-a777-0b4b5096cb2e" ChangeDateTime="04/04/2019 09:20:06">
+    <Property Name="ElementName" Value="[flow_internals].[Flow].[CreateByLogin]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[flow_internals].[Flow]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CreatedByLogin" />
+  </Operation>
 </Operations>
