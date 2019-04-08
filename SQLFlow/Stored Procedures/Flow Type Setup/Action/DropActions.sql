@@ -7,12 +7,11 @@ EXEC flow.Log 'TRACE', 'DropActions [:1:], [:2:], [:3:]', @TypeCode;
   
 -- Delete all actions
 DELETE flow_internals.FlowAction
-WHERE StatusCode IN (
-    SELECT StatusCode
-    FROM flow_internals.FlowStatus
-    WHERE TypeCode = @TypeCode
-  )
+WHERE TypeCode = @TypeCode
 ;
+
+EXEC flow.Log 'INFO', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
+
 
 -- Reset procedures and locks
 UPDATE flow_internals.FlowStatus
