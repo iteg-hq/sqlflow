@@ -43,8 +43,11 @@ END
 
 -- Find the required lock
 SELECT @RequiredLockCode = RequiredLockCode
-FROM flow_internals.FlowStatus
-WHERE StatusCode = @StatusCode
+FROM flow_internals.FlowStatus AS fs
+INNER JOIN flow_internals.Flow AS f
+  ON  f.TypeCode = fs.TypeCode
+WHERE FlowID = @FlowID
+  AND fs.StatusCode = @StatusCode
 ;
 
 -- Acquire the lock if possible
