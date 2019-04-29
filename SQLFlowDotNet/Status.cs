@@ -4,19 +4,21 @@ namespace SQLFlow
 {
     public class Status
     {
-        private readonly FlowDatabase FlowDatabase;
+        private readonly FlowDatabase flowDatabase;
+        private readonly string flowTypeCode;
+
         public string StatusCode;
-        public FlowType FlowType;
+        public FlowType FlowType { get => flowDatabase.GetFlowTypeByCode(flowTypeCode); }
 
         public IDictionary<string, Status> Actions
         {
-            get => FlowDatabase.GetActionsByStatus(FlowType.TypeCode, StatusCode);
+            get => flowDatabase.GetActionsByStatus(FlowType.TypeCode, StatusCode);
         }
 
-        internal Status(FlowDatabase flowDatabase, FlowType flowType, string statusCode)
+        internal Status(FlowDatabase flowDatabase, string flowTypeCode, string statusCode)
         {
-            FlowDatabase = flowDatabase;
-            FlowType = flowType;
+            this.flowDatabase = flowDatabase;
+            this.flowTypeCode = flowTypeCode;
             StatusCode = statusCode;
         }
 

@@ -12,12 +12,12 @@ namespace SQLFlow
 
     public class FlowParameters
     {
-        private readonly FlowDatabase FlowDatabase;
+        private readonly FlowDatabase flowDatabase;
         private readonly int FlowID;
 
         internal FlowParameters(FlowDatabase flowDatabase, int flowID)
         {
-            FlowDatabase = flowDatabase;
+            this.flowDatabase = flowDatabase;
             FlowID = flowID;
         }
 
@@ -25,11 +25,11 @@ namespace SQLFlow
         {
             get
             {
-                return FlowDatabase.GetParameterValue(FlowID, parameterName);
+                return flowDatabase.GetParameterValue(FlowID, parameterName);
             }
             set
             {
-                FlowDatabase.SetParameterValue(FlowID, parameterName, value);
+                flowDatabase.SetParameterValue(FlowID, parameterName, value);
             }
         }
     }
