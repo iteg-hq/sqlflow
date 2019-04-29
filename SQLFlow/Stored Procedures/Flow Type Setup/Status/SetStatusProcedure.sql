@@ -37,11 +37,13 @@ IF NOT EXISTS (
   )
   RETURN;
 
+/*
 IF 'EXECUTE' NOT IN ( SELECT permission_name FROM fn_my_permissions(@ProcedureName, 'OBJECT') )
 BEGIN
   EXEC flow.Log 'WARN', 'Non-existent status procedure [:1:]', @ProcedureName;
   THROW 51000, 'Invalid procedure', 1;
 END
+*/
 
 UPDATE flow_internals.FlowStatus
 SET ProcedureName = @ProcedureName
