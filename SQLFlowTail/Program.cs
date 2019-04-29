@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace SQLFlow
 {
@@ -11,17 +12,29 @@ namespace SQLFlow
             {
                 connectionString = args[0];
             }
-            FlowDatabase db = new FlowDatabase(connectionString);
+            int pollingInterval = 1000;
 
-            while (true)
+            FlowDatabase flowDatabase = new FlowDatabase(connectionString);
+
+            bool go = true;
+
+            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs eargs)
             {
-                foreach (LogEntry logentry in db.GetTail())
+                go = false;
+                eargs.Cancel = true;
+            };
+
+
+            while (go)
+            {
+                foreach (LogEntry logentry in flowDatabase.GetTail())
                 {
                     if (logentry.LogLevel >= LogLevel.TRACE)
                     {
                         Console.WriteLine(logentry.Format());
                     }
                 }
+                Thread.Sleep(pollingInterval);
             }
         }
     }
