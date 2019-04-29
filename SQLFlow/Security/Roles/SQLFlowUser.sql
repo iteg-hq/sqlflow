@@ -18,3 +18,7 @@ GO
 -- they lack permissions.
 
 GRANT EXECUTE TO SQLFlowUser;
+
+GO
+
+GRANT SELECT TO SQLFlowUser;
