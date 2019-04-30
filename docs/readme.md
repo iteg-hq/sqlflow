@@ -104,9 +104,7 @@ In order to install the assembly, you'll first need to install the public key on
 
 SQLFlow can be now be installed like this:
 
-- Right-click "Databases" and select "New Database..."
-- Name the new database `SQLFlow`.
-- Right-click the new database, select "Tasks" and "Upgrade Data-tier Application..."
+- Right-click "Databases" and select "Deploy Data-tier Application..."
 - Browse to `SQLFlow.dacpac` and click "Open" and "Next"
 
 The wizard will warn that it cannot detect drift, and will also ask to run the PostDeployment script.
@@ -124,6 +122,13 @@ EXEC flow.Log 'INFO', 'Hello World!';
 ```
 
 This message should appear in the log.
+
+### Upgrading
+
+To upgrade SQLFlow, download the files as above, then:
+
+- Right-click the new database, select "Tasks" and "Upgrade Data-tier Application..."
+- Browse to `SQLFlow.dacpac` and click "Open" and "Next"
 
 ## API ##
 
