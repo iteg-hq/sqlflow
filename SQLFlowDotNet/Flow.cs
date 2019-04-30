@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -13,7 +14,14 @@ namespace SQLFlow
         public Status Status { get => flowDatabase.GetStatusByFlowID(FlowID); }
         public FlowType FlowType { get => flowDatabase.GetFlowTypeByFlowID(FlowID); }
 
-        public void Log(LogLevel logLevel, string message, object value1 = null, object value2 = null) => flowDatabase.AddLogEntry(FlowID, logLevel, message, value1, value2);
+        public void Log(LogLevel logLevel, string message, object value1 = null, object value2 = null)
+        {
+            string formattedMessage = message;
+            formattedMessage = formattedMessage.Replace(":1:", (value1 ?? "NULL").ToString());
+            formattedMessage = formattedMessage.Replace(":2:", (value2 ?? "NULL").ToString());
+            Console.WriteLine(formattedMessage);
+            flowDatabase.AddLogEntry(FlowID, logLevel, message, value1, value2);
+        }
 
         public IDictionary<string, Status> Actions { get => flowDatabase.GetActionsByStatus(Status.FlowType.TypeCode, Status.StatusCode); }
 
