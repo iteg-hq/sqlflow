@@ -129,7 +129,6 @@
     <Build Include="Stored Procedures\Runtime\Log.sql" />
     <Build Include="Flows\Housekeeping\DeleteOldLogEntries.sql" />
     <Build Include="Flows\Housekeeping\Setup.sql" />
-    <Build Include="Stored Procedures\Operations\Touch.sql" />
     <Build Include="Stored Procedures\Internal\SetStatus.sql">
       <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
     </Build>
