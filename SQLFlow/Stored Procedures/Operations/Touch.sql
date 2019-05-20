@@ -1,8 +1,0 @@
-CREATE PROCEDURE flow.Touch @FlowID INT 
-AS
-SET NOCOUNT, XACT_ABORT ON;
-
-UPDATE flow_internals.Flow
-SET ExecutedAt = SYSDATETIME()
-WHERE FlowID = @FlowID
-;

@@ -22,7 +22,6 @@ EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
 -- Check that the action exists
 IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @FlowID )
 BEGIN
-  EXEC flow.Touch @FlowID;
   EXEC flow.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
   EXEC flow_internals.UpdateContext @FlowID=NULL;
   THROW 51000, 'Invalid action', 1;
@@ -58,5 +57,3 @@ BEGIN
 END
 
 EXEC flow.Log 'TRACE', 'Leaving flow.Do [:1:];', @RecursionLevel;
-EXEC flow.Touch @FlowID;
-

@@ -15,8 +15,6 @@ BEGIN
   DECLARE @PackageName NVARCHAR(128);
   DECLARE @EnvironmentName NVARCHAR(255);
 
-  EXEC flow.Touch @FlowID;
-
   SELECT
       @FolderName = f.name
     , @ProjectName = p.name
@@ -115,8 +113,6 @@ BEGIN
   END
 
   EXEC flow.Log 'DEBUG', 'Execution successful.'
-
-  EXEC flow.Touch @FlowID;
 
   EXEC flow.Log 'TRACE', 'Leaving setup.Run_ExecuteSSISPackage'
 END
