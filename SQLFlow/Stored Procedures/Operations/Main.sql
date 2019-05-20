@@ -34,10 +34,7 @@ IF @FlowID IS NULL
 
 EXEC flow_internals.UpdateContext @FlowID;
 
-UPDATE flow_internals.Flow
-SET ExecutionStartedAt = SYSDATETIME()
-WHERE FlowID = @FlowID
-;
+EXEC flow.StartExecution @FlowID;
 
 EXEC flow.Do @FlowID, @ActionCode;
 
@@ -49,9 +46,6 @@ WHERE FlowID = @FlowID
 
 EXEC flow.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;
 
-UPDATE flow_internals.Flow
-SET ExecutionStoppedAt = SYSDATETIME()
-WHERE FlowID = @FlowID
-;
+EXEC flow.StopExecution @FlowID;
 
 EXEC flow_internals.UpdateContext @FlowID=NULL;

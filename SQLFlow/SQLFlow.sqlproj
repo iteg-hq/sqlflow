@@ -196,5 +196,7 @@
     <Build Include="Flows\Test\flow_test.sql" />
     <Build Include="CLR\PostToWebhook.sql" />
     <Build Include="CLR\ReadFile.sql" />
+    <Build Include="Stored Procedures\Operations\StartExecution.sql" />
+    <Build Include="Stored Procedures\Operations\StopExecution.sql" />
   </ItemGroup>
 </Project>
