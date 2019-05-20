@@ -12,7 +12,9 @@ SELECT
   , s.Autocomplete
   , start_.ResultingStatusCode AS StartStatusCode
   , f.CreatedAt
-  , f.ExecutedAt
+  , f.ExecutionStartedAt
+  , f.ExecutionStoppedAt
+  , DATEDIFF(SECOND, f.ExecutionStartedAt, f.ExecutionStoppedAt) AS ExecutionDurationInSeconds
 FROM flow_internals.Flow AS f
 --INNER JOIN flow_internals.FlowType AS t
 --  ON t.TypeCode = f.TypeCode

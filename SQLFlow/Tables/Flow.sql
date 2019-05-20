@@ -4,7 +4,8 @@ CREATE TABLE flow_internals.Flow (
   , TypeCode NVARCHAR(100) NOT NULL
   , StatusCode NVARCHAR(100) NULL
   , CreatedAt DATETIME2(7) NOT NULL CONSTRAINT DF_Flow_CreatedAt DEFAULT(SYSDATETIME())
-  , ExecutedAt DATETIME2(7) NULL
+  , ExecutionStartedAt DATETIME2(7) NULL
+  , ExecutionStoppedAt DATETIME2(7) NULL
   , CreatedByLogin NVARCHAR(128) NULL CONSTRAINT DF_Flow_CreatedByLogin DEFAULT(SUSER_NAME())
   , CONSTRAINT PK_Flow PRIMARY KEY (FlowID)
   , CONSTRAINT FK_Flow_FlowType FOREIGN KEY (TypeCode) REFERENCES flow_internals.FlowType (TypeCode)
