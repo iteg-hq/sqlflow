@@ -10,19 +10,16 @@ In addition, SQLFlow provides a framework for storing parameter values needed by
 
 ## Features
 
-- **Error handling**: All errors are caught (and logged) and error handling code can be registered in SQLFlow.
-- **Automated rollbacks and reruns**: Code for application management tasks (like rolling back failed flows) can be registered with SQLFlow and performed automatically or by using a common interface.
-- **Logging**: SQLFlow provides a single SP for logging.
+- **Error handling, rollbacks and reruns**: All errors are caught (and logged) and error handling code can be registered in SQLFlow. Code for application management tasks (like rolling back failed flows) can be registered with SQLFlow and performed automatically or by using a common interface.
+- **Logging**: SQLFlow provides a single stored procedure for logging.
 - **Locking**: A simple locking mechanism lets you specify that only one flow can be running at a time, or that failed flows should block new flows from running.
 - **Flow configuration in one place**: All configuration info and parameters are kept in one place.
-- **Separation of invocation and execution**: In SQLFlow, a user or application with limited privileges may start a flow that will then run with elevated privileges.
-- **Seamless integration of SSIS packages and stored procedures**: Flows from both types of components, or add new types.
-- **Notifications via webhook**: SQLFlow makes it easy to notify operators via webhooks.
+- **Separation of invocation and execution**: A user or application with limited privileges may start a flow that will then run with elevated privileges.
 
 ## Example
 
 ~~~mssql
-> EXEC SQLFlowTest.flow_test.Test -- Add a new flow to the work queue.
+> EXEC SQLFlow.flow_test.Test -- Add a new flow to the work queue.
 
 [29][INFO] Created new FlowID: 29
 [29][INFO] Entered status [Test:TestFlow.New]
