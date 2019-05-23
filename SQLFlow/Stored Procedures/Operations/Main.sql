@@ -4,48 +4,15 @@ CREATE PROCEDURE flow.Main
   , @SortOrder INT = 1
 AS
 SET NOCOUNT, XACT_ABORT ON;
-
--- No logging to TRACE, since this SP is meant to be called very often.
+-- No logging, since this SP could be called very often.
 DECLARE @FlowID INT;
-DECLARE @StatusCode NVARCHAR(50);
-  
-EXEC flow_internals.UpdateContext @FlowID=NULL;
-  
--- Get the next action to run for this Execution Group where all required locks are available.
-SELECT TOP 1 @FlowID = FlowID
-FROM flow.FlowAction AS a
-WHERE a.ExecutionGroupCode = @ExecutionGroupCode
-  AND a.ActionCode = @ActionCode
-  AND NOT EXISTS (
-    -- The lock that the action requires, and all implied (child) locks.
-    SELECT LockCode
-    FROM flow_internals.GetLockTree(a.RequiredLockCode)
-    INTERSECT
-    -- All currently (and all implicitly) locks held by other Flows.
-    SELECT LockCode
-    FROM flow.AcquiredLock
-    WHERE FlowID != a.FlowID
-  )
-ORDER BY a.FlowID * @SortOrder
-;
+DECLARE @Done INT;
+EXEC @Done = flow_internals.GetNext @FlowID OUTPUT, @ExecutionGroupCode, @ActionCode, @SortOrder
+WHILE @Done = 0
+BEGIN
+  EXEC flow.StartExecution @FlowID;
+  EXEC flow.Do @FlowID, @ActionCode;
+  EXEC flow.StopExecution @FlowID;
 
-IF @FlowID IS NULL
-  RETURN;
-
-EXEC flow_internals.UpdateContext @FlowID;
-
-EXEC flow.StartExecution @FlowID;
-
-EXEC flow.Do @FlowID, @ActionCode;
-
--- Get and report the resulting status code
-SELECT @StatusCode = StatusCode
-FROM flow.Flow
-WHERE FlowID = @FlowID
-;
-
-EXEC flow.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;
-
-EXEC flow.StopExecution @FlowID;
-
-EXEC flow_internals.UpdateContext @FlowID=NULL;
+  EXEC @Done = flow_internals.GetNext @FlowID OUTPUT, @ExecutionGroupCode, @ActionCode, @SortOrder
+END

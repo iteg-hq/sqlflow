@@ -198,5 +198,6 @@
     <Build Include="CLR\ReadFile.sql" />
     <Build Include="Stored Procedures\Operations\StartExecution.sql" />
     <Build Include="Stored Procedures\Operations\StopExecution.sql" />
+    <Build Include="Functions\GetNext.sql" />
   </ItemGroup>
 </Project>
