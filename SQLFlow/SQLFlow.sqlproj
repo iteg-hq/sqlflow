@@ -26,7 +26,7 @@
     <DefaultSchema>flow_internals</DefaultSchema>
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
     <Recovery>SIMPLE</Recovery>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>SQLFlowDevelopment.snk</AssemblyOriginatorKeyFile>
     <PermissionSet>EXTERNAL_ACCESS</PermissionSet>
     <Trustworthy>False</Trustworthy>
@@ -93,9 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
-    <None Include="SQLFlowDevelopment.snk">
-      <CopyToOutputDirectory>DoNotCopy</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment.sql" />
