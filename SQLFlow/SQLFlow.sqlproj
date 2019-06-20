@@ -81,7 +81,6 @@
     <Folder Include="Stored Procedures\Runtime" />
     <Folder Include="Flows" />
     <Folder Include="Flows\Housekeeping" />
-    <Folder Include="CLR" />
     <Folder Include="Stored Procedures\Internal" />
     <Folder Include="Stored Procedures\Flow Type Setup\Type" />
     <Folder Include="Stored Procedures\Flow Type Setup\Action" />
@@ -174,8 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CLR\PostToWebhook.cs" />
-    <Compile Include="CLR\ReadFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
@@ -194,8 +191,6 @@
     <Build Include="Flows\Test\02 - Rollback.sql" />
     <Build Include="Flows\Test\03 - Failure.sql" />
     <Build Include="Flows\Test\flow_test.sql" />
-    <Build Include="CLR\PostToWebhook.sql" />
-    <Build Include="CLR\ReadFile.sql" />
     <Build Include="Stored Procedures\Operations\StartExecution.sql" />
     <Build Include="Stored Procedures\Operations\StopExecution.sql" />
     <Build Include="Functions\GetNext.sql" />
