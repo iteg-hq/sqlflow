@@ -11,7 +11,6 @@ BEGIN
   SET NOCOUNT, XACT_ABORT ON;
 
   DECLARE @EchoToOutput BIT;
-  DECLARE @Notify BIT;
   DECLARE @FormattedEntryText NVARCHAR(4000) = @EntryText
   SET @FormattedEntryText = REPLACE(@FormattedEntryText, ':1:', COALESCE(@Value1, 'NULL'));
   SET @FormattedEntryText = REPLACE(@FormattedEntryText, ':2:', COALESCE(@Value2, 'NULL'));
@@ -23,7 +22,6 @@ BEGIN
   SELECT
       @LogLevelID = LogLevelID 
     , @EchoToOutput = EchoToOutput
-    , @Notify = Notify
   FROM flow_internals.LogLevel 
   WHERE LogLevelCode = @LogLevel;
 
