@@ -17,6 +17,7 @@ EXEC flow.Log 'INFO', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
 UPDATE flow_internals.FlowStatus
 SET ProcedureName = NULL
   , RequiredLockCode = NULL
+  , Autocomplete = 0
 WHERE TypeCode = @TypeCode
 ;
 
