@@ -262,3 +262,5 @@ __pycache__/
 
 # Sublime Text workspace files
 *.sublime-workspace
+
+**/venv/

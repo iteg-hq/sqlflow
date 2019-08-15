@@ -1,0 +1,38 @@
+
+
+#tail p {
+  font-family: Courier;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#tail .ENTER { 
+  background-color: #aaaaff;
+}
+
+#tail .LEAVE { 
+  background-color: #ccccff;
+}
+
+#tail .TRACE { 
+  color: #cccccc;
+}
+
+#tail .DEBUG { 
+  color: #aaaaaa;
+}
+
+#tail .INFO { 
+  color: black;
+}
+
+#tail .WARN { 
+  background-color: yellow;
+}
+
+#tail .ERROR { 
+  background-color: red;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flow</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" >
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" >
+</head>
+<body>
+    <div class="container-fluid">
+        <table class="table">
+            <tr>
+                <th>FlowID</th>
+                <th>ExecutionGroupCode</th>
+                <th>TypeCode</th>
+                <th>StatusCode</th>
+                <th>Actions</th>
+                <th>Parameters</th>
+                <!--
+                <th>LockCount</th>
+                <th>ProcedureName</th>
+                <th>FailureStatusCode</th>
+                <th>SuccessStatusCode</th>
+                <th>Autocomplete</th>
+                <th>StartStatusCode</th>
+                <th>CreatedAt</th>
+                <th>ExecutionStartedAt</th>
+                <th>ExecutionStoppedAt</th>
+                <th>ExecutionDurationInSeconds</th>
+            -->
+            </tr>
+            {% for flow in flows %}
+            <tr>
+                <td>{{ flow.FlowID }}</td>
+                <td>{{ flow.ExecutionGroupCode }}</td>
+                <td>{{ flow.TypeCode }}</td>
+                <td>{{ flow.StatusCode }}</td>
+                <td>
+                {% for action in flow.Actions %}
+                    <p>{{ action.ActionCode }}</p>
+                {% endfor %}
+                </td>
+                <td>
+                {% for parameter in flow.Parameters %}
+                    <p>{{ parameter.ParameterName }} = {{ parameter.ParameterValue }}</p>
+                {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
