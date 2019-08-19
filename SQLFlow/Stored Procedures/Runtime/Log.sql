@@ -34,6 +34,27 @@ END
 IF @EchoToOutput = 1
   PRINT '[' + COALESCE(CAST(SESSION_CONTEXT(N'FlowID') AS NVARCHAR(10)), 'No FlowID') + '][' + @LogLevel + '] ' + @FormattedEntryText;
 
+DECLARE @ExecutionID INT = CAST(SESSION_CONTEXT(N'ExecutionID') AS INT)
+
+-- If the log level is ENTER, start a new execution that will include this entry.
+IF @LogLevel = 'ENTER'
+BEGIN
+  -- Start an execution log instance
+  INSERT INTO flow_internals.Execution (
+      ParentExecutionID
+    , ExecutableName
+    , ExecutionStartedAt
+    )
+  VALUES (
+      @ExecutionID
+    , @FormattedEntryText
+    , SYSDATETIME()
+    )
+  SET @ExecutionID = SCOPE_IDENTITY();
+
+  EXEC sp_set_session_context N'ExecutionID', @ExecutionID;
+END
+
 INSERT INTO flow_internals.LogEntry (
     LogLevelID
   , FormattedEntryText
@@ -55,27 +76,7 @@ VALUES (
   , @Value5
   )
 ;
-
-DECLARE @ExecutionID INT = CAST(SESSION_CONTEXT(N'ExecutionID') AS INT)
-
-IF @LogLevel = 'ENTER'
-BEGIN
-  -- Start an execution log instance
-  INSERT INTO flow_internals.Execution (
-      ParentExecutionID
-    , ExecutableName
-    , ExecutionStartedAt
-    )
-  VALUES (
-      @ExecutionID
-    , @FormattedEntryText
-    , SYSDATETIME()
-    )
-  SET @ExecutionID = SCOPE_IDENTITY();
-
-  EXEC sp_set_session_context N'ExecutionID', @ExecutionID;
-END
-
+  -- If the log level is LEAVE, end the current execution after logging this entry
 IF @LogLevel = 'LEAVE'
 BEGIN
   -- Close an execution log instance

@@ -25,7 +25,10 @@ def tail_api():
 
     conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};Server=localhost;Database=SQLFlow;Trusted_Connection=yes;")
     cursor = conn.cursor()
-    cursor.execute("DECLARE @rv BINARY(8) = CONVERT(BINARY(8), ?, 2); EXEC flow.Tail @rv;", rv)
+    if rv:
+        cursor.execute("DECLARE @rv BINARY(8) = CONVERT(BINARY(8), ?, 2); EXEC flow.Tail @rv;", rv)
+    else:
+        cursor.execute("EXEC flow.Tail;")
     cols = [col[0] for col in cursor.description]
     entries = [dict(zip(cols, row)) for row in cursor.fetchall()]
     for entry in entries:

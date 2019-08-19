@@ -19,10 +19,12 @@
 
 #tail .TRACE { 
   color: #cccccc;
+  display: none;
 }
 
 #tail .DEBUG { 
   color: #aaaaaa;
+  display: none;
 }
 
 #tail .INFO { 

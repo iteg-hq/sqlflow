@@ -8,6 +8,7 @@ SELECT
   , le.FormattedEntryText
   , le.ServerProcessID
   , le.FlowID
+  , le.ExecutionID
   , COALESCE(le.StatusCode, '(no status)') AS StatusCode
   , le.UserName
   , @@SERVERNAME AS ServerName

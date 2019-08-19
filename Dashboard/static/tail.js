@@ -43,9 +43,9 @@ function addEntry(entry) {
 }
 
 function filterEntry(entry) {
-    return entry.LogLevelCode == 'TRACE';
+    return false; entry.LogLevelCode == 'TRACE';
 }
 
 function formatEntry(entry) {
-    return `[${entry.EntryTimestamp}][${entry.LogLevelCode}][${entry.FlowID||""}] ${entry.FormattedEntryText}`
+    return `[${entry.EntryTimestamp}][${entry.LogLevelCode}][${entry.FlowID||""}][${entry.ExecutionID||""}] ${entry.FormattedEntryText}`
 }
