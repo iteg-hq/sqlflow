@@ -1,4 +1,4 @@
-EXEC sp_addextendedproperty
-  @name='sqlflow_version',
-  @value ='1.0.6'
+CREATE PROCEDURE dbo.About
+AS
+PRINT 'SQLFLow v1.0.6'
 ;
