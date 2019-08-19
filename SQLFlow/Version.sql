@@ -1,4 +1,4 @@
 CREATE PROCEDURE dbo.About
 AS
-PRINT 'SQLFLow v1.0.6'
+SELECT 'SQLFlow v1.0.7' AS [Version]
 ;
