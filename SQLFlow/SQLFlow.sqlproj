@@ -158,7 +158,7 @@
     <Build Include="Stored Procedures\Flow Type Setup\Type\SetInitialStatus.sql" />
     <Build Include="Stored Procedures\Internal\ShowOrphans.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Action\DropActions.sql" />
-    <Build Include="Version.sql" />
+    <Build Include="About.sql" />
     <Build Include="Security\Schemas\flow.sql" />
     <Build Include="Security\Schemas\flow_internals.sql" />
     <Build Include="Security\Roles\SQLFlowUser.sql" />
