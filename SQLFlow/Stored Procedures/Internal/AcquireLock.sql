@@ -20,23 +20,9 @@ END
 -- If not, try acquiring it.
 BEGIN TRANSACTION
   CREATE TABLE #tree (LockCode NVARCHAR(200) PRIMARY KEY, LockLevel INT NOT NULL);
-
+  -- Release any locks already held
   EXEC internal.ReleaseLock @FlowID;
   -- Root lock and children - if any one of these is held, the lock cannot be acquired
-  ;WITH tree AS (
-      SELECT LockCode, 0 AS LockLevel
-      FROM Lock
-      WITH (TABLOCKX, HOLDLOCK) -- Locks the lock table
-      WHERE LockCode = @RootLockCode
-      UNION ALL
-      SELECT child.LockCode, tree.LockLevel+1
-      FROM Lock AS child
-      INNER JOIN tree
-        ON tree.LockCode = child.ParentLockCode
-    )
-  INSERT INTO #tree (LockCode, LockLevel)
-  SELECT LockCode, LockLevel
-  FROM tree
 
   DECLARE @UnavailableLockCode NVARCHAR(200);
   DECLARE @HeldBy INT;
@@ -44,8 +30,8 @@ BEGIN TRANSACTION
   SELECT TOP 1
       @UnavailableLockCode = l.LockCode
     , @HeldBy = HeldByFlowID
-  FROM Lock AS l
-  INNER JOIN #tree AS t
+  FROM internal.Lock AS l
+  INNER JOIN internal.GetLockTree(@RootLockCode) AS t
     ON t.LockCode = l.LockCode
   WHERE HeldByFlowID != @FlowID
   ORDER BY t.LockLevel
