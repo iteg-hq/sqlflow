@@ -1,6 +1,6 @@
-CREATE PROCEDURE flow_test.FailOnce @FlowID INT
+CREATE PROCEDURE dbo.FailOnce @FlowID INT
 AS
-EXEC flow_test.DoStuff @FlowID;
+EXEC dbo.DoStuff @FlowID;
 
 IF [$(SQLFlow)].flow.GetParameterValue(@FlowID, 'Failed') = 'True'
   RETURN

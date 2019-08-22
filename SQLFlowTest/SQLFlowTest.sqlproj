@@ -60,23 +60,25 @@
     <Folder Include="Test" />
     <Folder Include="Security" />
     <Folder Include="Test\Stored Procedures" />
+    <Folder Include="Test\Tests" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="PostDeployment.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="TEst\03 - Failure.sql" />
-    <Build Include="TEst\01 - Simple.sql" />
-    <Build Include="TEst\02 - Rollback.sql" />
-    <Build Include="TEst\00 - Sample.sql" />
-    <Build Include="Test\flow_test.sql" />
     <Build Include="Test\Stored Procedures\DoStuff.sql" />
     <Build Include="Test\Stored Procedures\DoStuffButFailSometimes.sql" />
     <Build Include="Test\Stored Procedures\FailOnce.sql" />
     <Build Include="Test\Stored Procedures\RollStuffBack.sql" />
+    <Build Include="Security\test.sql" />
+    <Build Include="Test\RunAll.sql" />
+    <Build Include="Test\Tests\InvalidActionFails.sql" />
+    <Build Include="Test\Tests\DefaultExecutionGroup.sql" />
+    <Build Include="Test\Tests\NoLockOnMissingFlowType.sql" />
+    <Build Include="Test\Tests\NoProcedureOnMissingFlowType.sql" />
+    <Build Include="Test\Tests\NoLockOnMissingStatus.sql" />
+    <Build Include="Test\Tests\NoProcedureOnMissingStatus.sql" />
+    <Build Include="Test\Tests\DefaultInitialStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">

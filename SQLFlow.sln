@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLFlow", "SQLFlow\SQLFlow.sqlproj", "{2BBF7710-7196-4E6B-AC04-D8C45A26ADB0}"
 EndProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLFlowDotNet", "SQLFlowDotNet\SQLFlowDotNet.csproj", "{B4CCA36C-236F-4222-93A4-12219652EA55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLFlowTail", "SQLFlowTail\SQLFlowTail.csproj", "{5407A13E-F4CF-4BF5-B2B5-60E35431613F}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLFlowTest", "SQLFlowTest\SQLFlowTest.sqlproj", "{EB245836-9196-4FB1-A63C-F5A4C59D1284}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,15 @@ Global
 		{5407A13E-F4CF-4BF5-B2B5-60E35431613F}.Development|Any CPU.Build.0 = Debug|Any CPU
 		{5407A13E-F4CF-4BF5-B2B5-60E35431613F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5407A13E-F4CF-4BF5-B2B5-60E35431613F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Development|Any CPU.Deploy.0 = Debug|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB245836-9196-4FB1-A63C-F5A4C59D1284}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

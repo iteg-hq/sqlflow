@@ -19,7 +19,7 @@ IF NOT EXISTS (
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC flow.Log 'ERROR', 'Invalid status [:1:]', @StatusCode;
+  EXEC flow.Log 'ERROR', 'Invalid status [:1:.:2:]', @TypeCode, @StatusCode;
   THROW 51000, 'Invalid status', 1
 END
 
