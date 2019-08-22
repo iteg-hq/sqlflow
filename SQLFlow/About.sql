@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.About
+CREATE PROCEDURE flow.About
 AS
 SELECT 'SQLFlow v1' AS [Version]
 ;

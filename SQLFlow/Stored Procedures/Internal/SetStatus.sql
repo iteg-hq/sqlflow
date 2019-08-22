@@ -5,8 +5,8 @@ AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internal.UpdateContext @FlowID;
 
-EXEC dbo.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
-EXEC dbo.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
+EXEC flow.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
+EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
   * Set the status of a Flow, acquiring any locks and executing 
   * any stored procedures associated with the status.
@@ -22,12 +22,12 @@ DECLARE @ProcedureName NVARCHAR(500);
 -- If we're already there, return
 IF EXISTS (
     SELECT 1
-    FROM dbo.Flow
+    FROM flow.Flow
     WHERE FlowID = @FlowID
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC dbo.Log 'INFO', 'Already in status [:1:]', @StatusCode;
+  EXEC flow.Log 'INFO', 'Already in status [:1:]', @StatusCode;
   RETURN;
 END
 
@@ -37,7 +37,7 @@ IF @StatusCode NOT IN (
     FROM internal.FlowStatus AS s
   )
 BEGIN
-  EXEC dbo.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
+  EXEC flow.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
   THROW 51000, 'Invalid status', 1;
 END
 
@@ -53,13 +53,13 @@ WHERE FlowID = @FlowID
 -- Acquire the lock if possible
 IF @RequiredLockCode != ''
 BEGIN
-  EXEC dbo.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
+  EXEC flow.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
   EXEC internal.AcquireLock @FlowID, @RequiredLockCode
-  EXEC dbo.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
+  EXEC flow.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
 END
 ELSE
 BEGIN
-  EXEC dbo.Log 'DEBUG', 'No lock required';
+  EXEC flow.Log 'DEBUG', 'No lock required';
   EXEC internal.ReleaseLock @FlowID;
 END
 
@@ -71,10 +71,10 @@ WHERE FlowID = @FlowID
 EXEC sp_set_session_context N'StatusCode', @StatusCode;
 
 
-EXEC dbo.Log 'INFO', 'Entered status [:1:]', @StatusCode;
+EXEC flow.Log 'INFO', 'Entered status [:1:]', @StatusCode;
 
 SELECT @ProcedureName = ProcedureName 
-FROM dbo.Flow
+FROM flow.Flow
 WHERE FlowID = @FlowID
 ;
 
@@ -82,9 +82,9 @@ WHERE FlowID = @FlowID
 -- Fails if the failure action runs and fails
 IF @ProcedureName != ''
 BEGIN
-  EXEC dbo.Log 'DEBUG', 'Running status procedure';
-  EXEC dbo.ExecuteStoredProcedure @FlowID, @ProcedureName;
-  EXEC dbo.Log 'TRACE', 'Completed status procedure';
+  EXEC flow.Log 'DEBUG', 'Running status procedure';
+  EXEC flow.ExecuteStoredProcedure @FlowID, @ProcedureName;
+  EXEC flow.Log 'TRACE', 'Completed status procedure';
 END
 
-EXEC dbo.Log 'TRACE', 'Leaving dbo.SetStatus'
+EXEC flow.Log 'TRACE', 'Leaving flow.SetStatus'

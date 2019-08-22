@@ -17,7 +17,7 @@ WHILE @@ROWCOUNT > 0
   FROM #reachable
 
 SELECT *
-FROM dbo.FlowStatus
+FROM flow.FlowStatus
 WHERE StatusCode NOT IN ( SELECT StatusCode FROM #reachable )
 
 DROP TABLE #reachable;

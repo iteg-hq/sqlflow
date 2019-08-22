@@ -23,7 +23,7 @@ VALUES
 
 GO
 
-EXEC dbo.HousekeepingSetup;
+EXEC flow.HousekeepingSetup;
 
 /*
 EXEC flow_test.SimpleSetup;

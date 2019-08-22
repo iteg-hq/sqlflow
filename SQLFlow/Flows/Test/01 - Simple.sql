@@ -1,12 +1,12 @@
 CREATE PROCEDURE flow_test.SimpleSetup
 AS
-EXEC dbo.AddType 'Test:Simple';
+EXEC flow.AddType 'Test:Simple';
 
-EXEC dbo.DropActions 'Test:Simple';
+EXEC flow.DropActions 'Test:Simple';
 
-EXEC dbo.AddAction 'Test:Simple.New.Start', 'Running';
-EXEC dbo.AddAction 'Test:Simple.Running.Complete', 'Complete';
-EXEC dbo.SetStatusProcedure 'Test:Simple.Running', '$(DatabaseName).flow_test.DoStuff'
+EXEC flow.AddAction 'Test:Simple.New.Start', 'Running';
+EXEC flow.AddAction 'Test:Simple.Running.Complete', 'Complete';
+EXEC flow.SetStatusProcedure 'Test:Simple.Running', '$(DatabaseName).flow_test.DoStuff'
 
 GO
 
@@ -15,6 +15,6 @@ AS
 DECLARE @FlowID INT;
 -- Create a flow and start it yourself.
 -- [DoStuffAndComplete] will start immediately, running as you.
--- It will do stuff and then complete the dbo.
-EXEC dbo.NewFlow 'Test:Simple', @FlowID OUTPUT;
-EXEC dbo.Do @FlowID, 'Start';
+-- It will do stuff and then complete the flow.
+EXEC flow.NewFlow 'Test:Simple', @FlowID OUTPUT;
+EXEC flow.Do @FlowID, 'Start';

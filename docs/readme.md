@@ -115,7 +115,7 @@ Fetch `SQLFlowTail.exe` from the release page. Starting it should show you a con
 Now, try connecting to the SQLFlow database in Management Studio and doing:
 
 ```mssql
-EXEC dbo.Log 'INFO', 'Hello World!';
+EXEC flow.Log 'INFO', 'Hello World!';
 ```
 
 This message should appear in the log.
@@ -191,9 +191,9 @@ The status code must be prefixed with a valid flow type code. If @RequiredLockCo
 
 **NewFlow @TypeCode, @FlowID (OUTPUT)**: Create a new flow instance pf type @TypeCode. The flow ID is returned to the caller.
 
-**SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a dbo.
+**SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a flow.
 
-**[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a dbo.
+**[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a flow.
 
 #### Locking ####
 

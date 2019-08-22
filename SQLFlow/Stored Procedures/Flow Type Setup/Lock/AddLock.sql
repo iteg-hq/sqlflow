@@ -1,9 +1,9 @@
-CREATE PROCEDURE dbo.AddLock
+CREATE PROCEDURE flow.AddLock
     @LockCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC dbo.Log 'TRACE', 'AddLock [:1:]', @LockCode;
+EXEC flow.Log 'TRACE', 'AddLock [:1:]', @LockCode;
 
 IF @LockCode IN ( SELECT LockCode FROM internal.Lock ) RETURN;
 
@@ -26,8 +26,8 @@ END
 ELSE
 BEGIN
   -- If the parent doesn't exists, create it.
-  IF NOT EXISTS ( SELECT LockCode FROM dbo.Lock WHERE LockCode = @ParentLockCode)
-    EXEC dbo.AddLock @ParentLockCode;
+  IF NOT EXISTS ( SELECT LockCode FROM flow.Lock WHERE LockCode = @ParentLockCode)
+    EXEC flow.AddLock @ParentLockCode;
 
   -- Finally, create the child lock.
   INSERT INTO internal.Lock (
@@ -41,9 +41,9 @@ BEGIN
     , LockCode
     , LockLevel+1
     , HeldByFlowID
-  FROM dbo.Lock
+  FROM flow.Lock
   WHERE LockCode = @ParentLockCode
   ;
 END
 
-EXEC dbo.Log 'INFO', 'Added lock [:1:]', @LockCode;
+EXEC flow.Log 'INFO', 'Added lock [:1:]', @LockCode;

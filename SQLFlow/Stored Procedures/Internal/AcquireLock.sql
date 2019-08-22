@@ -4,9 +4,9 @@ CREATE PROCEDURE internal.AcquireLock
 AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internal.UpdateContext @FlowID;
-EXEC dbo.Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
+EXEC flow.Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
 
--- Check if the lock is held by the dbo.
+-- Check if the lock is held by the flow.
 IF EXISTS (
     SELECT 1
     FROM internal.Lock AS l
@@ -14,7 +14,7 @@ IF EXISTS (
       AND HeldByFlowID = @FlowID
   )
 BEGIN
-  EXEC dbo.Log 'DEBUG', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
+  EXEC flow.Log 'DEBUG', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
   RETURN
 END
 -- If not, try acquiring it.
@@ -40,7 +40,7 @@ BEGIN TRANSACTION
   IF @UnavailableLockCode != ''
   BEGIN
     ROLLBACK TRANSACTION
-    EXEC dbo.Log 'ERROR', 'Could not acquire lock [:1:], :2: is already held by :3:', @RootLockCode, @UnavailableLockCode, @HeldBy;
+    EXEC flow.Log 'ERROR', 'Could not acquire lock [:1:], :2: is already held by :3:', @RootLockCode, @UnavailableLockCode, @HeldBy;
     THROW 51000, 'Could not acquire lock', 1;
   END
 
@@ -50,6 +50,6 @@ BEGIN TRANSACTION
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 
-  EXEC dbo.Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
+  EXEC flow.Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
 
 COMMIT TRANSACTION

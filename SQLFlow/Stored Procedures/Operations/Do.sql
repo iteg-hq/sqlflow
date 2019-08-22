@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.Do
+CREATE PROCEDURE flow.Do
     @FlowID INT
   , @ActionCode NVARCHAR(50)
   , @RecursionLevel INT = 0
@@ -9,7 +9,7 @@ EXEC internal.UpdateContext @FlowID;
 /*
  * Performs an action
  */
-EXEC dbo.Log 'TRACE', 'Do [:1:], [:2:], [:3:]', @FlowID, @ActionCode, @RecursionLevel;
+EXEC flow.Log 'TRACE', 'Do [:1:], [:2:], [:3:]', @FlowID, @ActionCode, @RecursionLevel;
 
 DECLARE @StatusCode NVARCHAR(200);
 DECLARE @ResultingStatusCode NVARCHAR(200);
@@ -17,12 +17,12 @@ DECLARE @Autocomplete BIT;
 DECLARE @NextRecursionLevel INT = @RecursionLevel+1;
 
 
-EXEC dbo.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
+EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
 
 -- Check that the action exists
-IF @ActionCode NOT IN ( SELECT ActionCode FROM dbo.FlowAction WHERE FlowID = @FlowID )
+IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @FlowID )
 BEGIN
-  EXEC dbo.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
+  EXEC flow.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
   EXEC internal.UpdateContext @FlowID=NULL;
   THROW 51000, 'Invalid action', 1;
 END
@@ -31,7 +31,7 @@ END
 SELECT
     @ResultingStatusCode = ResultingStatusCode
   , @Autocomplete = Autocomplete
-FROM dbo.FlowAction
+FROM flow.FlowAction
 WHERE FlowID = @FlowID
   AND ActionCode = @ActionCode
 ;
@@ -43,7 +43,7 @@ END TRY
 BEGIN CATCH
   -- If anything goes wrong in the status transition, call Do recursively to perform the Fail action.
   -- No failure chaining: If Failing throws an exception, that exception is unhandled
-  EXEC dbo.Do @FlowID, 'Fail', @NextRecursionLevel;
+  EXEC flow.Do @FlowID, 'Fail', @NextRecursionLevel;
   RETURN;
 END CATCH
 
@@ -52,8 +52,8 @@ END CATCH
 
 IF @Autocomplete = 1
 BEGIN
-  EXEC dbo.Log 'TRACE', 'Autocompleting';
-  EXEC dbo.Do @FlowID, 'Complete', @NextRecursionLevel;
+  EXEC flow.Log 'TRACE', 'Autocompleting';
+  EXEC flow.Do @FlowID, 'Complete', @NextRecursionLevel;
 END
 
-EXEC dbo.Log 'TRACE', 'Leaving dbo.Do [:1:];', @RecursionLevel;
+EXEC flow.Log 'TRACE', 'Leaving flow.Do [:1:];', @RecursionLevel;

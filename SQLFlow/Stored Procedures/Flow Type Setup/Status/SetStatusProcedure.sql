@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.SetStatusProcedure
+CREATE PROCEDURE flow.SetStatusProcedure
     @TypeCode NVARCHAR(100)
   , @StatusCode NVARCHAR(100)
   , @ProcedureName NVARCHAR(255)
@@ -6,7 +6,7 @@ CREATE PROCEDURE dbo.SetStatusProcedure
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC dbo.Log 'TRACE', 'SetStatusProcedure [:1:], [:2:], [:3:], [:4:]', @TypeCode, @StatusCode, @ProcedureName, @Autocomplete;
+EXEC flow.Log 'TRACE', 'SetStatusProcedure [:1:], [:2:], [:3:], [:4:]', @TypeCode, @StatusCode, @ProcedureName, @Autocomplete;
 
 -- If this status has a procedure and no value is supplied for Autocomplete, assume that we want to
 -- Autocomplete. You might want to turn off Autocomplete if the status SP manages the resulting 
@@ -22,7 +22,7 @@ IF NOT EXISTS (
     AND StatusCode = @StatusCode
 )
 BEGIN
-  EXEC dbo.Log 'ERROR', 'Invalid status [:1:.:2:]', @TypeCode, @StatusCode;
+  EXEC flow.Log 'ERROR', 'Invalid status [:1:.:2:]', @TypeCode, @StatusCode;
   THROW 51000, 'Invalid status', 1
 END
 
@@ -40,7 +40,7 @@ IF NOT EXISTS (
 /*
 IF 'EXECUTE' NOT IN ( SELECT permission_name FROM fn_my_permissions(@ProcedureName, 'OBJECT') )
 BEGIN
-  EXEC dbo.Log 'WARN', 'Non-existent status procedure [:1:]', @ProcedureName;
+  EXEC flow.Log 'WARN', 'Non-existent status procedure [:1:]', @ProcedureName;
   THROW 51000, 'Invalid procedure', 1;
 END
 */
@@ -52,4 +52,4 @@ WHERE TypeCode = @TypeCode
   AND StatusCode = @StatusCode
 ;
 
-EXEC dbo.Log 'INFO', 'Using procedure [:1:], Autocomplete [:2:] for status [:3:]', @ProcedureName, @Autocomplete, @StatusCode;
+EXEC flow.Log 'INFO', 'Using procedure [:1:], Autocomplete [:2:] for status [:3:]', @ProcedureName, @Autocomplete, @StatusCode;

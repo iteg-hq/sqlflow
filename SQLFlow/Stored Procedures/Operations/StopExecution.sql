@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.StopExecution @FlowID INT
+CREATE PROCEDURE flow.StopExecution @FlowID INT
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
@@ -11,7 +11,7 @@ WHERE FlowID = @FlowID;
 EXEC internal.UpdateContext @FlowID=NULL;
 
 SELECT @StatusCode = StatusCode
-FROM dbo.Flow
+FROM flow.Flow
 WHERE FlowID = @FlowID;
 
-EXEC dbo.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;
+EXEC flow.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;

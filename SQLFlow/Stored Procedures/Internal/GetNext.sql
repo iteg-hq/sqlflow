@@ -8,7 +8,7 @@ SET @FlowID = NULL;
 
 -- Get the next action to run for this Execution Group where all required locks are available.
 SELECT TOP 1 @FlowID = FlowID
-FROM dbo.FlowAction AS a
+FROM flow.FlowAction AS a
 WHERE a.ExecutionGroupCode = @ExecutionGroupCode
   AND a.ActionCode = @ActionCode
   AND NOT EXISTS (

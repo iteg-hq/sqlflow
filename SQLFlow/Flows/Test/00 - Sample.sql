@@ -1,23 +1,23 @@
 CREATE PROCEDURE flow_test.TestSetup
 AS
-EXEC dbo.AddType 'Test:TestFlow', @ExecutionGroupCode='System';
+EXEC flow.AddType 'Test:TestFlow', @ExecutionGroupCode='System';
 
-EXEC dbo.DropActions 'Test:TestFlow';
+EXEC flow.DropActions 'Test:TestFlow';
 
-EXEC dbo.AddAction 'Test:TestFlow.New.Start', 'Running';
-EXEC dbo.AddAction 'Test:TestFlow.Running.Complete', 'Complete';
-EXEC dbo.AddAction 'Test:TestFlow.Running.Fail', 'Failed';
-EXEC dbo.AddAction 'Test:TestFlow.Failed.Rollback', 'RollbackRunning';
-EXEC dbo.AddAction 'Test:TestFlow.RollbackRunning.Complete', 'RollbackCompleted';
-EXEC dbo.AddAction 'Test:TestFlow.RollbackCompleted.Restart', 'Running';
+EXEC flow.AddAction 'Test:TestFlow.New.Start', 'Running';
+EXEC flow.AddAction 'Test:TestFlow.Running.Complete', 'Complete';
+EXEC flow.AddAction 'Test:TestFlow.Running.Fail', 'Failed';
+EXEC flow.AddAction 'Test:TestFlow.Failed.Rollback', 'RollbackRunning';
+EXEC flow.AddAction 'Test:TestFlow.RollbackRunning.Complete', 'RollbackCompleted';
+EXEC flow.AddAction 'Test:TestFlow.RollbackCompleted.Restart', 'Running';
 
-EXEC dbo.SetStatusProcedure 'Test:TestFlow.Running', '$(DatabaseName).flow_test.FailOnce'
-EXEC dbo.SetStatusProcedure 'Test:TestFlow.RollbackRunning', '$(DatabaseName).flow_test.RollStuffBack'
+EXEC flow.SetStatusProcedure 'Test:TestFlow.Running', '$(DatabaseName).flow_test.FailOnce'
+EXEC flow.SetStatusProcedure 'Test:TestFlow.RollbackRunning', '$(DatabaseName).flow_test.RollStuffBack'
 
 GO
 
 CREATE PROCEDURE flow_test.Test
 AS
 DECLARE @FlowID INT;
-EXEC dbo.NewFlow 'Test:TestFlow', @FlowID OUTPUT;
+EXEC flow.NewFlow 'Test:TestFlow', @FlowID OUTPUT;
 ;

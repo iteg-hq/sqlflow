@@ -4,5 +4,5 @@ GO
 GRANT CONNECT TO LogViewer;
 GO
 
-GRANT EXECUTE ON dbo.Tail TO LogViewer;
+GRANT EXECUTE ON flow.Tail TO LogViewer;
 GO

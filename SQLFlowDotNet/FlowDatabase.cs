@@ -73,7 +73,7 @@ namespace SQLFlow
             string typeCode;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT TypeCode FROM dbo.Flow WHERE FlowID = @FlowID", connection))
+                using (var command = new SqlCommand("SELECT TypeCode FROM flow.Flow WHERE FlowID = @FlowID", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@FlowID", flowID);
@@ -242,7 +242,7 @@ namespace SQLFlow
             string value = null;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT dbo.GetParameterValue(@FlowID, @Name)", connection))
+                using (var command = new SqlCommand("SELECT flow.GetParameterValue(@FlowID, @Name)", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@FlowID", flowID);

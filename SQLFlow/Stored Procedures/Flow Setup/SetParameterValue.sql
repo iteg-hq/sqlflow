@@ -1,18 +1,18 @@
-CREATE PROCEDURE dbo.SetParameterValue
+CREATE PROCEDURE flow.SetParameterValue
     @FlowID INT
   , @Name NVARCHAR(50)
   , @Value NVARCHAR(MAX)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC dbo.Log 'TRACE', 'SetParameterValue [:1:], [:2:], [:3:]', @FlowID, @Name, @Value;
+EXEC flow.Log 'TRACE', 'SetParameterValue [:1:], [:2:], [:3:]', @FlowID, @Name, @Value;
   
 IF @FlowID NOT IN ( SELECT @FlowID FROM internal.Flow )
 BEGIN
-  EXEC dbo.Log 'ERROR', 'Invalid FlowID :1:', @FlowID
+  EXEC flow.Log 'ERROR', 'Invalid FlowID :1:', @FlowID
 END
 
-EXEC dbo.Log 'DEBUG', 'Parameter :1: set to :2:', @Name, @Value;
+EXEC flow.Log 'DEBUG', 'Parameter :1: set to :2:', @Name, @Value;
 
 UPDATE internal.FlowParameter
 SET ParameterValue = @Value

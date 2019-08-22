@@ -1,22 +1,22 @@
 CREATE PROCEDURE flow_test.AsyncSetup
 AS
-EXEC dbo.AddType 'Test:Async', @ExecutionGroupCode='System';
+EXEC flow.AddType 'Test:Async', @ExecutionGroupCode='System';
 
-EXEC dbo.DropActions 'Test:Async';
+EXEC flow.DropActions 'Test:Async';
 
-EXEC dbo.AddAction 'Test:Async.New.Start', 'Running';
-EXEC dbo.AddAction 'Test:Async.Running.Complete', 'Complete';
+EXEC flow.AddAction 'Test:Async.New.Start', 'Running';
+EXEC flow.AddAction 'Test:Async.Running.Complete', 'Complete';
 
 -- Rollback
-EXEC dbo.AddAction 'Test:Async.Complete.Rollback', 'WaitingForRollback';
-EXEC dbo.AddAction 'Test:Async.WaitingForRollback.Start', 'RollingBack';
-EXEC dbo.AddAction 'Test:Async.RollingBack.Complete', 'RollbackCompleted';
+EXEC flow.AddAction 'Test:Async.Complete.Rollback', 'WaitingForRollback';
+EXEC flow.AddAction 'Test:Async.WaitingForRollback.Start', 'RollingBack';
+EXEC flow.AddAction 'Test:Async.RollingBack.Complete', 'RollbackCompleted';
 
 -- Restart
-EXEC dbo.AddAction 'Test:Async.RollbackCompleted.Restart', 'Running';
+EXEC flow.AddAction 'Test:Async.RollbackCompleted.Restart', 'Running';
 
-EXEC dbo.SetStatusProcedure 'Test:Async.Running', '$(DatabaseName).flow_test.DoStuff'
-EXEC dbo.SetStatusProcedure 'Test:Async.RollingBack', '$(DatabaseName).flow_test.RollStuffBack'
+EXEC flow.SetStatusProcedure 'Test:Async.Running', '$(DatabaseName).flow_test.DoStuff'
+EXEC flow.SetStatusProcedure 'Test:Async.RollingBack', '$(DatabaseName).flow_test.RollStuffBack'
 
 GO
 
@@ -24,4 +24,4 @@ CREATE PROCEDURE flow_test.Async
 AS
 -- Create the flow - the 
 DECLARE @FlowID INT;
-EXEC dbo.NewFlow 'Test:Async', @FlowID OUTPUT;
+EXEC flow.NewFlow 'Test:Async', @FlowID OUTPUT;

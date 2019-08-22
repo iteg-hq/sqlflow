@@ -1,4 +1,4 @@
-CREATE VIEW dbo.Lock
+CREATE VIEW flow.Lock
 AS 
 SELECT
     LockCode

@@ -1,4 +1,4 @@
-CREATE VIEW dbo.FlowType
+CREATE VIEW flow.FlowType
 AS 
 SELECT
     TypeCode

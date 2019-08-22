@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.Log
+CREATE PROCEDURE flow.Log
     @LogLevel NVARCHAR(10)
   , @EntryText NVARCHAR(4000)
   , @Value1 NVARCHAR(4000) = NULL
@@ -27,7 +27,7 @@ WHERE LogLevelCode = @LogLevel;
 IF @LogLevelID IS NULL
 BEGIN
   IF @LogLevel != 'ERROR'
-    EXEC dbo.Log 'ERROR', 'Bad loglevel: :1:', @LogLevelID;
+    EXEC flow.Log 'ERROR', 'Bad loglevel: :1:', @LogLevelID;
   THROW 51000, @LogLevel, 1;
 END
 
