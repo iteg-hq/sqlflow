@@ -107,7 +107,6 @@
     <Build Include="Views\LogEntry.sql" />
     <Build Include="Views\FlowAction.sql" />
     <Build Include="Views\Flow.sql" />
-    <Build Include="Views\FlowLock.sql" />
     <Build Include="Stored Procedures\Flow Setup\NewFlow.sql" />
     <Build Include="Stored Procedures\Flow Setup\SetParameterValue.sql" />
     <Build Include="Stored Procedures\Operations\Do.sql">
