@@ -193,8 +193,8 @@
     <Build Include="Flows\Test\flow_test.sql" />
     <Build Include="Stored Procedures\Operations\StartExecution.sql" />
     <Build Include="Stored Procedures\Operations\StopExecution.sql" />
-    <Build Include="Functions\GetNext.sql" />
     <Build Include="Stored Procedures\Operations\ExecuteNext.sql" />
     <Build Include="Tables\Execution.sql" />
+    <Build Include="Stored Procedures\Internal\GetNext.sql" />
   </ItemGroup>
 </Project>
