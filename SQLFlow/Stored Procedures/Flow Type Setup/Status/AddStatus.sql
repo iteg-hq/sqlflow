@@ -40,8 +40,8 @@ END
 
 -- Update the required lock, if specified
 IF @RequiredLockCode != ''
-  EXEC flow.SetStatusLock @StatusCode, @RequiredLockCode;
+  EXEC flow.SetStatusLock @TypeCode, @StatusCode, @RequiredLockCode;
 
 -- Update the procedure, if specified
 IF @ProcedureName != ''
-  EXEC flow.SetStatusProcedure @StatusCode, @ProcedureName;
+  EXEC flow.SetStatusProcedure @TypeCode, @StatusCode, @ProcedureName;
