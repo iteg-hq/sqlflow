@@ -40,7 +40,7 @@ BEGIN
       @LockCode
     , LockCode
     , LockDepth+1
-    , HeldByFlowID
+    , HeldByFlowID -- The new lock is held by whoever holds the parent lock
   FROM Lock
   WHERE LockCode = @ParentLockCode
   ;
