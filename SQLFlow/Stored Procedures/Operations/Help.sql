@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.Help @FlowID INT
+CREATE PROCEDURE Help @FlowID INT
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
@@ -19,7 +19,7 @@ SELECT
   , @TypeCode = COALESCE(TypeCode, '(none)')
   , @StatusCode = COALESCE(StatusCode, '(none)')
   , @ProcedureName = COALESCE(ProcedureName, '(none)')
-FROM flow.Flow
+FROM Flow
 WHERE FlowID = @FlowID
 
 IF @Exists = 0
@@ -36,7 +36,7 @@ PRINT 'Actions:'
 
 DECLARE action_cursor CURSOR FOR
 SELECT ActionCode, ResultingStatusCode
-FROM flow.FlowAction
+FROM FlowAction
 WHERE FlowID = @FlowID
 ;
 
@@ -59,7 +59,7 @@ PRINT 'Locks:';
 
 DECLARE lock_cursor CURSOR FOR
 SELECT LockCode
-FROM flow.AcquiredLock
+FROM AcquiredLock
 WHERE FlowID = @FlowID
 ORDER BY LockCode
 ;
@@ -84,7 +84,7 @@ PRINT 'Log tail:';
 
 DECLARE log_cursor CURSOR FOR
 SELECT LogLine
-FROM flow.LogEntry
+FROM LogEntry
 WHERE FlowID = @FlowID
   AND rv >= (
       -- Earliest log message to include
@@ -92,7 +92,7 @@ WHERE FlowID = @FlowID
       FROM (
           -- Top 10 latest messages
           SELECT TOP 10 rv
-          FROM flow.LogEntry
+          FROM LogEntry
           WHERE FlowID = @FlowID
           ORDER BY rv DESC
         ) AS tail

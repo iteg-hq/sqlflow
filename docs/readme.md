@@ -24,7 +24,7 @@ In addition, SQLFlow provides a framework for storing parameter values needed by
 [29][INFO] Created new FlowID: 29
 [29][INFO] Entered status [Test:TestFlow.New]
 
-> EXEC SQLFlow.flow.Main 'Test' -- Worker process picks up the flow from the queue
+> EXEC SQLFlow.Main 'Test' -- Worker process picks up the flow from the queue
 
 [29][INFO] Entered status [Test:TestFlow.Running]
 [29][INFO] Doing stuff
@@ -32,22 +32,22 @@ In addition, SQLFlow provides a framework for storing parameter values needed by
 [29][INFO] Entered status [Test:TestFlow.Failed]
 [29][INFO] Flow execution done. Final status: [Test:TestFlow.Failed].
 
-> EXEC SQLFlow.flow.Do 29, 'Rollback' -- Operator rolls back failed run
+> EXEC SQLFlow.Do 29, 'Rollback' -- Operator rolls back failed run
 
 [29][INFO] Entered status [Test:TestFlow.RollbackRunning]
 [29][INFO] Rolling stuff back
 [29][INFO] Entered status [Test:TestFlow.RollbackCompleted]
 
-> EXEC SQLFlow.flow.Do 29, 'Restart' -- And reruns manually
+> EXEC SQLFlow.Do 29, 'Restart' -- And reruns manually
 
 [29][INFO] Entered status [Test:TestFlow.Running]
 [29][INFO] Doing stuff
 [29][INFO] Entered status [Test:TestFlow.Complete]
 
-> EXEC SQLFlow.flow.Do 29, 'Rollback' -- Roll back completed flow
+> EXEC SQLFlow.Do 29, 'Rollback' -- Roll back completed flow
 
 [29][ERROR] Invalid action: [Rollback]
-Msg 51000, Level 16, State 1, Procedure SQLFlow.flow.Do, Line 28 [Batch Start Line 29]
+Msg 51000, Level 16, State 1, Procedure SQLFlow.Do, Line 28 [Batch Start Line 29]
 Invalid action
 
 ~~~
@@ -115,7 +115,7 @@ Fetch `SQLFlowTail.exe` from the release page. Starting it should show you a con
 Now, try connecting to the SQLFlow database in Management Studio and doing:
 
 ```mssql
-EXEC flow.Log 'INFO', 'Hello World!';
+EXEC Log 'INFO', 'Hello World!';
 ```
 
 This message should appear in the log.
@@ -191,9 +191,9 @@ The status code must be prefixed with a valid flow type code. If @RequiredLockCo
 
 **NewFlow @TypeCode, @FlowID (OUTPUT)**: Create a new flow instance pf type @TypeCode. The flow ID is returned to the caller.
 
-**SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a flow.
+**SetParameterValue @FlowID, @Name, @Value**: Set a parameter value for a 
 
-**[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a flow.
+**[Function] GetParameterValue(@FlowID, @Name)**: Get a parameter value for a 
 
 #### Locking ####
 

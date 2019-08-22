@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.StartExecution @FlowID INT
+CREATE PROCEDURE StartExecution @FlowID INT
 AS
 SET NOCOUNT, XACT_ABORT ON;
 

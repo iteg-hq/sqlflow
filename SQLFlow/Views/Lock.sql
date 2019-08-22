@@ -1,4 +1,4 @@
-CREATE VIEW flow.Lock
+CREATE VIEW Lock
 AS 
 SELECT
     LockCode

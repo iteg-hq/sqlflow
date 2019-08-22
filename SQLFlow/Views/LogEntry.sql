@@ -1,4 +1,4 @@
-CREATE VIEW flow.LogEntry
+CREATE VIEW LogEntry
 AS 
 SELECT
     le.rv

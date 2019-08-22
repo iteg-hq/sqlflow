@@ -23,7 +23,7 @@ VALUES
 
 GO
 
-EXEC flow.HousekeepingSetup;
+EXEC HousekeepingSetup;
 
 /*
 EXEC flow_test.SimpleSetup;

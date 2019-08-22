@@ -8,7 +8,7 @@ SET @FlowID = NULL;
 
 -- Get the next action to run for this Execution Group where all required locks are available.
 SELECT TOP 1 @FlowID = FlowID
-FROM flow.FlowAction AS a
+FROM FlowAction AS a
 WHERE a.ExecutionGroupCode = @ExecutionGroupCode
   AND a.ActionCode = @ActionCode
   AND NOT EXISTS (
@@ -18,7 +18,7 @@ WHERE a.ExecutionGroupCode = @ExecutionGroupCode
     INTERSECT
     -- All currently (and all implicitly) locks held by other Flows.
     SELECT LockCode
-    FROM flow.AcquiredLock
+    FROM AcquiredLock
     WHERE FlowID != a.FlowID
   )
 ORDER BY a.FlowID * @SortOrder

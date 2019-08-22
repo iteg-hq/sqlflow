@@ -1,16 +1,16 @@
-CREATE PROCEDURE flow.DropAction
+CREATE PROCEDURE DropAction
     @ActionCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC flow.Log 'TRACE', 'DropAction [:1:]', @ActionCode;
+EXEC Log 'TRACE', 'DropAction [:1:]', @ActionCode;
 
 DELETE internal.FlowAction 
 WHERE ActionCode = @ActionCode
 ;
 
 IF @@ROWCOUNT = 0
-  EXEC flow.Log 'WARN', 'Did not drop action [:1:]', @ActionCode;
+  EXEC Log 'WARN', 'Did not drop action [:1:]', @ActionCode;
 ELSE
-  EXEC flow.Log 'INFO', 'Dropped action [:1:]', @ActionCode;
+  EXEC Log 'INFO', 'Dropped action [:1:]', @ActionCode;
  

@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.ExecuteSSISPackage
+CREATE PROCEDURE ExecuteSSISPackage
     @FlowID INT
   , @SSISPackageName NVARCHAR(500)
 AS
@@ -27,11 +27,11 @@ WHERE '/SSISDB/' + f.name +'/'+ p.name +'/'+ pkg.name = @SSISPackageName
 
 IF @PackageName IS NULL
 BEGIN
-  EXEC flow.Log 'ERROR', 'SSIS Package not found: :1:', @SSISPackageName;
+  EXEC Log 'ERROR', 'SSIS Package not found: :1:', @SSISPackageName;
   RETURN 1;
 END
 
-SET @EnvironmentName = flow.GetParameterValue(@FlowID, 'SSISEnvironmentName');
+SET @EnvironmentName = GetParameterValue(@FlowID, 'SSISEnvironmentName');
 
 -- Get an environment reference
 SELECT @ReferenceID = er.reference_id
@@ -45,11 +45,11 @@ WHERE er.reference_type = 'A'
 
 IF @ReferenceID IS NULL
 BEGIN
-  EXEC flow.Log 'ERROR', 'SSIS environment not found: :1:', @EnvironmentName;
+  EXEC Log 'ERROR', 'SSIS environment not found: :1:', @EnvironmentName;
   THROW 51000, 'SSIS environment not found', 1;
 END
 
-EXEC flow.Log 'TRACE', 'Creating Execution'
+EXEC Log 'TRACE', 'Creating Execution'
 
 EXEC SSISDB.[catalog].create_execution
     @package_name = @PackageName
@@ -60,7 +60,7 @@ EXEC SSISDB.[catalog].create_execution
   , @execution_id = @ExecutionID OUTPUT
   ;
 
-EXEC flow.Log 'TRACE', 'SSIS Execution ID = :1:, setting parameters.', @ExecutionID
+EXEC Log 'TRACE', 'SSIS Execution ID = :1:, setting parameters.', @ExecutionID
 
 -- Wait for the SSIS package to finish running
 EXEC SSISDB.[catalog].set_execution_parameter_value
@@ -70,7 +70,7 @@ EXEC SSISDB.[catalog].set_execution_parameter_value
   , @parameter_value = 1
 ;
 
-EXEC flow.Log 'TRACE', 'SSIS Execution set to run as synchronized', @ExecutionID
+EXEC Log 'TRACE', 'SSIS Execution set to run as synchronized', @ExecutionID
 
 -- Set FlowID
 EXEC SSISDB.[catalog].set_execution_parameter_value
@@ -79,7 +79,7 @@ EXEC SSISDB.[catalog].set_execution_parameter_value
   , @parameter_name = N'FlowID'
   , @parameter_value = @FlowID
 ;
-EXEC flow.Log 'TRACE', 'FlowID set to :1:', @FlowID;
+EXEC Log 'TRACE', 'FlowID set to :1:', @FlowID;
    
 -- The actual execution
 EXEC SSISDB.[catalog].start_execution @ExecutionID;
@@ -103,14 +103,14 @@ FROM SSISDB.[catalog].executions
 WHERE execution_id = @ExecutionID
 ;
 
-EXEC flow.Log 'DEBUG', 'Execution ended, status = ":1:"', @StatusDescription;
+EXEC Log 'DEBUG', 'Execution ended, status = ":1:"', @StatusDescription;
 
 IF @Status IN (4, 6)
 BEGIN
-  EXEC flow.Log 'WARN', 'Package failed, see SSIS log for details (execution id :1:)', @ExecutionID;
+  EXEC Log 'WARN', 'Package failed, see SSIS log for details (execution id :1:)', @ExecutionID;
   THROW 51000, 'SSIS Package failed', 1;
 END
 
-EXEC flow.Log 'DEBUG', 'Execution successful.'
+EXEC Log 'DEBUG', 'Execution successful.'
 
-EXEC flow.Log 'TRACE', 'Leaving setup.Run_ExecuteSSISPackage'
+EXEC Log 'TRACE', 'Leaving setup.Run_ExecuteSSISPackage'

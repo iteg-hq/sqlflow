@@ -1,4 +1,4 @@
-CREATE VIEW flow.FlowAction
+CREATE VIEW FlowAction
 AS
 SELECT
     f.FlowID

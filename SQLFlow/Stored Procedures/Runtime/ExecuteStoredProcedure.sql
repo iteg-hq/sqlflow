@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.ExecuteStoredProcedure
+CREATE PROCEDURE ExecuteStoredProcedure
     @FlowID INT
   , @StoredProcedureName NVARCHAR(255)
 AS
@@ -11,16 +11,16 @@ SET NOCOUNT, XACT_ABORT ON;
 DECLARE @Status INT;
 DECLARE @ErrorCode INT;
 DECLARE @Message NVARCHAR(4000);
-EXEC flow.Log 'TRACE', 'flow.ExecuteStoredProcedure [:1:], [:2:]', @FlowID, @StoredProcedureName;
+EXEC Log 'TRACE', 'ExecuteStoredProcedure [:1:], [:2:]', @FlowID, @StoredProcedureName;
 
-EXEC flow.Log 'DEBUG', 'Calling stored procedure :1:', @StoredProcedureName;
+EXEC Log 'DEBUG', 'Calling stored procedure :1:', @StoredProcedureName;
 
 BEGIN TRY
   -- Call the procedure and capture the error code
   EXEC @ErrorCode = @StoredProcedureName @FlowID = @FlowID
   IF @ErrorCode <> 0
   BEGIN
-    EXEC flow.Log 'ERROR', 'Stored procedure returned non-zero';
+    EXEC Log 'ERROR', 'Stored procedure returned non-zero';
     THROW 51000, 'Stored procedure returned non-zero', 1;
   END
 END TRY
@@ -36,8 +36,8 @@ BEGIN CATCH
   IF @@TRANCOUNT > 0
   BEGIN
     ROLLBACK TRAN;
-    EXEC flow.Log 'WARN', 'Rolled back transaction, @@TRANCOUNT is :1:', @@TRANCOUNT
+    EXEC Log 'WARN', 'Rolled back transaction, @@TRANCOUNT is :1:', @@TRANCOUNT
   END
-  EXEC flow.Log 'ERROR', ':1:', @ErrorMessage;
+  EXEC Log 'ERROR', ':1:', @ErrorMessage;
   THROW
 END CATCH

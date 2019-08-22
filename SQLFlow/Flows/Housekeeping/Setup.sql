@@ -1,19 +1,19 @@
-CREATE PROCEDURE flow.HousekeepingSetup
+CREATE PROCEDURE HousekeepingSetup
 AS
 
-EXEC flow.AddType
+EXEC AddType
     @TypeCode = 'SQLFlow:Housekeeping'
   , @ExecutionGroupCode = 'System'
   ;
 
-EXEC flow.DropActions 'SQLFlow:Housekeeping';
+EXEC DropActions 'SQLFlow:Housekeeping';
 
-EXEC flow.AddAction 'SQLFlow:Housekeeping', 'New',     'Start',    'Running';
-EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Fail',     'Failed'
-EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Complete', 'Completed';
+EXEC AddAction 'SQLFlow:Housekeeping', 'New',     'Start',    'Running';
+EXEC AddAction 'SQLFlow:Housekeeping', 'Running', 'Fail',     'Failed'
+EXEC AddAction 'SQLFlow:Housekeeping', 'Running', 'Complete', 'Completed';
 
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Running', @ProcedureName='internal.HousekeepingRunning';
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Failed',  @ProcedureName='internal.HousekeepingFailed', @Autocomplete=0;
+EXEC SetStatusProcedure 'SQLFlow:Housekeeping', 'Running', @ProcedureName='internal.HousekeepingRunning';
+EXEC SetStatusProcedure 'SQLFlow:Housekeeping', 'Failed',  @ProcedureName='internal.HousekeepingFailed', @Autocomplete=0;
 
 GO
 
@@ -22,9 +22,9 @@ AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
   DECLARE @FlowID INT;
-  EXEC flow.NewFlow 'SQLFlow:Housekeeping', @FlowID OUTPUT
-  EXEC flow.SetParameterValue @FlowID, 'LogRetentionPeriodInDays', 30; -- Hardcoded
-  EXEC flow.Do @FlowID, 'Start';
+  EXEC NewFlow 'SQLFlow:Housekeeping', @FlowID OUTPUT
+  EXEC SetParameterValue @FlowID, 'LogRetentionPeriodInDays', 30; -- Hardcoded
+  EXEC Do @FlowID, 'Start';
 END
 
 GO
@@ -41,6 +41,6 @@ CREATE PROCEDURE internal.HousekeepingFailed @FlowID INT
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
-  EXEC flow.Log 'WARN', 'Housekeeping failed';
+  EXEC Log 'WARN', 'Housekeeping failed';
   -- Notify someone!
 END

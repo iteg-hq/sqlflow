@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.AddAction
+CREATE PROCEDURE AddAction
     @TypeCode NVARCHAR(200)
   , @StatusCode NVARCHAR(200)
   , @ActionCode NVARCHAR(200)
@@ -6,7 +6,7 @@ CREATE PROCEDURE flow.AddAction
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC flow.Log 'TRACE', 'AddAction [:1:], [:2:]', @ActionCode, @ResultingStatusCode;
+EXEC Log 'TRACE', 'AddAction [:1:], [:2:]', @ActionCode, @ResultingStatusCode;
 
 -- If no changes are needed, return
 IF EXISTS (
@@ -20,8 +20,8 @@ IF EXISTS (
   RETURN
 
 -- Forward definition of resulting status
-EXEC flow.AddStatus @TypeCode, @StatusCode;
-EXEC flow.AddStatus @TypeCode, @ResultingStatusCode;
+EXEC AddStatus @TypeCode, @StatusCode;
+EXEC AddStatus @TypeCode, @ResultingStatusCode;
 
 -- If the action exists and the Resulting Status Code is different, update it
 IF EXISTS (
@@ -39,7 +39,7 @@ BEGIN
     AND ActionCode = @ActionCode
   ;
 
-  EXEC flow.Log 'INFO', 'Updated resulting status on [:1:] (:2:)', @ActionCode, @ResultingStatusCode;
+  EXEC Log 'INFO', 'Updated resulting status on [:1:] (:2:)', @ActionCode, @ResultingStatusCode;
   RETURN;
 END
 
@@ -57,4 +57,4 @@ SELECT
   , @ResultingStatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Added new action [:1:.:2:.:3:] (-> [:4:])', @TypeCode, @StatusCode, @ActionCode, @ResultingStatusCode;
+EXEC Log 'INFO', 'Added new action [:1:.:2:.:3:] (-> [:4:])', @TypeCode, @StatusCode, @ActionCode, @ResultingStatusCode;

@@ -4,9 +4,9 @@ CREATE PROCEDURE internal.AcquireLock
 AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internal.UpdateContext @FlowID;
-EXEC flow.Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
+EXEC Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
 
--- Check if the lock is held by the flow.
+-- Check if the lock is held by the 
 IF EXISTS (
     SELECT 1
     FROM internal.Lock AS l
@@ -14,7 +14,7 @@ IF EXISTS (
       AND HeldByFlowID = @FlowID
   )
 BEGIN
-  EXEC flow.Log 'DEBUG', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
+  EXEC Log 'DEBUG', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
   RETURN
 END
 -- If not, try acquiring it.
@@ -25,12 +25,12 @@ BEGIN TRANSACTION
   -- Root lock and children - if any one of these is held, the lock cannot be acquired
   ;WITH tree AS (
       SELECT LockCode, 0 AS LockLevel
-      FROM flow.Lock
+      FROM Lock
       WITH (TABLOCKX, HOLDLOCK) -- Locks the lock table
       WHERE LockCode = @RootLockCode
       UNION ALL
       SELECT child.LockCode, tree.LockLevel+1
-      FROM flow.Lock AS child
+      FROM Lock AS child
       INNER JOIN tree
         ON tree.LockCode = child.ParentLockCode
     )
@@ -44,7 +44,7 @@ BEGIN TRANSACTION
   SELECT TOP 1
       @UnavailableLockCode = l.LockCode
     , @HeldBy = HeldByFlowID
-  FROM flow.Lock AS l
+  FROM Lock AS l
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
   WHERE HeldByFlowID != @FlowID
@@ -53,7 +53,7 @@ BEGIN TRANSACTION
   IF @UnavailableLockCode != ''
   BEGIN
     ROLLBACK TRANSACTION
-    EXEC flow.Log 'ERROR', 'Could not acquire lock [:1:], :2: is already held by :3:', @RootLockCode, @UnavailableLockCode, @HeldBy;
+    EXEC Log 'ERROR', 'Could not acquire lock [:1:], :2: is already held by :3:', @RootLockCode, @UnavailableLockCode, @HeldBy;
     THROW 51000, 'Could not acquire lock', 1;
   END
 
@@ -63,6 +63,6 @@ BEGIN TRANSACTION
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 
-  EXEC flow.Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
+  EXEC Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
 
 COMMIT TRANSACTION

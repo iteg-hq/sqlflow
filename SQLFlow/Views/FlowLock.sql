@@ -1,4 +1,4 @@
-CREATE VIEW flow.AcquiredLock
+CREATE VIEW AcquiredLock
 AS
 SELECT DISTINCT
     f.FlowID

@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.ExecuteNext
+CREATE PROCEDURE ExecuteNext
     @ExecutionGroupCode NVARCHAR(100) = 'Ungrouped'
   , @ActionCode NVARCHAR(50) = 'Start'
   , @SortOrder INT = 1
@@ -12,8 +12,8 @@ EXEC @RC = internal.GetNext @FlowID OUTPUT, @ExecutionGroupCode, @ActionCode, @S
 -- If we got one, execute it.
 IF @RC = 0
 BEGIN
-  EXEC flow.StartExecution @FlowID;
-  EXEC flow.Do @FlowID, @ActionCode;
-  EXEC flow.StopExecution @FlowID;
+  EXEC StartExecution @FlowID;
+  EXEC Do @FlowID, @ActionCode;
+  EXEC StopExecution @FlowID;
 END
 RETURN @RC

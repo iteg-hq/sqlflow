@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow.Tail
+CREATE PROCEDURE Tail
     @rv BINARY(8) = NULL
 AS
 SET NOCOUNT, XACT_ABORT ON;
@@ -8,12 +8,12 @@ IF @rv IS NULL
   SELECT rv, LogLevelCode, LogLevelID, EntryTimestamp, FormattedEntryText, ServerProcessID, FlowID, ExecutionID, StatusCode, UserName, ServerName
   FROM (
       SELECT TOP 100 rv, LogLevelCode, LogLevelID, EntryTimestamp, FormattedEntryText, ServerProcessID, FlowID, ExecutionID, StatusCode, UserName, ServerName
-      FROM flow.LogEntry
+      FROM LogEntry
       ORDER BY rv DESC
     ) AS t
   ORDER BY rv;
 ELSE
   SELECT rv, LogLevelCode, LogLevelID, EntryTimestamp, FormattedEntryText, ServerProcessID, FlowID, ExecutionID, StatusCode, UserName, ServerName
-  FROM flow.LogEntry
+  FROM LogEntry
   WHERE rv > @rv
   ORDER BY rv;

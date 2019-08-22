@@ -4,5 +4,5 @@ GO
 GRANT CONNECT TO LogViewer;
 GO
 
-GRANT EXECUTE ON flow.Tail TO LogViewer;
+GRANT EXECUTE ON Tail TO LogViewer;
 GO

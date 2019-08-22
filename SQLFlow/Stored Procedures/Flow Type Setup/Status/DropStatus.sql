@@ -1,12 +1,12 @@
-CREATE PROCEDURE flow.DropStatus
+CREATE PROCEDURE DropStatus
     @StatusCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow.Log 'TRACE', 'DropStatus [:1:], [:2:], [:3:]', @StatusCode;
+EXEC Log 'TRACE', 'DropStatus [:1:], [:2:], [:3:]', @StatusCode;
 
 DELETE internal.FlowStatus
 WHERE StatusCode = @StatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Deleted :1: rows from FlowStatus', @@ROWCOUNT;
+EXEC Log 'INFO', 'Deleted :1: rows from FlowStatus', @@ROWCOUNT;
  

@@ -1,11 +1,11 @@
-CREATE PROCEDURE flow.NewFlow
+CREATE PROCEDURE NewFlow
     @TypeCode NVARCHAR(200)
   , @FlowID INT OUTPUT
 AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internal.UpdateContext @FlowID;
 
-EXEC flow.Log 'TRACE', 'NewFlow [:1:], [:2:]', @TypeCode, @FlowID;
+EXEC Log 'TRACE', 'NewFlow [:1:], [:2:]', @TypeCode, @FlowID;
   
 DECLARE @InitialStatus NVARCHAR(200);
 
@@ -16,7 +16,7 @@ WHERE TypeCode = @TypeCode
 
 IF @TypeCode NOT IN ( SELECT TypeCode FROM internal.FlowType )
 BEGIN
-  EXEC flow.Log 'ERROR', 'Unknown flow type: :1:', @TypeCode;
+  EXEC Log 'ERROR', 'Unknown flow type: :1:', @TypeCode;
   THROW 51000, 'Unknown flow type code', 1;
 END 
 
@@ -37,7 +37,7 @@ SET @FlowID = SCOPE_IDENTITY();
 EXEC internal.UpdateContext @FlowID;
 
 -- Log the ID, so that it shows up in the log even if you're not seeing the FlowID column
-EXEC flow.Log 'INFO', 'Created new FlowID: :1:', @FlowID;
+EXEC Log 'INFO', 'Created new FlowID: :1:', @FlowID;
 
 -- Change status to New
 EXEC internal.SetStatus @FlowID, @InitialStatus;
@@ -51,6 +51,6 @@ WHERE TypeCode = @TypeCode
 ;
 
 IF @Autocomplete = 1
-  EXEC flow.Do @FlowID, 'Complete';
+  EXEC Do @FlowID, 'Complete';
 
 GO
