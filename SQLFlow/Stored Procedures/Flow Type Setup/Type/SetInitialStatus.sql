@@ -1,10 +1,10 @@
-CREATE PROCEDURE SetInitialStatus
+CREATE PROCEDURE dbo.SetInitialStatus
     @TypeCode NVARCHAR(50)
   , @InitialStatusCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC Log 'TRACE', 'SetInitialStatus [:1:], [:2:]', @TypeCode, @InitialStatusCode;
+EXEC dbo.Log 'TRACE', 'SetInitialStatus [:1:], [:2:]', @TypeCode, @InitialStatusCode;
 
 -- If the flow type does not exist, fail
 IF NOT EXISTS (
@@ -28,7 +28,7 @@ IF EXISTS (
   RETURN
 
 -- Add the status (if it does not already exists)
-EXEC AddStatus @TypeCode, @InitialStatusCode;
+EXEC dbo.AddStatus @TypeCode, @InitialStatusCode;
 
 -- Update
 UPDATE internal.FlowType
@@ -36,4 +36,4 @@ SET InitialStatusCode = @InitialStatusCode
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC Log 'INFO', 'Set initial itatus to [:2:] on flow type [:1:]', @TypeCode, @InitialStatusCode;
+EXEC dbo.Log 'INFO', 'Set initial itatus to [:2:] on flow type [:1:]', @TypeCode, @InitialStatusCode;

@@ -350,4 +350,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ExecutionStoppedAt" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="8d42f208-dbd8-4f81-be72-fbeadfa74362" ChangeDateTime="08/22/2019 12:42:49">
+    <Property Name="ElementName" Value="[internal].[Lock].[LockDepth]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[internal].[Lock]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LockLevel" />
+  </Operation>
 </Operations>

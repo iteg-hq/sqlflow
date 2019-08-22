@@ -1,9 +1,9 @@
-CREATE PROCEDURE AddLock
+CREATE PROCEDURE dbo.AddLock
     @LockCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC Log 'TRACE', 'AddLock [:1:]', @LockCode;
+EXEC dbo.Log 'TRACE', 'AddLock [:1:]', @LockCode;
 
 IF @LockCode IN ( SELECT LockCode FROM internal.Lock ) RETURN;
 
@@ -15,7 +15,7 @@ BEGIN
   INSERT INTO internal.Lock (
       LockCode
     , ParentLockCode 
-    , LockDepth
+    , LockLevel
     )
   VALUES (
       @LockCode
@@ -26,24 +26,24 @@ END
 ELSE
 BEGIN
   -- If the parent doesn't exists, create it.
-  IF NOT EXISTS ( SELECT LockCode FROM Lock WHERE LockCode = @ParentLockCode)
-    EXEC AddLock @ParentLockCode;
+  IF NOT EXISTS ( SELECT LockCode FROM dbo.Lock WHERE LockCode = @ParentLockCode)
+    EXEC dbo.AddLock @ParentLockCode;
 
   -- Finally, create the child lock.
   INSERT INTO internal.Lock (
       LockCode
     , ParentLockCode 
-    , LockDepth
+    , LockLevel
     , HeldByFlowID
     )
   SELECT
       @LockCode
     , LockCode
-    , LockDepth+1
-    , HeldByFlowID -- The new lock is held by whoever holds the parent lock
-  FROM Lock
+    , LockLevel+1
+    , HeldByFlowID
+  FROM dbo.Lock
   WHERE LockCode = @ParentLockCode
   ;
 END
 
-EXEC Log 'INFO', 'Added lock [:1:]', @LockCode;
+EXEC dbo.Log 'INFO', 'Added lock [:1:]', @LockCode;

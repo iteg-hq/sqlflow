@@ -1,4 +1,4 @@
-CREATE VIEW LogEntry
+CREATE VIEW dbo.LogEntry
 AS 
 SELECT
     le.rv

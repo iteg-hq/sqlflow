@@ -5,8 +5,8 @@ AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC internal.UpdateContext @FlowID;
 
-EXEC Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
-EXEC Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
+EXEC dbo.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
+EXEC dbo.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
   * Set the status of a Flow, acquiring any locks and executing 
   * any stored procedures associated with the status.
@@ -22,12 +22,12 @@ DECLARE @ProcedureName NVARCHAR(500);
 -- If we're already there, return
 IF EXISTS (
     SELECT 1
-    FROM Flow
+    FROM dbo.Flow
     WHERE FlowID = @FlowID
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC Log 'INFO', 'Already in status [:1:]', @StatusCode;
+  EXEC dbo.Log 'INFO', 'Already in status [:1:]', @StatusCode;
   RETURN;
 END
 
@@ -37,7 +37,7 @@ IF @StatusCode NOT IN (
     FROM internal.FlowStatus AS s
   )
 BEGIN
-  EXEC Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
+  EXEC dbo.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
   THROW 51000, 'Invalid status', 1;
 END
 
@@ -53,13 +53,13 @@ WHERE FlowID = @FlowID
 -- Acquire the lock if possible
 IF @RequiredLockCode != ''
 BEGIN
-  EXEC Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
+  EXEC dbo.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
   EXEC internal.AcquireLock @FlowID, @RequiredLockCode
-  EXEC Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
+  EXEC dbo.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
 END
 ELSE
 BEGIN
-  EXEC Log 'DEBUG', 'No lock required';
+  EXEC dbo.Log 'DEBUG', 'No lock required';
   EXEC internal.ReleaseLock @FlowID;
 END
 
@@ -71,10 +71,10 @@ WHERE FlowID = @FlowID
 EXEC sp_set_session_context N'StatusCode', @StatusCode;
 
 
-EXEC Log 'INFO', 'Entered status [:1:]', @StatusCode;
+EXEC dbo.Log 'INFO', 'Entered status [:1:]', @StatusCode;
 
 SELECT @ProcedureName = ProcedureName 
-FROM Flow
+FROM dbo.Flow
 WHERE FlowID = @FlowID
 ;
 
@@ -82,9 +82,9 @@ WHERE FlowID = @FlowID
 -- Fails if the failure action runs and fails
 IF @ProcedureName != ''
 BEGIN
-  EXEC Log 'DEBUG', 'Running status procedure';
-  EXEC ExecuteStoredProcedure @FlowID, @ProcedureName;
-  EXEC Log 'TRACE', 'Completed status procedure';
+  EXEC dbo.Log 'DEBUG', 'Running status procedure';
+  EXEC dbo.ExecuteStoredProcedure @FlowID, @ProcedureName;
+  EXEC dbo.Log 'TRACE', 'Completed status procedure';
 END
 
-EXEC Log 'TRACE', 'Leaving SetStatus'
+EXEC dbo.Log 'TRACE', 'Leaving dbo.SetStatus'

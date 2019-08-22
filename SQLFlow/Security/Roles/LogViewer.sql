@@ -4,5 +4,5 @@ GO
 GRANT CONNECT TO LogViewer;
 GO
 
-GRANT EXECUTE ON Tail TO LogViewer;
+GRANT EXECUTE ON dbo.Tail TO LogViewer;
 GO

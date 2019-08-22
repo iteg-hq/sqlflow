@@ -1,16 +1,16 @@
-CREATE PROCEDURE DropActions
+CREATE PROCEDURE dbo.DropActions
     @TypeCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC Log 'TRACE', 'DropActions [:1:], [:2:], [:3:]', @TypeCode;
+EXEC dbo.Log 'TRACE', 'DropActions [:1:], [:2:], [:3:]', @TypeCode;
   
 -- Delete all actions
 DELETE internal.FlowAction
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC Log 'INFO', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
+EXEC dbo.Log 'INFO', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
 
 
 -- Reset procedures and locks

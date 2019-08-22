@@ -1,10 +1,10 @@
-CREATE PROCEDURE SetExecutionGroup
+CREATE PROCEDURE dbo.SetExecutionGroup
     @TypeCode NVARCHAR(50)
   , @ExecutionGroupCode NVARCHAR(50)
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC Log 'TRACE', 'SetExecutionGroup [:1:], [:2:]', @TypeCode, @ExecutionGroupCode;
+EXEC dbo.Log 'TRACE', 'SetExecutionGroup [:1:], [:2:]', @TypeCode, @ExecutionGroupCode;
 
 IF NOT EXISTS (
     SELECT 1
@@ -27,4 +27,4 @@ SET ExecutionGroupCode = @ExecutionGroupCode
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC Log 'INFO', 'Set Execution Group to [:2:] on flow type [:1:]', @TypeCode, @ExecutionGroupCode;
+EXEC dbo.Log 'INFO', 'Set Execution Group to [:2:] on flow type [:1:]', @TypeCode, @ExecutionGroupCode;

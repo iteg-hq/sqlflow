@@ -1,8 +1,8 @@
-CREATE VIEW Lock
+CREATE VIEW dbo.Lock
 AS 
 SELECT
     LockCode
   , ParentLockCode
   , HeldByFlowID
-  , LockDepth
+  , LockLevel
 FROM internal.Lock

@@ -1,11 +1,11 @@
-CREATE PROCEDURE AddType
+CREATE PROCEDURE dbo.AddType
     @TypeCode NVARCHAR(50)
   , @ExecutionGroupCode NVARCHAR(50) = NULL
   , @InitialStatusCode NVARCHAR(200) = NULL
 AS
 SET NOCOUNT, XACT_ABORT ON;
 
-EXEC Log 'TRACE', 'AddType [:1:], [:2:], [:3:]', @TypeCode, @ExecutionGroupCode, @InitialStatusCode;
+EXEC dbo.Log 'TRACE', 'AddType [:1:], [:2:], [:3:]', @TypeCode, @ExecutionGroupCode, @InitialStatusCode;
 
 -- Create the flow if it does not exist
 IF NOT EXISTS (
@@ -17,14 +17,14 @@ BEGIN
   INSERT INTO internal.FlowType (TypeCode)
   VALUES (@TypeCode)
   ;
-  EXEC Log 'INFO', 'Added new flow type [:1:]', @TypeCode;
+  EXEC dbo.Log 'INFO', 'Added new flow type [:1:]', @TypeCode;
 END
 
--- Create or update the initial status. Calling SetInitialStatus
+-- Create or update the initial status. Calling dbo.SetInitialStatus
 -- guarantees that some initial status code will be set. If @InitialStatusCode
 -- is NULL og empty, a default code will be used.
-EXEC SetInitialStatus @TypeCode, @InitialStatusCode;
+EXEC dbo.SetInitialStatus @TypeCode, @InitialStatusCode;
 
 -- If an execution group was specified, set it.
 IF @ExecutionGroupCode <> ''
-  EXEC SetExecutionGroup @TypeCode, @ExecutionGroupCode;
+  EXEC dbo.SetExecutionGroup @TypeCode, @ExecutionGroupCode;

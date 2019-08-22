@@ -1,4 +1,4 @@
-CREATE VIEW FlowStatus
+CREATE VIEW dbo.FlowStatus
 AS 
 SELECT
     s.TypeCode

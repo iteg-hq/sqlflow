@@ -42,7 +42,7 @@ namespace SQLFlow
             int flowID;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("NewFlow", connection))
+                using (var command = new SqlCommand("flow.NewFlow", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@TypeCode", typeCode);
@@ -73,7 +73,7 @@ namespace SQLFlow
             string typeCode;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT TypeCode FROM Flow WHERE FlowID = @FlowID", connection))
+                using (var command = new SqlCommand("SELECT TypeCode FROM dbo.Flow WHERE FlowID = @FlowID", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@FlowID", flowID);
@@ -98,7 +98,7 @@ namespace SQLFlow
         {
             using (SqlConnection connection = GetConnection(flowID))
             {
-                using (var command = new SqlCommand("Log", connection))
+                using (var command = new SqlCommand("flow.Log", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@LogLevel", logLevel.ToString());
@@ -114,7 +114,7 @@ namespace SQLFlow
         {
             using (SqlConnection connection = GetConnection(flowID))
             {
-                using (var command = new SqlCommand("Do", connection))
+                using (var command = new SqlCommand("flow.Do", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@FlowID", flowID);
@@ -128,7 +128,7 @@ namespace SQLFlow
         {
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("Tail", connection))
+                using (var command = new SqlCommand("flow.Tail", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@rv", SqlDbType.Binary));
@@ -226,7 +226,7 @@ namespace SQLFlow
         {
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SetParameterValue", connection))
+                using (var command = new SqlCommand("flow.SetParameterValue", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@FlowID", flowID);
@@ -242,7 +242,7 @@ namespace SQLFlow
             string value = null;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT GetParameterValue(@FlowID, @Name)", connection))
+                using (var command = new SqlCommand("SELECT dbo.GetParameterValue(@FlowID, @Name)", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@FlowID", flowID);

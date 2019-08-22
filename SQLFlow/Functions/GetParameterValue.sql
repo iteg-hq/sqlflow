@@ -1,4 +1,4 @@
-CREATE FUNCTION GetParameterValue (
+CREATE FUNCTION dbo.GetParameterValue (
     @FlowID INT
   , @Name NVARCHAR(100)
 )

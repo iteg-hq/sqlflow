@@ -3,12 +3,12 @@ RETURNS TABLE
 AS
 RETURN
 WITH parent AS (
-  SELECT LockCode, 0 AS LockLevel
+  SELECT LockCode
   FROM internal.Lock
   --WITH (TABLOCKX, HOLDLOCK)
   WHERE LockCode = @RootLockCode
   UNION ALL
-  SELECT child.LockCode, parent.LockLevel+1
+  SELECT child.LockCode
   FROM internal.Lock AS child
   INNER JOIN parent
     ON parent.LockCode = child.ParentLockCode

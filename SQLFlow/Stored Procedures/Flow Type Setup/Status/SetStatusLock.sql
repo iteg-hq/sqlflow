@@ -1,4 +1,4 @@
-CREATE PROCEDURE SetStatusLock
+CREATE PROCEDURE dbo.SetStatusLock
     @TypeCode NVARCHAR(200)
   , @StatusCode NVARCHAR(200)
   , @RequiredLockCode NVARCHAR(255)
@@ -9,7 +9,7 @@ SET NOCOUNT, XACT_ABORT ON;
 -- Note: By default, any existing flows already in the status will not need to acquire the lock.
 -- To require this, set @Retroactive to 1
 
-EXEC Log 'TRACE', 'SetStatusLock [:1:], [:2:], [:3:]', @StatusCode, @TypeCode, @RequiredLockCode;
+EXEC dbo.Log 'TRACE', 'SetStatusLock [:1:], [:2:], [:3:]', @StatusCode, @TypeCode, @RequiredLockCode;
 
 -- Fail if the status does not exist
 IF NOT EXISTS (
@@ -19,7 +19,7 @@ IF NOT EXISTS (
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC Log 'ERROR', 'Invalid status [:1:]', @StatusCode;
+  EXEC dbo.Log 'ERROR', 'Invalid status [:1:]', @StatusCode;
   THROW 51000, 'Invalid status', 1
 END
 
@@ -39,7 +39,7 @@ IF NOT EXISTS (
     FROM internal.Lock
     WHERE LockCode = @RequiredLockCode
   )
-  EXEC AddLock @RequiredLockCode;
+  EXEC dbo.AddLock @RequiredLockCode;
 
 -- If the requirement applies to existing flows...
 IF @Retroactive = 1
@@ -64,7 +64,7 @@ BEGIN
           AND FlowID != @FlowID
       )
     BEGIN
-      EXEC Log 'ERROR', 'More than one flow in status [:1:]', @StatusCode;
+      EXEC dbo.Log 'ERROR', 'More than one flow in status [:1:]', @StatusCode;
       THROW 51000, 'More than one flow in status, status is not lockable.', 1;
     END
     -- ...and let it acquire the lock, if possible.
@@ -81,4 +81,4 @@ WHERE TypeCode = @TypeCode
 
 -- Log if the status 
 IF @@ROWCOUNT > 0
-  EXEC Log 'INFO', 'Lock [:1:] now required by status [:2:.:3:]', @RequiredLockCode, @TypeCode, @StatusCode;
+  EXEC dbo.Log 'INFO', 'Lock [:1:] now required by status [:2:.:3:]', @RequiredLockCode, @TypeCode, @StatusCode;

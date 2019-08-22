@@ -195,5 +195,6 @@
     <Build Include="Stored Procedures\Operations\ExecuteNext.sql" />
     <Build Include="Tables\Execution.sql" />
     <Build Include="Stored Procedures\Internal\GetNext.sql" />
+    <Build Include="Security\Schemas\flow.sql" />
   </ItemGroup>
 </Project>

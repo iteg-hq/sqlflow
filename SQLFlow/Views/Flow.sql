@@ -1,4 +1,4 @@
-CREATE VIEW Flow
+CREATE VIEW dbo.Flow
 AS 
 SELECT
     f.FlowID
