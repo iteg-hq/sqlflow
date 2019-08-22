@@ -12,12 +12,12 @@ EXEC flow.AddAction 'SQLFlow:Housekeeping', 'New',     'Start',    'Running';
 EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Fail',     'Failed'
 EXEC flow.AddAction 'SQLFlow:Housekeeping', 'Running', 'Complete', 'Completed';
 
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Running', @ProcedureName='flow_internals.HousekeepingRunning';
-EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Failed',  @ProcedureName='flow_internals.HousekeepingFailed', @Autocomplete=0;
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Running', @ProcedureName='internal.HousekeepingRunning';
+EXEC flow.SetStatusProcedure 'SQLFlow:Housekeeping', 'Failed',  @ProcedureName='internal.HousekeepingFailed', @Autocomplete=0;
 
 GO
 
-CREATE PROCEDURE flow_internals.Housekeeping
+CREATE PROCEDURE internal.Housekeeping
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
@@ -29,15 +29,15 @@ END
 
 GO
 
-CREATE PROCEDURE flow_internals.HousekeepingRunning @FlowID INT
+CREATE PROCEDURE internal.HousekeepingRunning @FlowID INT
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
-  EXEC flow_internals.DeleteOldLogEntries @FlowID;
+  EXEC internal.DeleteOldLogEntries @FlowID;
 END
 
 GO
-CREATE PROCEDURE flow_internals.HousekeepingFailed @FlowID INT
+CREATE PROCEDURE internal.HousekeepingFailed @FlowID INT
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;

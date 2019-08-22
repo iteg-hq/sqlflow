@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow_internals.DeleteOldLogEntries @FlowID INT
+CREATE PROCEDURE internal.DeleteOldLogEntries @FlowID INT
 AS
 BEGIN
   SET NOCOUNT, XACT_ABORT ON;
@@ -8,7 +8,7 @@ BEGIN
 
   DECLARE @Cutoff DATETIME2 = DATEADD(DAY, -@LogRetentionPeriodInDays, CURRENT_TIMESTAMP);
 
-  DELETE flow_internals.LogEntry
+  DELETE internal.LogEntry
   WHERE EntryTimestamp < @Cutoff
   ;
 

@@ -8,7 +8,7 @@ SET NOCOUNT, XACT_ABORT ON;
 DECLARE @FlowID INT;
 DECLARE @RC INT;
 -- Try getting the next FlowID.
-EXEC @RC = flow_internals.GetNext @FlowID OUTPUT, @ExecutionGroupCode, @ActionCode, @SortOrder
+EXEC @RC = internal.GetNext @FlowID OUTPUT, @ExecutionGroupCode, @ActionCode, @SortOrder
 -- If we got one, execute it.
 IF @RC = 0
 BEGIN

@@ -1,11 +1,11 @@
-CREATE PROCEDURE flow_internals.ReleaseLock
+CREATE PROCEDURE internal.ReleaseLock
     @FlowID INT
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow_internals.UpdateContext @FlowID;
+EXEC internal.UpdateContext @FlowID;
 EXEC flow.Log 'TRACE', 'ReleaseLock [:1:]', @FlowID;
 
-UPDATE flow_internals.Lock
+UPDATE internal.Lock
 SET HeldByFlowID = NULL
 WHERE HeldByFlowID = @FlowID
 ;

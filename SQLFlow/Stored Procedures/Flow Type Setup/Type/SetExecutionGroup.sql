@@ -8,7 +8,7 @@ EXEC flow.Log 'TRACE', 'SetExecutionGroup [:1:], [:2:]', @TypeCode, @ExecutionGr
 
 IF NOT EXISTS (
     SELECT 1
-    FROM flow_internals.FlowType
+    FROM internal.FlowType
     WHERE TypeCode = @TypeCode
   )
   THROW 51000, 'Flow type does not exist', 1;
@@ -16,13 +16,13 @@ IF NOT EXISTS (
 -- If no changes are needed, return
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.FlowType
+    FROM internal.FlowType
     WHERE TypeCode = @TypeCode
       AND ExecutionGroupCode = @ExecutionGroupCode    
   )
   RETURN
 
-UPDATE flow_internals.FlowType
+UPDATE internal.FlowType
 SET ExecutionGroupCode = @ExecutionGroupCode
 WHERE TypeCode = @TypeCode
 ;

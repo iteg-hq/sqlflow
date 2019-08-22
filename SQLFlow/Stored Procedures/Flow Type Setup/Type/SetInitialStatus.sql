@@ -9,7 +9,7 @@ EXEC flow.Log 'TRACE', 'SetInitialStatus [:1:], [:2:]', @TypeCode, @InitialStatu
 -- If the flow type does not exist, fail
 IF NOT EXISTS (
     SELECT 1
-    FROM flow_internals.FlowType
+    FROM internal.FlowType
     WHERE TypeCode = @TypeCode
   )
   THROW 51000, 'Flow type does not exist', 1;
@@ -21,7 +21,7 @@ IF @InitialStatusCode IS NULL OR @InitialStatusCode = ''
 -- If no changes are needed, return
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.FlowType
+    FROM internal.FlowType
     WHERE TypeCode = @TypeCode
       AND InitialStatusCode = @InitialStatusCode    
   )
@@ -31,7 +31,7 @@ IF EXISTS (
 EXEC flow.AddStatus @TypeCode, @InitialStatusCode;
 
 -- Update
-UPDATE flow_internals.FlowType
+UPDATE internal.FlowType
 SET InitialStatusCode = @InitialStatusCode
 WHERE TypeCode = @TypeCode
 ;

@@ -16,7 +16,7 @@ SELECT
     '['+ CAST(EntryTimestamp AS NVARCHAR(26)) +']' +
     '['+ COALESCE(StatusCode, 'no status') +']' +
     ' '+ FormattedEntryText AS LogLine
-FROM flow_internals.LogEntry AS le
-INNER JOIN flow_internals.LogLevel AS ll
+FROM internal.LogEntry AS le
+INNER JOIN internal.LogLevel AS ll
   ON ll.LogLevelID = le.LogLevelID
 ;

@@ -10,11 +10,11 @@ EXEC flow.Log 'TRACE', 'AddType [:1:], [:2:], [:3:]', @TypeCode, @ExecutionGroup
 -- Create the flow if it does not exist
 IF NOT EXISTS (
     SELECT 1
-    FROM flow_internals.FlowType
+    FROM internal.FlowType
     WHERE TypeCode = @TypeCode
   )
 BEGIN
-  INSERT INTO flow_internals.FlowType (TypeCode)
+  INSERT INTO internal.FlowType (TypeCode)
   VALUES (@TypeCode)
   ;
   EXEC flow.Log 'INFO', 'Added new flow type [:1:]', @TypeCode;

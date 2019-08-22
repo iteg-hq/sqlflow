@@ -1,4 +1,4 @@
-CREATE TABLE flow_internals.LogEntry (
+CREATE TABLE internal.LogEntry (
     rv ROWVERSION
   , UserName NVARCHAR(256) NOT NULL CONSTRAINT DF_LogEntry_UserName DEFAULT(SUSER_NAME())
   , EntryTimestamp DATETIME2(7) NOT NULL CONSTRAINT DF_LogEntry_EntryTimestamp DEFAULT (SYSDATETIME())
@@ -17,7 +17,7 @@ CREATE TABLE flow_internals.LogEntry (
   , Value4 NVARCHAR(4000) NULL
   , Value5 NVARCHAR(4000) NULL
   , CONSTRAINT PK_LogEntry PRIMARY KEY (rv)
-  , CONSTRAINT FK_LogEntry_LogLevel FOREIGN KEY (LogLevelID) REFERENCES flow_internals.LogLevel (LogLevelID)
-  --, CONSTRAINT FK_LogEntry_Flow FOREIGN KEY (FlowID) REFERENCES flow_internals.Flow (FlowID)
+  , CONSTRAINT FK_LogEntry_LogLevel FOREIGN KEY (LogLevelID) REFERENCES internal.LogLevel (LogLevelID)
+  --, CONSTRAINT FK_LogEntry_Flow FOREIGN KEY (FlowID) REFERENCES internal.Flow (FlowID)
   )
 

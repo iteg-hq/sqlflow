@@ -23,7 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>flow_internals</DefaultSchema>
+    <DefaultSchema>internal</DefaultSchema>
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
     <Recovery>SIMPLE</Recovery>
     <SignAssembly>False</SignAssembly>
@@ -159,8 +159,7 @@
     <Build Include="Stored Procedures\Internal\ShowOrphans.sql" />
     <Build Include="Stored Procedures\Flow Type Setup\Action\DropActions.sql" />
     <Build Include="About.sql" />
-    <Build Include="Security\Schemas\flow.sql" />
-    <Build Include="Security\Schemas\flow_internals.sql" />
+    <Build Include="Security\Schemas\internal.sql" />
     <Build Include="Security\Roles\SQLFlowUser.sql" />
     <Build Include="Security\Roles\LogViewer.sql" />
   </ItemGroup>

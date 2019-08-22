@@ -1,15 +1,15 @@
-CREATE PROCEDURE flow_internals.AcquireLock
+CREATE PROCEDURE internal.AcquireLock
     @FlowID INT
   , @RootLockCode NVARCHAR(200)
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow_internals.UpdateContext @FlowID;
+EXEC internal.UpdateContext @FlowID;
 EXEC flow.Log 'TRACE', 'AcquireLock [:1:], [:2:]', @FlowID, @RootLockCode;
 
 -- Check if the lock is held by the flow.
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.Lock AS l
+    FROM internal.Lock AS l
     WHERE LockCode = @RootLockCode
       AND HeldByFlowID = @FlowID
   )
@@ -21,7 +21,7 @@ END
 BEGIN TRANSACTION
   CREATE TABLE #tree (LockCode NVARCHAR(200) PRIMARY KEY, LockLevel INT NOT NULL);
 
-  EXEC flow_internals.ReleaseLock @FlowID;
+  EXEC internal.ReleaseLock @FlowID;
   -- Root lock and children - if any one of these is held, the lock cannot be acquired
   ;WITH tree AS (
       SELECT LockCode, 0 AS LockLevel
@@ -59,7 +59,7 @@ BEGIN TRANSACTION
 
   UPDATE l
   SET HeldByFlowID = @FlowID
-  FROM flow_internals.Lock AS l
+  FROM internal.Lock AS l
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 

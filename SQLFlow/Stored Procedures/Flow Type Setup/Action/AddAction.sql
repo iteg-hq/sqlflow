@@ -11,7 +11,7 @@ EXEC flow.Log 'TRACE', 'AddAction [:1:], [:2:]', @ActionCode, @ResultingStatusCo
 -- If no changes are needed, return
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.FlowAction AS a
+    FROM internal.FlowAction AS a
     WHERE TypeCode = @TypeCode
       AND StatusCode = @StatusCode
       AND ActionCode = @ActionCode
@@ -26,13 +26,13 @@ EXEC flow.AddStatus @TypeCode, @ResultingStatusCode;
 -- If the action exists and the Resulting Status Code is different, update it
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.FlowAction AS a
+    FROM internal.FlowAction AS a
     WHERE TypeCode = @TypeCode
       AND StatusCode = @StatusCode
       AND ActionCode = @ActionCode
   )
 BEGIN
-  UPDATE flow_internals.FlowAction
+  UPDATE internal.FlowAction
   SET ResultingStatusCode = @ResultingStatusCode
   WHERE TypeCode = @TypeCode
     AND StatusCode = @StatusCode
@@ -44,7 +44,7 @@ BEGIN
 END
 
 -- If the action does not exist, add it
-INSERT INTO flow_internals.FlowAction (
+INSERT INTO internal.FlowAction (
     TypeCode
   , StatusCode
   , ActionCode

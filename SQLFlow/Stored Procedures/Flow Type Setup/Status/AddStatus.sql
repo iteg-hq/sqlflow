@@ -10,7 +10,7 @@ EXEC flow.Log 'TRACE', 'AddStatus [:1:], [:2:], [:3:], [:4:]', @TypeCode, @Statu
 
 IF NOT EXISTS (
   SELECT 1
-  FROM flow_internals.FlowType
+  FROM internal.FlowType
   WHERE TypeCode = @TypeCode
   )
 BEGIN
@@ -21,12 +21,12 @@ END
 -- Add the status, if needed
 IF NOT EXISTS (
   SELECT 1
-  FROM flow_internals.FlowStatus AS s
+  FROM internal.FlowStatus AS s
   WHERE TypeCode = @TypeCode
     AND StatusCode = @StatusCode
   )
 BEGIN
-  INSERT INTO flow_internals.FlowStatus (
+  INSERT INTO internal.FlowStatus (
       TypeCode
     , StatusCode
     )

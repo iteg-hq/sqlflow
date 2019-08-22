@@ -14,7 +14,7 @@ EXEC flow.Log 'TRACE', 'SetStatusLock [:1:], [:2:], [:3:]', @StatusCode, @TypeCo
 -- Fail if the status does not exist
 IF NOT EXISTS (
     SELECT 1
-    FROM flow_internals.FlowStatus
+    FROM internal.FlowStatus
     WHERE TypeCode = @TypeCode
       AND StatusCode = @StatusCode
   )
@@ -26,7 +26,7 @@ END
 -- If the status already has the lock, exit.
 IF EXISTS (
     SELECT 1
-    FROM flow_internals.FlowStatus
+    FROM internal.FlowStatus
     WHERE TypeCode = @TypeCode
       AND StatusCode = @StatusCode
       AND NOT EXISTS ( SELECT RequiredLockCode EXCEPT SELECT @RequiredLockCode )
@@ -36,7 +36,7 @@ IF EXISTS (
 -- If the lock does not exist, add it.
 IF NOT EXISTS (
     SELECT 1
-    FROM flow_internals.Lock
+    FROM internal.Lock
     WHERE LockCode = @RequiredLockCode
   )
   EXEC flow.AddLock @RequiredLockCode;
@@ -48,7 +48,7 @@ BEGIN
   DECLARE @FlowID INT;
 
   SELECT TOP 1 @FlowID = FlowID
-  FROM flow_internals.Flow
+  FROM internal.Flow
   WHERE TypeCode = @TypeCode
     AND StatusCode = @StatusCode
 
@@ -58,7 +58,7 @@ BEGIN
     -- ...make sure it's the only one...
     IF EXISTS (
         SELECT 1
-        FROM flow_internals.Flow
+        FROM internal.Flow
         WHERE TypeCode = @TypeCode
           AND StatusCode = @StatusCode
           AND FlowID != @FlowID
@@ -68,12 +68,12 @@ BEGIN
       THROW 51000, 'More than one flow in status, status is not lockable.', 1;
     END
     -- ...and let it acquire the lock, if possible.
-    EXEC flow_internals.AcquireLock @FlowID, @RequiredLockCode;
+    EXEC internal.AcquireLock @FlowID, @RequiredLockCode;
   END
 END
 
 -- Update the status.
-UPDATE flow_internals.FlowStatus
+UPDATE internal.FlowStatus
 SET RequiredLockCode = @RequiredLockCode
 WHERE TypeCode = @TypeCode
   AND StatusCode = @StatusCode

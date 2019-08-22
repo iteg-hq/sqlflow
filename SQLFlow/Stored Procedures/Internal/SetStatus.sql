@@ -1,9 +1,9 @@
-CREATE PROCEDURE flow_internals.SetStatus
+CREATE PROCEDURE internal.SetStatus
     @FlowID INT
   , @StatusCode NVARCHAR(255)
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow_internals.UpdateContext @FlowID;
+EXEC internal.UpdateContext @FlowID;
 
 EXEC flow.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
 EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
@@ -34,7 +34,7 @@ END
 -- If the status is invalid, return
 IF @StatusCode NOT IN (
     SELECT s.StatusCode
-    FROM flow_internals.FlowStatus AS s
+    FROM internal.FlowStatus AS s
   )
 BEGIN
   EXEC flow.Log 'ERROR', 'Invalid status: [:1:]', @StatusCode;
@@ -43,8 +43,8 @@ END
 
 -- Find the required lock
 SELECT @RequiredLockCode = RequiredLockCode
-FROM flow_internals.FlowStatus AS fs
-INNER JOIN flow_internals.Flow AS f
+FROM internal.FlowStatus AS fs
+INNER JOIN internal.Flow AS f
   ON  f.TypeCode = fs.TypeCode
 WHERE FlowID = @FlowID
   AND fs.StatusCode = @StatusCode
@@ -54,16 +54,16 @@ WHERE FlowID = @FlowID
 IF @RequiredLockCode != ''
 BEGIN
   EXEC flow.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
-  EXEC flow_internals.AcquireLock @FlowID, @RequiredLockCode
+  EXEC internal.AcquireLock @FlowID, @RequiredLockCode
   EXEC flow.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
 END
 ELSE
 BEGIN
   EXEC flow.Log 'DEBUG', 'No lock required';
-  EXEC flow_internals.ReleaseLock @FlowID;
+  EXEC internal.ReleaseLock @FlowID;
 END
 
-UPDATE flow_internals.Flow
+UPDATE internal.Flow
 SET StatusCode = @StatusCode
 WHERE FlowID = @FlowID
 ;

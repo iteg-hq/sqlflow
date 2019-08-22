@@ -17,7 +17,7 @@ IF @ProcedureName <> '' AND @Autocomplete IS NULL
 
 IF NOT EXISTS (
   SELECT 1
-  FROM flow_internals.FlowStatus
+  FROM internal.FlowStatus
   WHERE TypeCode = @TypeCode
     AND StatusCode = @StatusCode
 )
@@ -29,7 +29,7 @@ END
 -- No change
 IF NOT EXISTS (
     SELECT ProcedureName, Autocomplete
-    FROM flow_internals.FlowStatus
+    FROM internal.FlowStatus
     WHERE TypeCode = @TypeCode
       AND StatusCode = @StatusCode
     EXCEPT
@@ -45,7 +45,7 @@ BEGIN
 END
 */
 
-UPDATE flow_internals.FlowStatus
+UPDATE internal.FlowStatus
 SET ProcedureName = @ProcedureName
   , Autocomplete = @Autocomplete
 WHERE TypeCode = @TypeCode

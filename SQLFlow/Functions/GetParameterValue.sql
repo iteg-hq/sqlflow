@@ -8,7 +8,7 @@ BEGIN
   DECLARE @ParameterValue NVARCHAR(MAX);
 
   SELECT @ParameterValue = ParameterValue
-  FROM flow_internals.FlowParameter
+  FROM internal.FlowParameter
   WHERE FlowID = @FlowID 
     AND ParameterName = @Name
   ;

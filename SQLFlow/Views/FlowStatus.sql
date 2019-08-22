@@ -6,7 +6,7 @@ SELECT
   , s.RequiredLockCode
   , s.ProcedureName
   , s.Autocomplete
-FROM flow_internals.FlowStatus AS s
+FROM internal.FlowStatus AS s
 --INNER JOIN internals.FlowType AS t
 --  ON t.TypeCode = s.TypeCode
 ;

@@ -1,1 +1,1 @@
-CREATE SCHEMA flow_internals;
+CREATE SCHEMA internal;

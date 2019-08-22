@@ -5,8 +5,8 @@ ALTER ROLE SQLFlowUser ADD MEMBER [GRITLAPTOP02\SQLFlow];
 
 -- Log Levels
 --------------------
-IF NOT EXISTS ( SELECT 1 FROM flow_internals.LogLevel )
-INSERT INTO flow_internals.LogLevel (
+IF NOT EXISTS ( SELECT 1 FROM internal.LogLevel )
+INSERT INTO internal.LogLevel (
     LogLevelID
   , LogLevelCode
   , EchoToOutput

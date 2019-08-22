@@ -159,7 +159,7 @@ namespace SQLFlow
             string statusCode;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT StatusCode FROM flow_internals.Flow WHERE FlowID = @FlowID", connection))
+                using (var command = new SqlCommand("SELECT StatusCode FROM internal.Flow WHERE FlowID = @FlowID", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@FlowID", flowID);
@@ -174,7 +174,7 @@ namespace SQLFlow
             string statusCode;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT InitialStatusCode FROM flow_internals.FlowType WHERE TypeCode= @TypeCode", connection))
+                using (var command = new SqlCommand("SELECT InitialStatusCode FROM internal.FlowType WHERE TypeCode= @TypeCode", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@TypeCode", typeCode);
@@ -190,7 +190,7 @@ namespace SQLFlow
             string executionGroup;
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT ExecutionGroupCode FROM flow_internals.FlowType WHERE TypeCode= @TypeCode", connection))
+                using (var command = new SqlCommand("SELECT ExecutionGroupCode FROM internal.FlowType WHERE TypeCode= @TypeCode", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@TypeCode", typeCode);
@@ -205,7 +205,7 @@ namespace SQLFlow
             var result = new Dictionary<string, Status>();
             using (SqlConnection connection = GetConnection())
             {
-                using (var command = new SqlCommand("SELECT ActionCode, ResultingStatusCode FROM flow_internals.FlowAction WHERE TypeCode = @TypeCode AND StatusCode = @StatusCode", connection))
+                using (var command = new SqlCommand("SELECT ActionCode, ResultingStatusCode FROM internal.FlowAction WHERE TypeCode = @TypeCode AND StatusCode = @StatusCode", connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue("@TypeCode", typeCode);

@@ -5,7 +5,7 @@ SET NOCOUNT, XACT_ABORT ON;
 
 EXEC flow.Log 'TRACE', 'DropAction [:1:]', @ActionCode;
 
-DELETE flow_internals.FlowAction 
+DELETE internal.FlowAction 
 WHERE ActionCode = @ActionCode
 ;
 

@@ -4,7 +4,7 @@ AS
 SET NOCOUNT, XACT_ABORT ON;
 EXEC flow.Log 'TRACE', 'DropStatus [:1:], [:2:], [:3:]', @StatusCode;
 
-DELETE flow_internals.FlowStatus
+DELETE internal.FlowStatus
 WHERE StatusCode = @StatusCode
 ;
 

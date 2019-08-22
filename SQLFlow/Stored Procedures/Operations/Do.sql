@@ -4,7 +4,7 @@ CREATE PROCEDURE flow.Do
   , @RecursionLevel INT = 0
 AS
 SET NOCOUNT, XACT_ABORT ON;
-EXEC flow_internals.UpdateContext @FlowID;
+EXEC internal.UpdateContext @FlowID;
 
 /*
  * Performs an action
@@ -23,7 +23,7 @@ EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
 IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @FlowID )
 BEGIN
   EXEC flow.Log 'ERROR', 'Invalid action: [:1:]', @ActionCode;
-  EXEC flow_internals.UpdateContext @FlowID=NULL;
+  EXEC internal.UpdateContext @FlowID=NULL;
   THROW 51000, 'Invalid action', 1;
 END
 
@@ -38,7 +38,7 @@ WHERE FlowID = @FlowID
 
 -- Try changing the status (Fails if the status requires a lock and the lock is taken)
 BEGIN TRY
-  EXEC flow_internals.SetStatus @FlowID, @ResultingStatusCode;
+  EXEC internal.SetStatus @FlowID, @ResultingStatusCode;
 END TRY
 BEGIN CATCH
   -- If anything goes wrong in the status transition, call Do recursively to perform the Fail action.

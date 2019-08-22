@@ -316,37 +316,37 @@
     <Property Name="NewName" Value="SetParameterValue" />
   </Operation>
   <Operation Name="Rename Refactor" Key="64c5abdf-73ef-4e67-bbfc-e8dcb8070633" ChangeDateTime="02/26/2019 12:53:17">
-    <Property Name="ElementName" Value="[flow_internals].[GrabFlow]" />
+    <Property Name="ElementName" Value="[internal].[GrabFlow]" />
     <Property Name="ElementType" Value="SqlProcedure" />
-    <Property Name="ParentElementName" Value="[flow_internals]" />
+    <Property Name="ParentElementName" Value="[internal]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="UpdateContext" />
   </Operation>
   <Operation Name="Rename Refactor" Key="0cfbb8ec-a52b-4360-a9f2-c311ee5dcd21" ChangeDateTime="02/26/2019 13:11:45">
-    <Property Name="ElementName" Value="[flow_internals].[FlowStatus].[AutoComplete]" />
+    <Property Name="ElementName" Value="[internal].[FlowStatus].[AutoComplete]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[flow_internals].[FlowStatus]" />
+    <Property Name="ParentElementName" Value="[internal].[FlowStatus]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Autocomplete" />
   </Operation>
   <Operation Name="Rename Refactor" Key="75505232-f43c-4173-a777-0b4b5096cb2e" ChangeDateTime="04/04/2019 09:20:06">
-    <Property Name="ElementName" Value="[flow_internals].[Flow].[CreateByLogin]" />
+    <Property Name="ElementName" Value="[internal].[Flow].[CreateByLogin]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[flow_internals].[Flow]" />
+    <Property Name="ParentElementName" Value="[internal].[Flow]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CreatedByLogin" />
   </Operation>
   <Operation Name="Rename Refactor" Key="1bb8ee34-767b-4c08-b18c-87520138c4e6" ChangeDateTime="05/20/2019 08:13:17">
-    <Property Name="ElementName" Value="[flow_internals].[Flow].[ExecutedAt]" />
+    <Property Name="ElementName" Value="[internal].[Flow].[ExecutedAt]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[flow_internals].[Flow]" />
+    <Property Name="ParentElementName" Value="[internal].[Flow]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ExecutionStartedAt" />
   </Operation>
   <Operation Name="Rename Refactor" Key="d5b754f6-ffc7-4fb9-a720-aef2beaa4cd8" ChangeDateTime="05/20/2019 08:13:28">
-    <Property Name="ElementName" Value="[flow_internals].[Flow].[CompletedAt]" />
+    <Property Name="ElementName" Value="[internal].[Flow].[CompletedAt]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[flow_internals].[Flow]" />
+    <Property Name="ParentElementName" Value="[internal].[Flow]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ExecutionStoppedAt" />
   </Operation>

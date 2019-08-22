@@ -7,21 +7,21 @@ SET NOCOUNT, XACT_ABORT ON;
 
 EXEC flow.Log 'TRACE', 'SetParameterValue [:1:], [:2:], [:3:]', @FlowID, @Name, @Value;
   
-IF @FlowID NOT IN ( SELECT @FlowID FROM flow_internals.Flow )
+IF @FlowID NOT IN ( SELECT @FlowID FROM internal.Flow )
 BEGIN
   EXEC flow.Log 'ERROR', 'Invalid FlowID :1:', @FlowID
 END
 
 EXEC flow.Log 'DEBUG', 'Parameter :1: set to :2:', @Name, @Value;
 
-UPDATE flow_internals.FlowParameter
+UPDATE internal.FlowParameter
 SET ParameterValue = @Value
 WHERE FlowID = @FlowID
   AND ParameterName = @Name
 ;
 
 IF @@ROWCOUNT = 0
-  INSERT INTO flow_internals.FlowParameter (
+  INSERT INTO internal.FlowParameter (
       FlowID
     , ParameterName
     , ParameterValue

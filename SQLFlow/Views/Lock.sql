@@ -5,4 +5,4 @@ SELECT
   , ParentLockCode
   , HeldByFlowID
   , LockDepth
-FROM flow_internals.Lock
+FROM internal.Lock

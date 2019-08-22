@@ -1,4 +1,4 @@
-CREATE PROCEDURE flow_internals.GetNext
+CREATE PROCEDURE internal.GetNext
     @FlowID INT OUTPUT
   , @ExecutionGroupCode NVARCHAR(100) = 'Ungrouped'
   , @ActionCode NVARCHAR(50) = 'Start'
@@ -14,7 +14,7 @@ WHERE a.ExecutionGroupCode = @ExecutionGroupCode
   AND NOT EXISTS (
     -- The lock that the action requires, and all implied (child) locks.
     SELECT LockCode
-    FROM flow_internals.GetLockTree(a.RequiredLockCode)
+    FROM internal.GetLockTree(a.RequiredLockCode)
     INTERSECT
     -- All currently (and all implicitly) locks held by other Flows.
     SELECT LockCode

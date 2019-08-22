@@ -21,7 +21,7 @@ DECLARE @LogLevelID TINYINT
 SELECT
     @LogLevelID = LogLevelID 
   , @EchoToOutput = EchoToOutput
-FROM flow_internals.LogLevel 
+FROM internal.LogLevel 
 WHERE LogLevelCode = @LogLevel;
 
 IF @LogLevelID IS NULL
@@ -40,7 +40,7 @@ DECLARE @ExecutionID INT = CAST(SESSION_CONTEXT(N'ExecutionID') AS INT)
 IF @LogLevel = 'ENTER'
 BEGIN
   -- Start an execution log instance
-  INSERT INTO flow_internals.Execution (
+  INSERT INTO internal.Execution (
       ParentExecutionID
     , ExecutableName
     , ExecutionStartedAt
@@ -55,7 +55,7 @@ BEGIN
   EXEC sp_set_session_context N'ExecutionID', @ExecutionID;
 END
 
-INSERT INTO flow_internals.LogEntry (
+INSERT INTO internal.LogEntry (
     LogLevelID
   , FormattedEntryText
   , RawEntryText
@@ -82,12 +82,12 @@ BEGIN
   -- Close an execution log instance
   DECLARE @ParentExecutionID INT;
 
-  UPDATE flow_internals.Execution
+  UPDATE internal.Execution
   SET ExecutionEndedAt = SYSDATETIME()
   WHERE ExecutionID = @ExecutionID
 
   SELECT @ParentExecutionID = ParentExecutionID
-  FROM flow_internals.Execution
+  FROM internal.Execution
   WHERE ExecutionID = @ExecutionID
 
   EXEC sp_set_session_context N'ExecutionID', @ParentExecutionID;
