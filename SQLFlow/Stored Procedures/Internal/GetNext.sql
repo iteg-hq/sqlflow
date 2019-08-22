@@ -18,7 +18,7 @@ WHERE a.ExecutionGroupCode = @ExecutionGroupCode
     INTERSECT
     -- All currently (and all implicitly) locks held by other Flows.
     SELECT LockCode
-    FROM AcquiredLock
+    FROM internal.Lock
     WHERE FlowID != a.FlowID
   )
 ORDER BY a.FlowID * @SortOrder
