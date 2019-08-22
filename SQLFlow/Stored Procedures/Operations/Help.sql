@@ -59,8 +59,8 @@ PRINT 'Locks:';
 
 DECLARE lock_cursor CURSOR FOR
 SELECT LockCode
-FROM AcquiredLock
-WHERE FlowID = @FlowID
+FROM Lock
+WHERE HeldByFlowID = @FlowID
 ORDER BY LockCode
 ;
 
