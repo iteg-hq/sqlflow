@@ -17,7 +17,7 @@ DECLARE @Autocomplete BIT;
 DECLARE @NextRecursionLevel INT = @RecursionLevel+1;
 
 
-EXEC flow.Log 'DEBUG', 'Performing action: [:1:]', @ActionCode;
+EXEC flow.Log 'TRACE', 'Performing action: [:1:]', @ActionCode;
 
 -- Check that the action exists
 IF @ActionCode NOT IN ( SELECT ActionCode FROM flow.FlowAction WHERE FlowID = @FlowID )

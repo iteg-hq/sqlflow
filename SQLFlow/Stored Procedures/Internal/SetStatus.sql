@@ -6,7 +6,6 @@ SET NOCOUNT, XACT_ABORT ON;
 EXEC flow_internals.UpdateContext @FlowID;
 
 EXEC flow.Log 'TRACE', 'SetStatus [:1:], [:2:]', @FlowID, @StatusCode;
-EXEC flow.Log 'DEBUG', 'Entering status [:1:]', @StatusCode;
 /*
   * Set the status of a Flow, acquiring any locks and executing 
   * any stored procedures associated with the status.
@@ -27,7 +26,7 @@ IF EXISTS (
       AND StatusCode = @StatusCode
   )
 BEGIN
-  EXEC flow.Log 'INFO', 'Already in status [:1:]', @StatusCode;
+  EXEC flow.Log 'TRACE', 'Already in status [:1:]', @StatusCode;
   RETURN;
 END
 
@@ -53,13 +52,13 @@ WHERE FlowID = @FlowID
 -- Acquire the lock if possible
 IF @RequiredLockCode != ''
 BEGIN
-  EXEC flow.Log 'DEBUG', 'Lock required: [:1:]', @RequiredLockCode;
+  EXEC flow.Log 'TRACE', 'Lock required: [:1:]', @RequiredLockCode;
   EXEC flow_internals.AcquireLock @FlowID, @RequiredLockCode
-  EXEC flow.Log 'INFO', 'Acquired lock [:1:]', @RequiredLockCode;
+  EXEC flow.Log 'TRACE', 'Acquired lock [:1:]', @RequiredLockCode;
 END
 ELSE
 BEGIN
-  EXEC flow.Log 'DEBUG', 'No lock required';
+  EXEC flow.Log 'TRACE', 'No lock required';
   EXEC flow_internals.ReleaseLock @FlowID;
 END
 
@@ -82,7 +81,7 @@ WHERE FlowID = @FlowID
 -- Fails if the failure action runs and fails
 IF @ProcedureName != ''
 BEGIN
-  EXEC flow.Log 'DEBUG', 'Running status procedure';
+  EXEC flow.Log 'TRACE', 'Running status procedure';
   EXEC flow.ExecuteStoredProcedure @FlowID, @ProcedureName;
   EXEC flow.Log 'TRACE', 'Completed status procedure';
 END

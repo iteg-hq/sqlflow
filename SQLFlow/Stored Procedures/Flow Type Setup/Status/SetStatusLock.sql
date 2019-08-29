@@ -81,4 +81,4 @@ WHERE TypeCode = @TypeCode
 
 -- Log if the status 
 IF @@ROWCOUNT > 0
-  EXEC flow.Log 'INFO', 'Lock [:1:] now required by status [:2:.:3:]', @RequiredLockCode, @TypeCode, @StatusCode;
+  EXEC flow.Log 'TRACE', 'Lock [:1:] now required by status [:2:.:3:]', @RequiredLockCode, @TypeCode, @StatusCode;

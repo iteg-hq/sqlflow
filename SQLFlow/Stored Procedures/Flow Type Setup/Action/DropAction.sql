@@ -12,5 +12,5 @@ WHERE ActionCode = @ActionCode
 IF @@ROWCOUNT = 0
   EXEC flow.Log 'WARN', 'Did not drop action [:1:]', @ActionCode;
 ELSE
-  EXEC flow.Log 'INFO', 'Dropped action [:1:]', @ActionCode;
+  EXEC flow.Log 'TRACE', 'Dropped action [:1:]', @ActionCode;
  

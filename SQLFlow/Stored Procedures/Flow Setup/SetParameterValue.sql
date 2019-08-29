@@ -12,7 +12,7 @@ BEGIN
   EXEC flow.Log 'ERROR', 'Invalid FlowID :1:', @FlowID
 END
 
-EXEC flow.Log 'DEBUG', 'Parameter :1: set to :2:', @Name, @Value;
+EXEC flow.Log 'TRACE', 'Parameter :1: set to :2:', @Name, @Value;
 
 UPDATE flow_internals.FlowParameter
 SET ParameterValue = @Value

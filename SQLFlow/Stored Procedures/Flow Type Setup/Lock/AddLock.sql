@@ -46,4 +46,4 @@ BEGIN
   ;
 END
 
-EXEC flow.Log 'INFO', 'Added lock [:1:]', @LockCode;
+EXEC flow.Log 'TRACE', 'Added lock [:1:]', @LockCode;

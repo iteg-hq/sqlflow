@@ -10,5 +10,5 @@ SET HeldByFlowID = NULL
 WHERE HeldByFlowID = @FlowID
 ;
 
-EXEC flow.Log 'DEBUG', 'Released :1: locks', @@ROWCOUNT;
+EXEC flow.Log 'TRACE', 'Released :1: locks', @@ROWCOUNT;
 

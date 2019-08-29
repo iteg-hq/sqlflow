@@ -103,7 +103,7 @@ FROM SSISDB.[catalog].executions
 WHERE execution_id = @ExecutionID
 ;
 
-EXEC flow.Log 'DEBUG', 'Execution ended, status = ":1:"', @StatusDescription;
+EXEC flow.Log 'TRACE', 'Execution ended, status = ":1:"', @StatusDescription;
 
 IF @Status IN (4, 6)
 BEGIN
@@ -111,6 +111,6 @@ BEGIN
   THROW 51000, 'SSIS Package failed', 1;
 END
 
-EXEC flow.Log 'DEBUG', 'Execution successful.'
+EXEC flow.Log 'TRACE', 'Execution successful.'
 
 EXEC flow.Log 'TRACE', 'Leaving setup.Run_ExecuteSSISPackage'

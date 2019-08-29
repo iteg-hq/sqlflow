@@ -35,7 +35,7 @@ BEGIN
     , @StatusCode
     )
   ;
-  EXEC flow.Log 'INFO', 'Added new flow status: [:1:]',  @StatusCode;
+  EXEC flow.Log 'TRACE', 'Added new flow status: [:1:]',  @StatusCode;
 END
 
 -- Update the required lock, if specified

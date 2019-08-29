@@ -14,7 +14,7 @@ IF EXISTS (
       AND HeldByFlowID = @FlowID
   )
 BEGIN
-  EXEC flow.Log 'DEBUG', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
+  EXEC flow.Log 'TRACE', 'Lock [:1:] already held.', @RootLockCode, @@ROWCOUNT;
   RETURN
 END
 -- If not, try acquiring it.
@@ -63,6 +63,6 @@ BEGIN TRANSACTION
   INNER JOIN #tree AS t
     ON t.LockCode = l.LockCode
 
-  EXEC flow.Log 'DEBUG', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
+  EXEC flow.Log 'TRACE', 'Acquired lock [:1:] (and children, :2: in all)', @RootLockCode, @@ROWCOUNT;
 
 COMMIT TRANSACTION

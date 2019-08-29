@@ -14,4 +14,4 @@ SELECT @StatusCode = StatusCode
 FROM flow.Flow
 WHERE FlowID = @FlowID;
 
-EXEC flow.Log 'INFO', 'Flow execution done. Final status: [:1:].', @StatusCode;
+EXEC flow.Log 'TRACE', 'Flow execution done. Final status: [:1:].', @StatusCode;

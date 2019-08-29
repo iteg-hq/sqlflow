@@ -10,7 +10,7 @@ DELETE flow_internals.FlowAction
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC flow.Log 'INFO', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
+EXEC flow.Log 'TRACE', 'Dropped :1: actions on type :2:', @@ROWCOUNT, @TypeCode;
 
 
 -- Reset procedures and locks

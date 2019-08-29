@@ -52,4 +52,4 @@ WHERE TypeCode = @TypeCode
   AND StatusCode = @StatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Using procedure [:1:], Autocomplete [:2:] for status [:3:]', @ProcedureName, @Autocomplete, @StatusCode;
+EXEC flow.Log 'TRACE', 'Using procedure [:1:], Autocomplete [:2:] for status [:3:]', @ProcedureName, @Autocomplete, @StatusCode;

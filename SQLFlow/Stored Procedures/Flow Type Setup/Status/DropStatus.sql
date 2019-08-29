@@ -8,5 +8,5 @@ DELETE flow_internals.FlowStatus
 WHERE StatusCode = @StatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Deleted :1: rows from FlowStatus', @@ROWCOUNT;
+EXEC flow.Log 'TRACE', 'Deleted :1: rows from FlowStatus', @@ROWCOUNT;
  

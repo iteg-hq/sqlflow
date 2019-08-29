@@ -39,7 +39,7 @@ BEGIN
     AND ActionCode = @ActionCode
   ;
 
-  EXEC flow.Log 'INFO', 'Updated resulting status on [:1:] (:2:)', @ActionCode, @ResultingStatusCode;
+  EXEC flow.Log 'TRACE', 'Updated resulting status on [:1:] (:2:)', @ActionCode, @ResultingStatusCode;
   RETURN;
 END
 
@@ -57,4 +57,4 @@ SELECT
   , @ResultingStatusCode
 ;
 
-EXEC flow.Log 'INFO', 'Added new action [:1:.:2:.:3:] (-> [:4:])', @TypeCode, @StatusCode, @ActionCode, @ResultingStatusCode;
+EXEC flow.Log 'TRACE', 'Added new action [:1:.:2:.:3:] (-> [:4:])', @TypeCode, @StatusCode, @ActionCode, @ResultingStatusCode;

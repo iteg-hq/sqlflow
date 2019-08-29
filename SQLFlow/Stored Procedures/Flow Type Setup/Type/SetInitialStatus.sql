@@ -36,4 +36,4 @@ SET InitialStatusCode = @InitialStatusCode
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC flow.Log 'INFO', 'Set initial status to [:2:] on flow type [:1:]', @TypeCode, @InitialStatusCode;
+EXEC flow.Log 'TRACE', 'Set initial status to [:2:] on flow type [:1:]', @TypeCode, @InitialStatusCode;

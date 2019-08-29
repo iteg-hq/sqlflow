@@ -13,8 +13,6 @@ DECLARE @ErrorCode INT;
 DECLARE @Message NVARCHAR(4000);
 EXEC flow.Log 'TRACE', 'flow.ExecuteStoredProcedure [:1:], [:2:]', @FlowID, @StoredProcedureName;
 
-EXEC flow.Log 'DEBUG', 'Calling stored procedure :1:', @StoredProcedureName;
-
 BEGIN TRY
   -- Call the procedure and capture the error code
   EXEC @ErrorCode = @StoredProcedureName @FlowID = @FlowID

@@ -27,4 +27,4 @@ SET ExecutionGroupCode = @ExecutionGroupCode
 WHERE TypeCode = @TypeCode
 ;
 
-EXEC flow.Log 'INFO', 'Set Execution Group to [:2:] on flow type [:1:]', @TypeCode, @ExecutionGroupCode;
+EXEC flow.Log 'TRACE', 'Set Execution Group to [:2:] on flow type [:1:]', @TypeCode, @ExecutionGroupCode;

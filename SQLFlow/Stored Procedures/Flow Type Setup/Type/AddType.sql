@@ -17,7 +17,7 @@ BEGIN
   INSERT INTO flow_internals.FlowType (TypeCode)
   VALUES (@TypeCode)
   ;
-  EXEC flow.Log 'INFO', 'Added new flow type [:1:]', @TypeCode;
+  EXEC flow.Log 'TRACE', 'Added new flow type [:1:]', @TypeCode;
 END
 
 -- Create or update the initial status. Calling flow.SetInitialStatus
