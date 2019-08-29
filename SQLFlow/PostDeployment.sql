@@ -13,9 +13,9 @@ INSERT INTO flow_internals.LogLevel (
   )
 VALUES
     (10, 'TRACE', 0)
-  , (11, 'ENTER', 0)
-  , (12, 'LEAVE', 0)
   , (20, 'DEBUG', 0)
+  , (25, 'ENTER', 0)
+  , (26, 'LEAVE', 0)
   , (30, 'INFO',  1)
   , (40, 'WARN',  1)
   , (50, 'ERROR', 1)
