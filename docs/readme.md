@@ -228,7 +228,7 @@ Remove all actions from the flow type.
 
 ### Flow Instances ###
 
-#### **NewFlow **
+#### NewFlow 
 
 Create a new flow instance.
 
